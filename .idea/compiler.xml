@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+<<<<<<< Updated upstream
     <annotationProcessing>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
@@ -10,5 +11,12 @@
         <module name="Pill-Mate-Backend.Pill-Mate-Backend.main" />
       </profile>
     </annotationProcessing>
+=======
+    <bytecodeTargetLevel>
+      <module name="Pill-Mate-Backend.Pill-Mate-Backend" target="17" />
+      <module name="Pill-Mate-Backend.Pill-Mate-Backend.main" target="17" />
+      <module name="Pill-Mate-Backend.Pill-Mate-Backend.test" target="17" />
+    </bytecodeTargetLevel>
+>>>>>>> Stashed changes
   </component>
 </project>
