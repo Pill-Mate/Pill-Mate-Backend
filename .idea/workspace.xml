@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="initial commit" />
+    <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="initial commit">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +42,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -62,20 +69,40 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.Build Pill-Mate-Backend.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "Spring Boot.PillMateBackendApplication.executor": "Run",
+    "git-widget-placeholder": "jihyun",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "F:/Pill-Mate-Backend/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/myuser",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "configurable.group.build",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\Pill-Mate-Backend\Pill-Mate-Backend\src\main\java\com\example\Pill_Mate_Backend\myuser" />
+      <recent name="F:\Pill-Mate-Backend\Pill-Mate-Backend\src\main\java\com\example\Pill_Mate_Backend\statistics" />
+      <recent name="F:\Pill-Mate-Backend\Pill-Mate-Backend\src\main\java\com\example\Pill_Mate_Backend\search" />
+      <recent name="F:\Pill-Mate-Backend\Pill-Mate-Backend\src\main\java\com\example\Pill_Mate_Backend\register" />
+      <recent name="F:\Pill-Mate-Backend\Pill-Mate-Backend\src\main\java\com\example\Pill_Mate_Backend\check" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="PillMateBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="Pill-Mate-Backend.Pill-Mate-Backend.main" />
+      <module name="Pill-Mate-Backend.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.Pill_Mate_Backend.PillMateBackendApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -100,6 +127,9 @@
       <updated>1721806684570</updated>
       <workItem from="1721806685759" duration="1022000" />
       <workItem from="1721831559879" duration="947000" />
+      <workItem from="1721888495465" duration="95000" />
+      <workItem from="1721888649933" duration="2804000" />
+      <workItem from="1721971117046" duration="3142000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
