@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-<<<<<<< Updated upstream
     <annotationProcessing>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.34/ec547ef414ab1d2c040118fb9c1c265ada63af14/lombok-1.18.34.jar" />
         </processorPath>
-        <module name="Pill-Mate-Backend.Pill-Mate-Backend.main" />
+        <module name="Pill-Mate-Backend.main" />
       </profile>
     </annotationProcessing>
-=======
-    <bytecodeTargetLevel>
-      <module name="Pill-Mate-Backend.Pill-Mate-Backend" target="17" />
-      <module name="Pill-Mate-Backend.Pill-Mate-Backend.main" target="17" />
-      <module name="Pill-Mate-Backend.Pill-Mate-Backend.test" target="17" />
-    </bytecodeTargetLevel>
->>>>>>> Stashed changes
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>

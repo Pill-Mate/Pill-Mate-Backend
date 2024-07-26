@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< Updated upstream
-      <module fileurl="file://$PROJECT_DIR$/.idea/Pill-Mate-Backend.iml" filepath="$PROJECT_DIR$/.idea/Pill-Mate-Backend.iml" />
-=======
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.Pill-Mate-Backend.iml" filepath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.Pill-Mate-Backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.Pill-Mate-Backend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.Pill-Mate-Backend.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.Pill-Mate-Backend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.Pill-Mate-Backend.test.iml" />
->>>>>>> Stashed changes
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.iml" filepath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.test.iml" />
     </modules>
   </component>
 </project>
