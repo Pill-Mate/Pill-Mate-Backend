@@ -2,7 +2,16 @@ package com.example.Pill_Mate_Backend.domain;
 
 import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 public class Hospital extends BaseEntity {
 
     @Id

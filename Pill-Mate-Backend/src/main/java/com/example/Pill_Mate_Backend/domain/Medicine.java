@@ -4,11 +4,20 @@ import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
 import com.example.Pill_Mate_Backend.domain.enums.IngredientUnit;
 import com.example.Pill_Mate_Backend.domain.sets.StringSetConverter;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 public class Medicine extends BaseEntity {
 
     @Id
@@ -52,8 +61,8 @@ public class Medicine extends BaseEntity {
     //set
     //caution_types
     @Convert(converter = StringSetConverter.class)
-    @Column(name = "roles", columnDefinition = "SET('USER', 'ADMIN', 'MODERATOR')")
-    //병용금기, 임부금기, 용량주의, 투여기간주의, 노인주의, 특정연령대금기, 효능군중복
+    @Column(name = "cautiontypes", columnDefinition = "SET('DOUBLE', 'PREGNANT', 'VOLUME', 'PERIOD', 'OLD', 'SPECIFICAGE', 'EFFICACYDOUBLE')")
+    //병용금기, 임부금기, 용량주의, 투여기간주의, 노인주의, 특정연령대금기, 효능군중복//
     private Set<String> cautionTypes;
 
     //fk
