@@ -1,14 +1,20 @@
 package com.example.Pill_Mate_Backend.domain;
 
 import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Time;
 import java.util.Date;
 
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 public class User extends BaseEntity {
 
     @Id
