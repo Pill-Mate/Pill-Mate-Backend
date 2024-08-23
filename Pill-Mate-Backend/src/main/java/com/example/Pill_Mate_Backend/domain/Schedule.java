@@ -4,6 +4,7 @@ import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
 import com.example.Pill_Mate_Backend.domain.enums.EatUnit;
 import com.example.Pill_Mate_Backend.domain.enums.MealUnit;
 import com.example.Pill_Mate_Backend.domain.enums.MedicineUnit;
+import com.example.Pill_Mate_Backend.domain.enums.ScheduleStatus;
 import com.example.Pill_Mate_Backend.domain.sets.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,8 +52,8 @@ public class Schedule extends BaseEntity {
     private Boolean isAlarm;
 
     @Column(nullable = false)
-    @ColumnDefault("true")
-    private Boolean isValid;
+    @ColumnDefault("ACTIVATE")
+    private ScheduleStatus status;
 
     @Column(nullable = false)
     private Date startDate;

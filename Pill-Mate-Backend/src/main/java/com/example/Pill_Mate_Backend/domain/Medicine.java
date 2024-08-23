@@ -61,8 +61,8 @@ public class Medicine extends BaseEntity {
     //set
     //caution_types
     @Convert(converter = StringSetConverter.class)
-    @Column(name = "cautiontypes", columnDefinition = "SET('DOUBLE', 'PREGNANT', 'VOLUME', 'PERIOD', 'OLD', 'SPECIFICAGE', 'EFFICACYDOUBLE')")
-    //병용금기, 임부금기, 용량주의, 투여기간주의, 노인주의, 특정연령대금기, 효능군중복//
+    @Column(name = "cautiontypes", columnDefinition = "SET('PREGNANT', 'VOLUME', 'PERIOD', 'OLD', 'AGE', 'ADDITIVE')")
+    //, 임부금기, 용량주의, 투여기간주의, 노인주의, 특정연령대금기, 첨가제주의|| <효능군중복, 병용금기> 는 type에 표시안됨.//
     private Set<String> cautionTypes;
 
     //fk
