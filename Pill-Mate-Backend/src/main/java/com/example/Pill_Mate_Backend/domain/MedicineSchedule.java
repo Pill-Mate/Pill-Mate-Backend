@@ -5,10 +5,7 @@ import com.example.Pill_Mate_Backend.domain.enums.EatUnit;
 import com.example.Pill_Mate_Backend.domain.enums.IntakeSpecific;
 import com.example.Pill_Mate_Backend.domain.enums.MealUnit;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Time;
 import java.util.Date;
@@ -18,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class MedicineSchedule extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

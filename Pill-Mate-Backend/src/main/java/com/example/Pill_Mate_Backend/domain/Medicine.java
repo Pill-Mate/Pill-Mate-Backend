@@ -4,10 +4,7 @@ import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
 import com.example.Pill_Mate_Backend.domain.enums.IngredientUnit;
 import com.example.Pill_Mate_Backend.domain.sets.StringSetConverter;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Medicine extends BaseEntity {
 
     @Id

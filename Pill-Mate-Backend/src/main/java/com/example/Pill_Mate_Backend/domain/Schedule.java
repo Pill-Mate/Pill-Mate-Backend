@@ -7,10 +7,7 @@ import com.example.Pill_Mate_Backend.domain.enums.MedicineUnit;
 import com.example.Pill_Mate_Backend.domain.enums.ScheduleStatus;
 import com.example.Pill_Mate_Backend.domain.sets.StringSetConverter;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.Date;
@@ -21,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Schedule extends BaseEntity {
 
     @Id
@@ -52,7 +50,7 @@ public class Schedule extends BaseEntity {
     private Boolean isAlarm;
 
     @Column(nullable = false)
-    @ColumnDefault("ACTIVATE")
+    //@ColumnDefault("ACTIVATE") //--이게 오륜가 싶어서 했는데 이거 하니까 오류 해결됨.
     private ScheduleStatus status;
 
     @Column(nullable = false)
