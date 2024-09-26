@@ -48,6 +48,7 @@ public class MedicineSchedule extends BaseEntity {
     @Column(nullable = false)
     private Boolean eatCheck;//변수명 check 시 에러 -> eatCheck로 변경.
 
+
     //fk
     //user_id, medicine_id
     @ManyToOne(fetch = FetchType.LAZY)

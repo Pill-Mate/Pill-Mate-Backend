@@ -5,7 +5,6 @@ import com.example.Pill_Mate_Backend.domain.enums.IngredientUnit;
 import com.example.Pill_Mate_Backend.domain.sets.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -61,6 +60,7 @@ public class Medicine extends BaseEntity {
     @Convert(converter = StringSetConverter.class)
     @Column(name = "cautiontypes", columnDefinition = "SET('PREGNANT', 'VOLUME', 'PERIOD', 'OLD', 'AGE', 'ADDITIVE')")
     //, 임부금기, 용량주의, 투여기간주의, 노인주의, 특정연령대금기, 첨가제주의|| <효능군중복, 병용금기> 는 type에 표시안됨.//
+
     private Set<String> cautionTypes;
 
     //fk

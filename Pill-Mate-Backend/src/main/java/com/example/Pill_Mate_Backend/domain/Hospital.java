@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @Data
 @EqualsAndHashCode(callSuper = true)
+
 public class Hospital extends BaseEntity {
 
     @Id
