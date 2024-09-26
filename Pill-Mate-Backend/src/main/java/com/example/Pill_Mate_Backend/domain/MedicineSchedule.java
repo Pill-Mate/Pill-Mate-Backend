@@ -5,10 +5,17 @@ import com.example.Pill_Mate_Backend.domain.enums.EatUnit;
 import com.example.Pill_Mate_Backend.domain.enums.IntakeSpecific;
 import com.example.Pill_Mate_Backend.domain.enums.MealUnit;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.sql.Time;
 import java.util.Date;
 
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class MedicineSchedule extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +46,8 @@ public class MedicineSchedule extends BaseEntity {
     private Integer mealTime;
 
     @Column(nullable = false)
-    private Boolean check;
+    private Boolean eatCheck;//변수명 check 시 에러 -> eatCheck로 변경.
+
 
     //fk
     //user_id, medicine_id
