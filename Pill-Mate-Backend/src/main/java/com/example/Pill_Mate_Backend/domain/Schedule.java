@@ -53,6 +53,7 @@ public class Schedule extends BaseEntity {
     //@ColumnDefault("ACTIVATE") //--이게 오륜가 싶어서 했는데 이거 하니까 오류 해결됨.
     private ScheduleStatus status;
 
+
     @Column(nullable = false)
     private Date startDate;
 
@@ -63,11 +64,13 @@ public class Schedule extends BaseEntity {
     //intake_frequency, intake_count
     @Convert(converter = StringSetConverter.class)
     @Column(name = "intakefrequency", columnDefinition = "SET('MON', 'TUE', 'WEN', 'THU', 'FRI', 'SAT', 'SUN')")
+
     //월화수목금토일
     private Set<String> intakeFrequency;
 
     @Convert(converter = StringSetConverter.class)
     @Column(name = "intakecount", columnDefinition = "SET('MORNING', 'LUNCH', 'DINNER', 'EMPTY', 'SLEEP')")
+
     //아점저공취
     private Set<String> intakeCount;
 
