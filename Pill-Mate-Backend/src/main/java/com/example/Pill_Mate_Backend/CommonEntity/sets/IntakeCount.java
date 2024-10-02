@@ -1,4 +1,4 @@
-package com.example.Pill_Mate_Backend.domain.sets;
+package com.example.Pill_Mate_Backend.CommonEntity.sets;
 
 import java.util.HashSet;
 import java.util.Set;

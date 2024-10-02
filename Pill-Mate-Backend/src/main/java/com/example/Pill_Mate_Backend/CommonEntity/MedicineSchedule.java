@@ -1,9 +1,9 @@
-package com.example.Pill_Mate_Backend.domain;
+package com.example.Pill_Mate_Backend.CommonEntity;
 
-import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
-import com.example.Pill_Mate_Backend.domain.enums.EatUnit;
-import com.example.Pill_Mate_Backend.domain.enums.IntakeSpecific;
-import com.example.Pill_Mate_Backend.domain.enums.MealUnit;
+import com.example.Pill_Mate_Backend.global.common.BaseEntity;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import jakarta.persistence.*;
 import lombok.*;
 

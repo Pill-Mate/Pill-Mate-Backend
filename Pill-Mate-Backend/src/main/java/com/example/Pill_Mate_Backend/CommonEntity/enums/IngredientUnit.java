@@ -1,4 +1,4 @@
-package com.example.Pill_Mate_Backend.domain.enums;
+package com.example.Pill_Mate_Backend.CommonEntity.enums;
 
 public enum IngredientUnit {
     //1개 성분량 단위

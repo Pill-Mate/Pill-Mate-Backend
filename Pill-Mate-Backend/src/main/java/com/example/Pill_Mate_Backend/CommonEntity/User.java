@@ -1,6 +1,6 @@
-package com.example.Pill_Mate_Backend.domain;
+package com.example.Pill_Mate_Backend.CommonEntity;
 
-import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
+import com.example.Pill_Mate_Backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 
 import java.sql.Time;
-import java.util.Date;
 
 @Entity
 @AllArgsConstructor
@@ -28,13 +27,6 @@ public class User extends BaseEntity {
 
     @Column(nullable = false, length = 50)
     private String email;
-
-    @Column(nullable = false, length = 50)
-    private String sex;
-    //이건 enum으로 안하나
-
-    @Column(nullable = false)
-    private Date birth;
 
     @Column(nullable = false)
     private Time wakeupTime;

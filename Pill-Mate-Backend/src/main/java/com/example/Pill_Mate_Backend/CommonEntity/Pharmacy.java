@@ -1,6 +1,6 @@
-package com.example.Pill_Mate_Backend.domain;
+package com.example.Pill_Mate_Backend.CommonEntity;
 
-import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
+import com.example.Pill_Mate_Backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,18 +10,17 @@ import lombok.*;
 @Builder
 @Data
 @EqualsAndHashCode(callSuper = true)
-
-public class Hospital extends BaseEntity {
+public class Pharmacy extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 50)
-    private String name;
+    private String pharmacyName;
 
     @Column(nullable = false, length = 50)
-    private String phone;
+    private String pharmacyPhone;
 
     //fk
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,5 +30,4 @@ public class Hospital extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
-
 }
