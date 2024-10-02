@@ -1,4 +1,4 @@
-package com.example.Pill_Mate_Backend.domain.sets;
+package com.example.Pill_Mate_Backend.CommonEntity.sets;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

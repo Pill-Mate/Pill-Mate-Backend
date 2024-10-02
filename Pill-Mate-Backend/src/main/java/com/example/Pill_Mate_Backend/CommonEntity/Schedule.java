@@ -1,11 +1,11 @@
-package com.example.Pill_Mate_Backend.domain;
+package com.example.Pill_Mate_Backend.CommonEntity;
 
-import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
-import com.example.Pill_Mate_Backend.domain.enums.EatUnit;
-import com.example.Pill_Mate_Backend.domain.enums.MealUnit;
-import com.example.Pill_Mate_Backend.domain.enums.MedicineUnit;
-import com.example.Pill_Mate_Backend.domain.enums.ScheduleStatus;
-import com.example.Pill_Mate_Backend.domain.sets.StringSetConverter;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
+import com.example.Pill_Mate_Backend.global.common.BaseEntity;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.MedicineUnit;
+import com.example.Pill_Mate_Backend.CommonEntity.sets.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -50,7 +50,7 @@ public class Schedule extends BaseEntity {
     private Boolean isAlarm;
 
     @Column(nullable = false)
-    //@ColumnDefault("ACTIVATE") //--이게 오륜가 싶어서 했는데 이거 하니까 오류 해결됨.
+    @ColumnDefault("ACTIVE")
     private ScheduleStatus status;
 
 

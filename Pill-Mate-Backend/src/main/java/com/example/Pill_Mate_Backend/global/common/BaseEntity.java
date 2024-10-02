@@ -1,4 +1,4 @@
-package com.example.Pill_Mate_Backend.domain.common;
+package com.example.Pill_Mate_Backend.global.common;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

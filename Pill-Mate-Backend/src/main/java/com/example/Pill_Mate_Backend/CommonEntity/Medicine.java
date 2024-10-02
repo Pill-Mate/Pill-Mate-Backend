@@ -1,12 +1,11 @@
-package com.example.Pill_Mate_Backend.domain;
+package com.example.Pill_Mate_Backend.CommonEntity;
 
-import com.example.Pill_Mate_Backend.domain.common.BaseEntity;
-import com.example.Pill_Mate_Backend.domain.enums.IngredientUnit;
-import com.example.Pill_Mate_Backend.domain.sets.StringSetConverter;
+import com.example.Pill_Mate_Backend.global.common.BaseEntity;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.IngredientUnit;
+import com.example.Pill_Mate_Backend.CommonEntity.sets.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Set;
 
 @Entity
