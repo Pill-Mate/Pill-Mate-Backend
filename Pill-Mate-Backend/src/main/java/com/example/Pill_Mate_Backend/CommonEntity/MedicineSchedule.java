@@ -53,7 +53,7 @@ public class MedicineSchedule extends BaseEntity {
     //user_id, medicine_id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")

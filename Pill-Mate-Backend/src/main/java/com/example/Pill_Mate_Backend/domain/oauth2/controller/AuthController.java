@@ -1,6 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.oauth2.controller;
 
-import com.example.Pill_Mate_Backend.CommonEntity.User;
+import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.KakaoSignUpDTO;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.OnboardingDTO;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.UserInfoResponseDto;
@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Time;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +34,7 @@ public class AuthController {
 
     // 프론트에서 인가코드를 받으면 이 엔드포인트가 호출됨
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, Object>> kakaoLogin(//@RequestBody KakaoSignUpDTO kakaoSignUpDto) {//<UserInfoResponseDto> @RequestHeader..
+    public ResponseEntity<Map<String, Object>> kakaoLogin(
                                                           @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
                                                           @RequestBody KakaoSignUpDTO kakaoSignUpDto) {
 
@@ -45,20 +43,18 @@ public class AuthController {
             String jwtToken = authorizationHeader.substring(7);
             // JWT를 사용한 추가 처리 가능
         }
-
         // 본문에서 카카오 Access Token 가져오기
         String kakaoAccessToken = kakaoSignUpDto.getKakaoAccessToken();
-        Boolean marketingAlarm = kakaoSignUpDto.getMarketingAlarm();
 
         // 카카오 Access Token으로 사용자 정보 조회
-        UserInfoResponseDto userInfo = kakaoService.getUserInfo(kakaoAccessToken, marketingAlarm);
+        UserInfoResponseDto userInfo = kakaoService.getUserInfo(kakaoAccessToken);
 
         // 이메일로 유저가 이미 존재하는지 확인
-        Optional<User> existingUser = userRepository.findByEmail(userInfo.getEmail());
+        Optional<Users> existingUser = userRepository.findByEmail(userInfo.getEmail());
         if (existingUser.isPresent()) {
             // 이미 존재하는 유저 -> 로그인 처리
-            User user = existingUser.get();
-            String jwtToken = jwtService.generateToken(user.getEmail());
+            Users users = existingUser.get();
+            String jwtToken = jwtService.generateToken(users.getEmail());
 
             // 응답 데이터 준비
             Map<String, Object> response = new HashMap<>();
@@ -72,16 +68,15 @@ public class AuthController {
 
         //데이터 넣기
         // User 객체 생성
-        User user = new User(userInfo.getName(), userInfo.getEmail(),  marketingAlarm, userInfo.getProfileImage());
+        Users users = new Users(userInfo.getName(), userInfo.getEmail(), userInfo.getProfileImage());
         // 데이터베이스에 사용자 정보 저장
-        userRepository.save(user);
+        userRepository.save(users);
 
         // JWT 토큰 생성
         String jwtToken = jwtService.generateToken(userInfo.getEmail());
 
         // 응답 데이터 준비
         Map<String, Object> response = new HashMap<>();
-        //response.put("message", "회원가입 완료");
         System.out.println("회원가입 성공");
         response.put("jwtToken", jwtToken);
         response.put("login",false);
@@ -98,31 +93,16 @@ public class AuthController {
             String jwtToken = token.substring(7);
             if (jwtService.validateToken(jwtToken)) {
                 String email = jwtService.extractEmail(jwtToken);
-                onboardingService.setUserInfo(email, onboardingDTO.getWakeupTime(), onboardingDTO.getBedTime(), onboardingDTO.getMorningTime(), onboardingDTO.getLunchTime(), onboardingDTO.getDinnerTime());
-
-                //존재 시 변경
-                Optional<User> existingUser = userRepository.findByEmail(email);
-                if (existingUser.isPresent()) {
-                    User user = existingUser.get();
-                    // 온보딩 정보 업데이트
-                    user.setWakeupTime(onboardingDTO.getWakeupTime());
-                    user.setBedTime(onboardingDTO.getBedTime());
-                    user.setMorningTime(onboardingDTO.getMorningTime());
-                    user.setLunchTime(onboardingDTO.getLunchTime());
-                    user.setDinnerTime(onboardingDTO.getDinnerTime());
-
-                    // 데이터베이스에 업데이트된 유저 정보 저장
-                    userRepository.save(user);
-                }
+                onboardingService.setUserInfo(email, onboardingDTO.getWakeupTime(), onboardingDTO.getBedTime(), onboardingDTO.getMorningTime(), onboardingDTO.getLunchTime(), onboardingDTO.getDinnerTime(), onboardingDTO.getAlarmMarketing());
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT");
             }
         }
-
         // 로직 처리 후 응답 반환
         return ResponseEntity.ok("Onboarding success");
     }
 
+    //밑은 아직 ing
     @PostMapping("/logout")
     public String ㅣogout(HttpSession session) {
         String accessToken = (String) session.getAttribute("kakaoToken");

@@ -29,7 +29,7 @@ public class Medicine extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String ingredient;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 255)
     private String image;
 
     @Column(nullable = false, length = 50)
@@ -66,5 +66,5 @@ public class Medicine extends BaseEntity {
     //user_id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 }

@@ -2,16 +2,14 @@ package com.example.Pill_Mate_Backend.domain.oauth2.dto;
 
 public class UserInfoResponseDto {
     private String name;
-
     private String profileImage;
     private String email;
-    private Boolean alarmMarketing;
 
-    public UserInfoResponseDto(String name, String profileImage, String email, boolean alarmMarketing) {
+
+    public UserInfoResponseDto(String name, String profileImage, String email) {
         this.name = name;
         this.profileImage = profileImage;
         this.email = email;
-        this.alarmMarketing = alarmMarketing;
     }
 
     public String getName() {
@@ -38,11 +36,4 @@ public class UserInfoResponseDto {
         this.email = email;
     }
 
-    public Boolean getAlarmMarketing() {
-        return alarmMarketing;
-    }
-
-    public void setAlarmMarketing(Boolean alarmMarketing) {
-        this.alarmMarketing = alarmMarketing;
-    }
 }

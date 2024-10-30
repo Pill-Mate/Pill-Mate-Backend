@@ -1,10 +1,7 @@
 package com.example.Pill_Mate_Backend.CommonEntity;
 
-import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.*;
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.MedicineUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.sets.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,7 +38,7 @@ public class Schedule extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
-    private MedicineUnit medicineUnit;
+    private IngredientUnit medicineUnit;
 
     @Column(nullable = false, length = 50)
     private Float medicineVolume;
@@ -49,8 +46,9 @@ public class Schedule extends BaseEntity {
     @Column(nullable = false)
     private Boolean isAlarm;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @ColumnDefault("ACTIVE")
+    @ColumnDefault("'ACTIVATE'")
     private ScheduleStatus status;
 
 
@@ -78,7 +76,7 @@ public class Schedule extends BaseEntity {
     //user_id, medicine_id
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")

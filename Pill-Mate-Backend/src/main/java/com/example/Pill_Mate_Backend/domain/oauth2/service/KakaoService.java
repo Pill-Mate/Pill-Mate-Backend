@@ -1,7 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.oauth2.service;
 
 
-import com.example.Pill_Mate_Backend.CommonEntity.User;
+import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.UserInfoResponseDto;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class KakaoService {
     private final UserRepository userRepository;
 
-    public UserInfoResponseDto getUserInfo(String kakaoAccessToken, boolean alarmMarketing) {
+    public UserInfoResponseDto getUserInfo(String kakaoAccessToken) {
         RestTemplate restTemplate = new RestTemplate();
         String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
 
@@ -44,61 +44,14 @@ public class KakaoService {
             String nickname = (String) ((Map) userInfo.get("properties")).get("nickname");
             String profileImage = (String) ((Map<String, Object>) userInfo.get("properties")).get("profile_image");
 
-            //? 유저...데이터 넣기
-            //User user = new User(nickname, email, alarmMarketing, profileImage);
-            //userRepository.save(user);
-
-            return new UserInfoResponseDto(nickname, profileImage, email, alarmMarketing);
+            return new UserInfoResponseDto(nickname, profileImage, email);
         } else {
             throw new RuntimeException("Failed to get user info from Kakao");
         }
-        /*
-        Map<String, Object> userInfo = getKakaoUserInfo(kakaoAccessToken);
-
-        String userName = (String) ((Map<String, Object>) userInfo.get("properties")).get("nickname");
-        String profileImage = (String) ((Map<String, Object>) userInfo.get("properties")).get("profile_image");
-        String email = (String) ((Map<String, Object>) userInfo.get("kakao_account")).get("email");
-
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-
-        if (optionalUser.isPresent()) {
-            User existingUser = optionalUser.get();
-            existingUser.setUsername(userName);
-            existingUser.setProfileImage(profileImage);
-            existingUser.setEmail(email);
-            userRepository.save(existingUser);
-        } else {
-            // 회원가입 처리 시 alarmMarketing과 같은 추가 정보도 설정
-            User newUser = new User(profileImage, email, alarmMarketing);
-            userRepository.save(newUser);
-        }
-
-        return new UserInfoResponseDto(userName, profileImage, email, alarmMarketing);*/
-    }
-
-    private Map<String, Object> getKakaoUserInfo(String kakaoAccessToken) {
-        RestTemplate restTemplate = new RestTemplate();
-        String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + kakaoAccessToken);
-
-        HttpEntity<String> request = new HttpEntity<>(headers);
-
-        ResponseEntity<Map> response = restTemplate.exchange(userInfoUrl, HttpMethod.GET, request, Map.class);
-
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Object responseBody = response.getBody();
-            if (responseBody instanceof Map) {
-                return (Map<String, Object>) responseBody;
-            } else {
-                throw new RuntimeException("Unexpected response body type");
-            }
-        }
-        throw new RuntimeException("Failed to get user info");
     }
 
 
+    //밑은 아직
     //삭제?0---------------------------------------------------------------------------------------------------------------------------------
     public void kakaoLogout(String accessToken) {
         String logoutUrl = "https://kapi.kakao.com/v1/user/logout";
@@ -176,7 +129,7 @@ public class KakaoService {
     }
 
     public void deleteUser(String email) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<Users> optionalUser = userRepository.findByEmail(email);
 
         if (optionalUser.isPresent()) {
             userRepository.delete(optionalUser.get());
