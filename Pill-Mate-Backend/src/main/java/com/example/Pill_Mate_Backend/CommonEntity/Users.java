@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 
 import java.sql.Time;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class Users extends BaseEntity {
     private String email;
 
     @Column(nullable = false, length = 255)
-    private String profileImage;
+    private String profileImage;       //userImage로 바꿔야? -----------------!-------------------
 
     @Column(nullable = false)
     private Time wakeupTime;
@@ -65,4 +66,20 @@ public class Users extends BaseEntity {
         this.alarmMarketing = false;
         this.alarmInfo = false;
     }
+
+    //on delete cascade를 위한 one to many
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<Medicine> medicines;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<Schedule> schedules;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<Pharmacy> pharmacies;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<Hospital> hospitals;
+
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<MedicineSchedule> medicineSchedules;
 }

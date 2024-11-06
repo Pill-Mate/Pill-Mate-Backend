@@ -36,7 +36,8 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<Map<String, Object>> kakaoLogin(
                                                           @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
-                                                          @RequestBody KakaoSignUpDTO kakaoSignUpDto) {
+                                                          @RequestBody KakaoSignUpDTO kakaoSignUpDto,
+                                                          HttpSession session) {
 
         // JWT가 존재하는 경우에만 처리
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -56,6 +57,9 @@ public class AuthController {
             Users users = existingUser.get();
             String jwtToken = jwtService.generateToken(users.getEmail());
 
+            // 세션에 accessToken 저장
+            session.setAttribute("kakaoToken", kakaoAccessToken);
+
             // 응답 데이터 준비
             Map<String, Object> response = new HashMap<>();
             //response.put("message", "로그인 성공");
@@ -66,11 +70,14 @@ public class AuthController {
         }
 
 
-        //데이터 넣기
+        //새로운 유저 가입
         // User 객체 생성
         Users users = new Users(userInfo.getName(), userInfo.getEmail(), userInfo.getProfileImage());
         // 데이터베이스에 사용자 정보 저장
         userRepository.save(users);
+
+        // 세션에 accessToken 저장
+        session.setAttribute("kakaoToken", kakaoAccessToken);
 
         // JWT 토큰 생성
         String jwtToken = jwtService.generateToken(userInfo.getEmail());
@@ -104,40 +111,33 @@ public class AuthController {
 
     //밑은 아직 ing
     @PostMapping("/logout")
-    public String ㅣogout(HttpSession session) {
+    public String logout(HttpSession session) {
         String accessToken = (String) session.getAttribute("kakaoToken");
 
         if(accessToken != null && !"".equals(accessToken)){
             try {
                 kakaoService.kakaoDisconnect(accessToken);
             } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
+                return String.valueOf(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Logout failed"));
             }
             session.removeAttribute("kakaoToken");
             session.removeAttribute("loginMember");
+            session.invalidate(); // 세션 무효화
         }else{
             System.out.println("accessToken is null");
         }
-
         return "redirect:/";
     }
 
     // 카카오 회원탈퇴
     @PostMapping("/signout")
-    public ResponseEntity<String> unlink(@RequestHeader("Authorization") String token) {
-        String email = jwtService.extractEmail(token.substring(7)); // Bearer 제거 후 파싱
-        kakaoService.kakaoUnlink(token);
-        kakaoService.deleteUser(email);
+    public ResponseEntity<String> unlink(@RequestHeader("Authorization") String jwtToken, @RequestBody KakaoSignUpDTO kakaoSignUpDto) {
+        String kakaoToken = kakaoSignUpDto.getKakaoAccessToken();
+        String email = jwtService.extractEmail(jwtToken.substring(7)); // Bearer 제거 후 파싱
+        kakaoService.kakaoUnlink(kakaoToken); //카카오에서 연결 해제
+        kakaoService.deleteUser(email); //우리 db에서 회원정보 삭제
         return ResponseEntity.ok("회원정보 삭제 완료");
     }
-
-    // 회원탈퇴 시 데이터베이스에서도 유저 정보 삭제
-
-    //@DeleteMapping("/deleteUser")
-    //public ResponseEntity<String> deleteUser(@RequestParam String email) {
-    //    kakaoService.deleteUser(email);
-    //    return ResponseEntity.ok("회원정보 삭제 완료");
-    //}
 
     // Exception Handler
     @ExceptionHandler(OnboardingService.UserNotFoundException.class)

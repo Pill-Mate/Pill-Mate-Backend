@@ -50,52 +50,43 @@ public class KakaoService {
         }
     }
 
-
-    //밑은 아직
-    //삭제?0---------------------------------------------------------------------------------------------------------------------------------
-    public void kakaoLogout(String accessToken) {
-        String logoutUrl = "https://kapi.kakao.com/v1/user/logout";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + accessToken);
-
-        HttpEntity<String> request = new HttpEntity<>(headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(logoutUrl, HttpMethod.POST, request, String.class);
-
-        if (response.getStatusCode() == HttpStatus.OK) {
-            // 로그아웃 성공
-            System.out.println("카카오 로그아웃 성공");
-        } else {
-            // 로그아웃 실패
-            System.out.println("카카오 로그아웃 실패");
-        }
-    }
-
     public void kakaoDisconnect(String accessToken) throws JsonProcessingException {
         // HTTP Header 생성
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Content-type", "application/x-www-form-urlencoded");
+        try {
+            // HTTP Header 생성
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + accessToken);
+            headers.add("Content-type", "application/x-www-form-urlencoded");
 
-        // HTTP 요청 보내기
-        HttpEntity<MultiValueMap<String, String>> kakaoLogoutRequest = new HttpEntity<>(headers);
-        RestTemplate rt = new RestTemplate();
-        ResponseEntity<String> response = rt.exchange(
-                "https://kapi.kakao.com/v1/user/logout",
-                HttpMethod.POST,
-                kakaoLogoutRequest,
-                String.class
-        );
+            // HTTP 요청 보내기
+            HttpEntity<MultiValueMap<String, String>> kakaoLogoutRequest = new HttpEntity<>(headers);
+            RestTemplate rt = new RestTemplate();
+            ResponseEntity<String> response = rt.exchange(
+                    "https://kapi.kakao.com/v1/user/logout",
+                    HttpMethod.POST,
+                    kakaoLogoutRequest,
+                    String.class
+            );
 
-        // responseBody에 있는 정보를 꺼냄
-        String responseBody = response.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(responseBody);
+            // 응답 확인
+            if (response.getStatusCode() == HttpStatus.OK) {
+                // 응답이 성공이면 ID를 추출하고 로그아웃 성공 메시지 출력
+                String responseBody = response.getBody();
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        Long id = jsonNode.get("id").asLong();
-        System.out.println("반환된 id: "+id);
+                Long id = jsonNode.get("id").asLong();
+                System.out.println("카카오 로그아웃 성공, 반환된 id: "+ id);
+            } else {
+                // 응답이 실패 상태인 경우 로그에 실패 메시지 출력
+                System.out.println("카카오 로그아웃 실패, 응답 코드: "+ response.getStatusCode());
+                throw new RuntimeException("Failed to log out from Kakao");
+            }
+        } catch (Exception e) {
+            // 예외 발생 시 로그에 오류 메시지 출력
+            System.out.println("카카오 로그아웃 중 오류 발생: "+ e.getMessage());
+            throw new RuntimeException("카카오 로그아웃 실패", e);
+        }
     }
 
     public void kakaoUnlink(String accessToken) {
@@ -116,16 +107,6 @@ public class KakaoService {
             // 회원탈퇴 실패
             System.out.println("카카오 회원탈퇴 실패");
         }
-    }
-
-    public void userLogout(HttpServletRequest request, HttpServletResponse response) {
-        // 세션 무효화
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-
-        // 쿠키 삭제 등 추가 작업
     }
 
     public void deleteUser(String email) {

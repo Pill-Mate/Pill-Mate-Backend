@@ -47,8 +47,9 @@ public class Schedule extends BaseEntity {
     private Boolean isAlarm;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    //@Column(nullable = false)// 이거 하면 varchar이 아닌 enum으로 mysql에 저장 되는(타 db와의 연동 문제)
     @ColumnDefault("'ACTIVATE'")
+    @Column(columnDefinition = "VARCHAR(10)") //제대로 작동 안할 수도.. 생성 시 설정하는 걸로?
     private ScheduleStatus status;
 
 
@@ -74,7 +75,7 @@ public class Schedule extends BaseEntity {
 
     //fk
     //user_id, medicine_id
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id")
     private Users users;
 

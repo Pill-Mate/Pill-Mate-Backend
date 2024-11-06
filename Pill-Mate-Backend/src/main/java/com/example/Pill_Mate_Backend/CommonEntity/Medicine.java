@@ -6,6 +6,7 @@ import com.example.Pill_Mate_Backend.CommonEntity.sets.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,13 +25,13 @@ public class Medicine extends BaseEntity {
     private String identifyNumber;
 
     @Column(nullable = false, length = 50)
-    private String name;
+    private String medicineName;
 
     @Column(nullable = false, length = 50)
     private String ingredient;
 
     @Column(nullable = false, length = 255)
-    private String image;
+    private String medicineImage;
 
     @Column(nullable = false, length = 50)
     private String className;
@@ -67,4 +68,17 @@ public class Medicine extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
+
+    //on delete cascade를 위한 one to many
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<Schedule> schedules;
+
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<Hospital> hospitals;
+
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<Pharmacy> pharmacies;
+
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<MedicineSchedule> medicineSchedules;
 }
