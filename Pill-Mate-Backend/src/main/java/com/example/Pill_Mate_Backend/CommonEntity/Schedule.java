@@ -1,10 +1,7 @@
 package com.example.Pill_Mate_Backend.CommonEntity;
 
-import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.*;
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.MedicineUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.sets.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,7 +38,7 @@ public class Schedule extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
-    private MedicineUnit medicineUnit;
+    private IngredientUnit medicineUnit;
 
     @Column(nullable = false, length = 50)
     private Float medicineVolume;
@@ -49,8 +46,10 @@ public class Schedule extends BaseEntity {
     @Column(nullable = false)
     private Boolean isAlarm;
 
-    @Column(nullable = false)
-    @ColumnDefault("ACTIVE")
+    @Enumerated(EnumType.STRING)
+    //@Column(nullable = false)// 이거 하면 varchar이 아닌 enum으로 mysql에 저장 되는(타 db와의 연동 문제)
+    @ColumnDefault("'ACTIVATE'")
+    @Column(columnDefinition = "VARCHAR(10)") //제대로 작동 안할 수도.. 생성 시 설정하는 걸로?
     private ScheduleStatus status;
 
 
@@ -76,9 +75,9 @@ public class Schedule extends BaseEntity {
 
     //fk
     //user_id, medicine_id
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
