@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
+
     // url: http://localhost:8080/swagger-ui/index.html#/
     @Bean
     public OpenAPI getOpenApi() {
@@ -22,9 +23,9 @@ public class SwaggerConfig {
                 .info(getSwaggerInfo())
                 .components(getComponents())
                 // 보안 인증 추가 시 사용
-                //.components(authSetting())
-                .addServersItem(server);
-        //.addSecurityItem(new SecurityRequirement().addList("access-token"));
+                .components(authSetting())
+                .addServersItem(server)
+                .addSecurityItem(new SecurityRequirement().addList("access-token"));
     }
 
     private Info getSwaggerInfo() {
@@ -42,13 +43,13 @@ public class SwaggerConfig {
         return new Components();
     }
     // 보안 인증 추가 시 사용
-//    private Components authSetting() {
-//        return new Components()
-//                .addSecuritySchemes(
-//                        "access-token",
-//                        new SecurityScheme()
-//                                .type(SecurityScheme.Type.HTTP)
-//                                .scheme("bearer")
-//                                .bearerFormat("JWT"));
-//    }
+    private Components authSetting() {
+        return new Components()
+                .addSecuritySchemes(
+                        "access-token",
+                        new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT"));
+    }
 }
