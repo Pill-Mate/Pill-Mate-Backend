@@ -1,29 +1,23 @@
 package com.example.Pill_Mate_Backend.domain.check.controller;
 
+import com.example.Pill_Mate_Backend.domain.check.dto.ChangeDateDTO;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineCheckDTO;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDTO;
 import com.example.Pill_Mate_Backend.domain.check.service.HomeService;
 import com.example.Pill_Mate_Backend.domain.check.service.MedicineCheckService;
 import com.example.Pill_Mate_Backend.domain.oauth2.controller.AuthController;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 
 
 @RestController
@@ -37,6 +31,7 @@ public class CheckController {
     private final MedicineCheckService medicineCheckService;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+    @SneakyThrows
     @GetMapping("/default")
     public List<MedicineDTO> getMedicineSchedulesByDate(@RequestHeader(value = "Authorization", required = true) String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -47,17 +42,12 @@ public class CheckController {
                 email = jwtService.extractEmail(jwtToken);
 
             } else {
-                //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT");
+                logger.info("Invalid JWT");
             }
         }
-        //LocalDate localDate = LocalDate.parse(date); // 문자열을 LocalDate로 변환 오늘 date 넘겨주기
-        Date mydate = null;//----------------------!!!!!이거만 오늘로 바꾸기!!!!!!!
-        try {
-            mydate = format.parse("2024-11-03");
-        } catch (ParseException e) {
-            System.out.print("date문제");
-            throw new RuntimeException(e);
-        }
+
+        Date mydate = format.parse("2024-11-03");//----------------------!!!!!이거만 오늘로 바꾸기!!!!!!!
+
         System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
         return homeService.getMedicineSchedulesByDate(email, mydate);
     }
@@ -71,5 +61,26 @@ public class CheckController {
 
         medicineCheckService.updateCheckStatus(medicineCheckList);
         return ResponseEntity.ok().build();
+    }
+
+    @SneakyThrows
+    @PostMapping("/datechange")
+    public List<MedicineDTO> getMedicineSchedulesByDate2(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+
+            } else {
+                logger.info("Invalid JWT");
+            }
+        }
+
+        //date 받아서 데이터 뽑기.(homedefault와 함께 homeservice 사용..)
+        Date mydate = format.parse(changeDateDTO.getDate());
+        System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
+        return homeService.getMedicineSchedulesByDate(email, mydate);
     }
 }
