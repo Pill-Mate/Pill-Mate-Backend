@@ -62,24 +62,24 @@ public class Schedule extends BaseEntity {
     //set
     //intake_frequency, intake_count
     @Convert(converter = StringSetConverter.class)
-    @Column(name = "intakefrequency", columnDefinition = "SET('MON', 'TUE', 'WEN', 'THU', 'FRI', 'SAT', 'SUN')")
+    @Column(name = "intakefrequencys", columnDefinition = "SET('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY')")
 
     //월화수목금토일
-    private Set<String> intakeFrequency;
+    private Set<String> intakeFrequencys;
 
     @Convert(converter = StringSetConverter.class)
-    @Column(name = "intakecount", columnDefinition = "SET('MORNING', 'LUNCH', 'DINNER', 'EMPTY', 'SLEEP')")
+    @Column(name = "intakecounts", columnDefinition = "SET('MORNING', 'LUNCH', 'DINNER', 'EMPTY', 'SLEEP')")
 
     //아점저공취
-    private Set<String> intakeCount;
+    private Set<String> intakeCounts;
 
     //fk
     //user_id, medicine_id
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id")
     private Users users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 }

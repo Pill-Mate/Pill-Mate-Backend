@@ -47,7 +47,7 @@ public class RegisterController {
             log.info(registerDTO.toString());
             Users users = Users.builder()
                     .id(null)
-                    .userImg(URI.create("https://example.com/profile.jpg"))  // 임시 프로필 이미지
+                    .profileImage(URI.create("https://example.com/profile.jpg"))  // 임시 프로필 이미지
                     .username("testUser")  // 사용자 이름
                     .email("testuser@example.com")  // 이메일
                     .wakeupTime(Time.valueOf(LocalTime.of(7, 0)))  // 기상 시간 07:00

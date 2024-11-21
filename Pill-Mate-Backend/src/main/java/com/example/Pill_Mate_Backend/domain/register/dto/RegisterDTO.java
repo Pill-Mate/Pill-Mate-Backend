@@ -3,11 +3,9 @@ package com.example.Pill_Mate_Backend.domain.register.dto;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.IngredientUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.MedicineUnit;
 import lombok.Builder;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -31,8 +29,8 @@ public record RegisterDTO (
         String caution,
         String storage,
         Long medicineId,
-        Set<String> intakeFrequency,
-        Set<String> intakeCount,
+        Set<String> intakeCounts,
+        Set<String> intakeFrequencys,
         MealUnit mealUnit,
         int mealTime,
         EatUnit eatUnit,

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.net.URI;
 import java.sql.Time;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Users extends BaseEntity {
     private String email;
 
     @Column(nullable = false, length = 255)
-    private String profileImage;       //userImage로 바꿔야? -----------------!-------------------
+    private URI profileImage;       //userImage로 바꿔야? -----------------!-------------------
 
     @Column(nullable = false)
     private Time wakeupTime;
@@ -54,7 +55,7 @@ public class Users extends BaseEntity {
 
 
     //카카오 로그인 엔티티 생성할때 디폴트 값 넣어서 생성.
-    public Users(String username, String email, String profileImage){
+    public Users(String username, String email, URI profileImage){
         this.username = username;
         this.email = email;
         this.profileImage = profileImage;
