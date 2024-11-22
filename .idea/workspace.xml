@@ -4,13 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="initial commit">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="[Feat]약물 등록">
+      <change beforePath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/checksums/md5-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Medicine.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Medicine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/MedicineSchedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/MedicineSchedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Schedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/enums/IntakeSpecific.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/enums/IntakeCount.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/oauth2/dto/UserInfoResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/oauth2/dto/UserInfoResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/oauth2/service/KakaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/oauth2/service/KakaoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/controller/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/controller/RegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/dto/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/dto/RegisterDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/service/RegisterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/service/RegisterService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +54,16 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Record" />
+        <option value="Enum" />
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -46,6 +71,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -63,6 +89,9 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2jgRMOSCFqSHUJRA9g93vv0Lt4I" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -70,15 +99,16 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Gradle.Build Pill-Mate-Backend.executor": "Run",
+    "Gradle.Pill-Mate-Backend.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.PillMateBackendApplication.executor": "Run",
-    "git-widget-placeholder": "jihyun",
+    "git-widget-placeholder": "#7",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "F:/Pill-Mate-Backend/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/myuser",
+    "last_opened_file_path": "F:/2024/News-Snap-Backend",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -89,9 +119,17 @@
     "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "configurable.group.build",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.Pill_Mate_Backend.global.common.exception.handler" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\Pill-Mate-Backend\Pill-Mate-Backend\src\main\java\com\example\Pill_Mate_Backend\myuser" />
       <recent name="F:\Pill-Mate-Backend\Pill-Mate-Backend\src\main\java\com\example\Pill_Mate_Backend\statistics" />
@@ -130,6 +168,30 @@
       <workItem from="1721888495465" duration="95000" />
       <workItem from="1721888649933" duration="2804000" />
       <workItem from="1721971117046" duration="3142000" />
+      <workItem from="1722842968019" duration="2038000" />
+      <workItem from="1723284212433" duration="1201000" />
+      <workItem from="1723375900913" duration="43000" />
+      <workItem from="1723435166321" duration="594000" />
+      <workItem from="1723436640405" duration="3468000" />
+      <workItem from="1723535878180" duration="2925000" />
+      <workItem from="1723615615796" duration="2869000" />
+      <workItem from="1723736133502" duration="3723000" />
+      <workItem from="1723793496826" duration="1976000" />
+      <workItem from="1728527106783" duration="183000" />
+      <workItem from="1728527301793" duration="5963000" />
+      <workItem from="1729735837793" duration="347000" />
+      <workItem from="1730238821702" duration="10401000" />
+      <workItem from="1730249408908" duration="2920000" />
+      <workItem from="1730252373370" duration="369000" />
+      <workItem from="1730252757172" duration="937000" />
+      <workItem from="1730255000474" duration="2382000" />
+      <workItem from="1730271332581" duration="2825000" />
+      <workItem from="1730274180353" duration="9242000" />
+      <workItem from="1730898117633" duration="2703000" />
+      <workItem from="1730972345986" duration="1614000" />
+      <workItem from="1731040297356" duration="2244000" />
+      <workItem from="1731043033608" duration="1990000" />
+      <workItem from="1732186735479" duration="8229000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -139,7 +201,23 @@
       <option name="project" value="LOCAL" />
       <updated>1721831667088</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="PR테스트중">
+      <option name="closed" value="true" />
+      <created>1721996372457</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1721996372457</updated>
+    </task>
+    <task id="LOCAL-00003" summary="[Feat]약물 등록">
+      <option name="closed" value="true" />
+      <created>1731042092962</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1731042092962</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -156,7 +234,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="jihyun" />
                       </list>
                     </value>
                   </entry>
@@ -170,6 +248,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial commit" />
+    <MESSAGE value="ResponseDTO 추가" />
+    <MESSAGE value="PR테스트중" />
+    <MESSAGE value="[Feat]약물 등록" />
+    <option name="LAST_COMMIT_MESSAGE" value="[Feat]약물 등록" />
   </component>
 </project>
