@@ -48,7 +48,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/swagger-resources/**").permitAll() // 인증 없이 접근 가능한 경로
+                        .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/swagger-resources/**", "/**").permitAll() // 인증 없이 접근 가능한 경로
                         .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                         .anyRequest().authenticated() // 나머지 모든 요청은 인증 필요
                 )

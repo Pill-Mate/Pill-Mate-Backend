@@ -2,7 +2,7 @@ package com.example.Pill_Mate_Backend.CommonEntity;
 
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,7 +36,7 @@ public class MedicineSchedule extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
-    private IntakeSpecific intakeSpecific;
+    private IntakeCount intakeCount;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
