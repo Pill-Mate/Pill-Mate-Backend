@@ -1,8 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.check.controller;
 
-import com.example.Pill_Mate_Backend.domain.check.dto.ChangeDateDTO;
-import com.example.Pill_Mate_Backend.domain.check.dto.MedicineCheckDTO;
-import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDTO;
+import com.example.Pill_Mate_Backend.domain.check.dto.*;
+import com.example.Pill_Mate_Backend.domain.check.service.ClickMedicineService;
 import com.example.Pill_Mate_Backend.domain.check.service.HomeService;
 import com.example.Pill_Mate_Backend.domain.check.service.MedicineCheckService;
 import com.example.Pill_Mate_Backend.domain.oauth2.controller.AuthController;
@@ -30,6 +29,8 @@ public class CheckController {
     private final JwtService jwtService;
     private final MedicineCheckService medicineCheckService;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    @Autowired
+    private ClickMedicineService clickMedicineService;
 
     @SneakyThrows
     @GetMapping("/default")
@@ -82,5 +83,11 @@ public class CheckController {
         Date mydate = format.parse(changeDateDTO.getDate());
         System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
         return homeService.getMedicineSchedulesByDate(email, mydate);
+    }
+
+    @PostMapping("/clickmedicine")
+    public MedicineDetailDTO getMedicineDetail(@RequestBody ClickMedicineDTO clickMedicineDTO){
+        System.out.print(clickMedicineDTO);
+        return clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getMedicineScheduleId());
     }
 }

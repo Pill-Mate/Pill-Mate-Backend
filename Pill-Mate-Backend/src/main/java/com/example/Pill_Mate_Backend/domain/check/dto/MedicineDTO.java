@@ -1,7 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.check.dto;
 
 import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
+//import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import lombok.Builder;
 import lombok.Data;

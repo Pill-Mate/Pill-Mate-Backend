@@ -2,7 +2,7 @@ package com.example.Pill_Mate_Backend.domain.check.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineCheckDTO;
-import com.example.Pill_Mate_Backend.domain.check.repository.MedicineScheduleRepository;
+import com.example.Pill_Mate_Backend.domain.check.repository.MedicineScheduleRepository2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class MedicineCheckService {
     @Autowired
-    private MedicineScheduleRepository repository;
+    private MedicineScheduleRepository2 repository;
 
     public void updateCheckStatus(List<MedicineCheckDTO> updateList) {
         for (MedicineCheckDTO dto : updateList) {

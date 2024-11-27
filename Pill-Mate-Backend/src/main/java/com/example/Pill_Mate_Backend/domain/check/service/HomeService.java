@@ -1,10 +1,8 @@
 package com.example.Pill_Mate_Backend.domain.check.service;
 
-import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
+//import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDTO;
-import com.example.Pill_Mate_Backend.domain.check.repository.MedicineScheduleRepository;
+import com.example.Pill_Mate_Backend.domain.check.repository.MedicineScheduleRepository2;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.util.ArrayList;
+        import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +19,7 @@ import java.util.List;
 public class HomeService {
 
     @Autowired
-    private MedicineScheduleRepository medicineScheduleRepository;
+    private MedicineScheduleRepository2 medicineScheduleRepository2;
 
     //public List<MedicineDTO> getMedicineSchedulesByDate(String email, Date date) {
     //    System.out.print(medicineScheduleRepository.findByIntakeDate(email, date));//삭제
@@ -31,7 +28,7 @@ public class HomeService {
 
     @SneakyThrows
     public List<MedicineDTO> getMedicineSchedulesByDate(String email, Date date) {
-        List<Object[]> results = medicineScheduleRepository.findByIntakeDate(email, date);
+        List<Object[]> results = medicineScheduleRepository2.findByIntakeDate(email, date);
         List<MedicineDTO> medicineDTOList = new ArrayList<>();
 
         for (Object[] result : results) {
