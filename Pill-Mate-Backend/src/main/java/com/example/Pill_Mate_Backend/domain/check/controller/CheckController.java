@@ -65,7 +65,7 @@ public class CheckController {
     }
 
     @SneakyThrows
-    @PostMapping("/datechange")
+    @PostMapping("/datechange2")
     public List<MedicineDTO> getMedicineSchedulesByDate2(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
@@ -83,6 +83,34 @@ public class CheckController {
         Date mydate = format.parse(changeDateDTO.getDate());
         System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
         return homeService.getMedicineSchedulesByDate(email, mydate);
+    }
+
+    @SneakyThrows
+    @PostMapping("/datechange")
+    public ResponseDTO getMedicineSchedulesByDate3(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+
+            } else {
+                logger.info("Invalid JWT");
+            }
+        }
+
+        //date 받아서 데이터 뽑기.(homedefault와 함께 homeservice 사용..)
+        Date mydate;
+        if(changeDateDTO.getDate()==null || changeDateDTO.getDate()==""){
+            mydate = format.parse("2024-11-03"); //null일때 오늘로 설정(바꿔야!-------------------------------------------
+        }else{
+            mydate = format.parse(changeDateDTO.getDate());
+        }
+        List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate(email, mydate);
+        WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
+        System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
+        return new ResponseDTO(medicineList, weekCount);
     }
 
     @PostMapping("/clickmedicine")

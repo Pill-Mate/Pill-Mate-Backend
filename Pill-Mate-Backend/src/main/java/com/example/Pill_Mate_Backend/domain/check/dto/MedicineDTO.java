@@ -28,7 +28,7 @@ public class MedicineDTO {//interface는 왜 안된걸까..? enum과 uri 때문�
 */
     //medicine_schedule
     private Long medicineScheduleId;
-    private String intakeSpecific;//intakespecific
+    private String intakeCount;//intakespecific
     private Time intakeTime;
     private Integer eatCount;
     private String eatUnit;//eatunit
@@ -39,12 +39,12 @@ public class MedicineDTO {//interface는 왜 안된걸까..? enum과 uri 때문�
     //medicine
     private String medicineName;
     private URI medicineImage;
-    public MedicineDTO(Long id, String intakeSpecific, Time intakeTime, Integer eatCount,
+    public MedicineDTO(Long id, String intakeCount, Time intakeTime, Integer eatCount,
                        String eatUnit, Integer mealTime, String mealUnit, Boolean eatCheck,
                        String medicineName, URI medicineImage) {
         // 필드 초기화
         setMedicineScheduleId(id);
-        this.intakeSpecific = intakeSpecific;
+        this.intakeCount = intakeCount;
         setIntakeTime(intakeTime);
         setEatCount(eatCount);
         this.eatUnit = eatUnit;

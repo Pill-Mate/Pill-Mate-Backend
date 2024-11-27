@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSchedule, Long> {
-    @Query(value = "SELECT ms.id as medicinescheduleid, ms.intake_specific as intakespecific, ms.intake_time as intaketime, ms.eat_count as eatcount, " +
+    @Query(value = "SELECT ms.id as medicinescheduleid, ms.intake_count as intakecount, ms.intake_time as intaketime, ms.eat_count as eatcount, " +
             "ms.eat_unit as eatunit, ms.meal_time as mealtime, ms.meal_unit as mealunit, ms.eat_check as eatcheck, m.medicine_name as medicinename, m.medicine_image as medicineimage " +
             "FROM medicine_schedule ms " +
             "JOIN medicine m " +
@@ -31,4 +31,27 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
             "where ms.id = :medicineScheduleId"
             , nativeQuery = true)
     Object[] findMedicineDetailByScheduleId(@Param("medicineScheduleId") long medicineScheduleId);
+
+    //count 받아오기
+    @Query(value = "Select count(*) From medicine_schedule ms " +
+            "Join users u on u.id = ms.user_id " +
+            "where ms.intake_date = :date and u.email = :email"
+            , nativeQuery = true)
+    Object[] findAllCountByDate(@Param("email") String email, @Param("date") Date date);
+    @Query(value = "Select count(*) From medicine_schedule ms " +
+            "Join users u on u.id = ms.user_id " +
+            "where ms.intake_date = :date and u.email = :email and eat_check = 0"
+            , nativeQuery = true)
+    Object[] findLeftCountByDate(@Param("email") String email, @Param("date") Date date);
+
+    //week 받아오기
+    @Query(value = "Select date(ms.intake_date) as target " +
+            "From medicine_schedule ms " +
+            "Join users u on u.id = ms.user_id " +
+            "where u.email = :email and ms.intake_date between :startdate and :enddate " +
+            "group by date(ms.intake_date) " +
+            "having sum(ms.eat_check) > 0 " +
+            "order by target"
+            , nativeQuery = true)
+    List<Object[]> findExitWeekByDate(@Param("email") String email, @Param("startdate") Date startDate, @Param("enddate") Date endDate);
 }
