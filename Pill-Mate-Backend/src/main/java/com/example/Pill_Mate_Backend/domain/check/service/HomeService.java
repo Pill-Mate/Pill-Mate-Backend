@@ -3,6 +3,7 @@ package com.example.Pill_Mate_Backend.domain.check.service;
 //import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDTO;
 import com.example.Pill_Mate_Backend.domain.check.dto.WeekCountDTO;
+import com.example.Pill_Mate_Backend.domain.check.dto.WeekDTO;
 import com.example.Pill_Mate_Backend.domain.check.repository.MedicineScheduleRepository2;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -20,10 +21,6 @@ public class HomeService {
     @Autowired
     private MedicineScheduleRepository2 medicineScheduleRepository2;
 
-    //public List<MedicineDTO> getMedicineSchedulesByDate(String email, Date date) {
-    //    System.out.print(medicineScheduleRepository.findByIntakeDate(email, date));//삭제
-    //    return medicineScheduleRepository.findByIntakeDate(email, date);
-    //}
 
     @SneakyThrows
     public List<MedicineDTO> getMedicineSchedulesByDate(String email, Date date) {
@@ -92,12 +89,51 @@ public class HomeService {
 
         WeekCountDTO weekCountDTO = new WeekCountDTO(
                 sunday, monday, tuesday, wednesday, thursday, friday, saturday,
-                //countAllResult[0].intValue(),
                 Long.valueOf(String.valueOf(Optional.ofNullable(countAllResult[0]).orElse(0L))).intValue(),
                 Long.valueOf(String.valueOf(Optional.ofNullable(countLeftResult[0]).orElse(0L))).intValue()
-                //(Integer) countLeftResult[0]
         );
         return weekCountDTO;
+    }
+
+    public WeekDTO getWeekByDate(String email, Date date){
+
+        //date 범위 알아내기(일주일 범위 알아내기)
+        Map<String, Date> weekRange = getWeekRange(date);
+        Date startDate = weekRange.get("startOfWeek");
+        Date endDate = weekRange.get("endOfWeek");
+        System.out.println("Date: " + weekRange.get("startOfWeek") + " - " + weekRange.get("endOfWeek"));
+
+        Boolean sunday = false;
+        Boolean monday = false;
+        Boolean tuesday = false;
+        Boolean wednesday = false;
+        Boolean thursday = false;
+        Boolean friday = false;
+        Boolean saturday = false;
+
+        List<Object[]> weekResult = medicineScheduleRepository2.findExitWeekByDate(email, startDate, endDate);
+        Calendar calendar = Calendar.getInstance();
+        for (Object[] result : weekResult){
+            calendar.setTime((Date) result[0]);
+
+            // 현재 날짜의 요일을 가져옴 (1: Sunday, 2: Monday, ..., 7: Saturday)
+            int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+            if(currentDayOfWeek ==1 ) {sunday = true;}
+            else if(currentDayOfWeek == 2 ) {monday = true;}
+            else if(currentDayOfWeek == 3 ) {tuesday = true;}
+            else if(currentDayOfWeek == 4 ) {wednesday = true;}
+            else if(currentDayOfWeek == 5 ) {thursday = true;}
+            else if(currentDayOfWeek == 6 ) {friday = true;}
+            else if(currentDayOfWeek == 7 ) {saturday = true;}
+        }
+
+        System.out.println("week:"+sunday+monday+tuesday+wednesday+thursday+friday+saturday);
+
+        WeekDTO weekDTO = new WeekDTO(
+                sunday, monday, tuesday, wednesday, thursday, friday, saturday
+        );
+        return weekDTO;
     }
 
     public static Map<String, Date> getWeekRange(Date date) {
