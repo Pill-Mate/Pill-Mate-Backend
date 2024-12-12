@@ -42,16 +42,30 @@ dependencies {
 //1009추가
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+
 //JWT
+
+	//1009추가
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//JWT
+
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
-tasks.named('test') {
+test {//tasks.named('test')
 	useJUnitPlatform()
 }
+
 //성현 추가
 tasks.withType(JavaCompile) {
 	options.compilerArgs << "-Xlint:unchecked"
 }
+
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-Xlint:unchecked"
+}
+
