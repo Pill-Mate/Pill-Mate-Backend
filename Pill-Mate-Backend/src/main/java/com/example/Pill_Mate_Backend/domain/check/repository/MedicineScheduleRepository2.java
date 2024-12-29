@@ -24,7 +24,7 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
             , nativeQuery = true)
     List<Object[]> findByIntakeDate(@Param("email") String email, @Param("date") Date date);
 
-    @Query(value = "select m.medicine_name, m.medicine_image, m.class_name, m.ingredient, m.efficacy, m.caution, m.side_effect, m.storage " +
+    @Query(value = "select m.medicine_name, m.medicine_image, m.class_name, m.ingredient, m.efficacy, m.caution, m.side_effect, m.storage, m.entp_name " +
             "from medicine_schedule ms " +
             "join medicine m " +
             "on ms.medicine_id = m.id " +
