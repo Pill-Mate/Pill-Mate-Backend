@@ -23,6 +23,7 @@ public record RegisterDTO (
         float ingredientAmount,
 
         URI medicineImage,
+        String entpName,
         String classname,
         String efficacy,
         String sideEffect,
