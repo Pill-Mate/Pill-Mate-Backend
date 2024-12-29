@@ -56,6 +56,7 @@ public class RegisterService {
                 .medicineName(registerDTO.medicineName())
                 .ingredient(registerDTO.ingredient())
                 .medicineImage(registerDTO.medicineImage())
+                .entpName(registerDTO.entpName())
                 .className(registerDTO.classname())
                 .efficacy(registerDTO.efficacy())
                 .sideEffect(registerDTO.sideEffect())

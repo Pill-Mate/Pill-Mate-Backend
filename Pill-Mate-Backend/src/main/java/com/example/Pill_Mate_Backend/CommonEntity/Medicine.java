@@ -35,6 +35,9 @@ public class Medicine extends BaseEntity {
     private URI medicineImage;
 
     @Column(nullable = false, length = 50)
+    private String entpName;
+
+    @Column(nullable = false, length = 50)
     private String className;
 
     @Column(nullable = false, length = 250)
