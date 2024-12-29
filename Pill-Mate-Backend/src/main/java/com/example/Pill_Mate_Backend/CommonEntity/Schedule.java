@@ -75,7 +75,7 @@ public class Schedule extends BaseEntity {
 
     //fk
     //user_id, medicine_id
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
 
