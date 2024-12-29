@@ -20,4 +20,5 @@ public class MedicineDetailDTO {
     private String caution;
     private String sideEffect;
     private String storage;
+    private String entpName;
 }
