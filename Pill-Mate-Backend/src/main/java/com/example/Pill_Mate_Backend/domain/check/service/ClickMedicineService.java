@@ -42,6 +42,7 @@ public class ClickMedicineService {
         String caution= null;
         String sideEffect= null;
         String storage= null;
+        String entpName = null;
 
         for (Object obj : result) {
             // 내부 배열 요소를 하나씩 출력
@@ -57,6 +58,7 @@ public class ClickMedicineService {
             caution = (String) innerArray[5];
             sideEffect = (String) innerArray[6];
             storage = (String) innerArray[7];
+            entpName = (String) innerArray[8];
         }
 
         // DTO에 값 설정
@@ -68,7 +70,8 @@ public class ClickMedicineService {
                 efficacy,
                 caution,
                 sideEffect,
-                storage
+                storage,
+                entpName
         );
         return medicineDetailDTO;
     }
