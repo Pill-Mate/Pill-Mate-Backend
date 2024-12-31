@@ -55,6 +55,12 @@ public class AuthController {
         if (existingUser.isPresent()) {
             // 이미 존재하는 유저 -> 로그인 처리
             Users users = existingUser.get();
+
+            // 기존 유저 정보 업데이트
+            users.setUsername(userInfo.getName()); // 닉네임 업데이트
+            users.setProfileImage(userInfo.getProfileImage()); // 프로필 사진 업데이트
+            userRepository.save(users); // 변경된 정보 저장
+
             String jwtToken = jwtService.generateToken(users.getEmail());
 
             // 세션에 accessToken 저장
