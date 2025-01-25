@@ -36,7 +36,7 @@ public class CheckController {
     @SneakyThrows
     @PatchMapping("/medicinecheck")
     public ResponseDTO updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
-        System.out.print(medicineCheckList);
+        System.out.println(medicineCheckList);
         if (medicineCheckList == null || medicineCheckList.isEmpty()) {
             logger.info("Invalid or empty request body");
             return null;
@@ -60,6 +60,7 @@ public class CheckController {
         long medicineScheduleId = medicineCheckList.get(0).getMedicineScheduleId();
 
         Date mydate = homeService.getDateByScheduleId(medicineScheduleId);
+        mydate = format.parse(String.valueOf(mydate));
         System.out.println("오늘 DATE!! : " + mydate);
         if (mydate == null) {
             mydate = new Date(); // 현재 날짜로 설정
