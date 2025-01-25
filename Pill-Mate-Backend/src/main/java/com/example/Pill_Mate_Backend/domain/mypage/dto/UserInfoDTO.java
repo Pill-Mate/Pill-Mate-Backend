@@ -8,12 +8,12 @@ import java.net.URI;
 @Builder
 @Data
 public class UserInfoDTO {
-    private String username;
+    private String userName;
     private String email;
     private URI profileImage;
 
     public UserInfoDTO(String username, String email, URI profileImage) {
-        this.username = username;
+        this.userName = username;
         this.email = email;
         this.profileImage = profileImage;
     }
