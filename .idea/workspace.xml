@@ -4,15 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="[Feat]약물 등록">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="[Fix]인증키 환경 변수 설정&#10;- 인증키 property로 관리하도록 수정">
+      <change afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/dto/OnboardingDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/controller/ApiTestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/controller/ApiTestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Medicine.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Medicine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/controller/OpenApiController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/controller/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/controller/RegisterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/dto/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/dto/RegisterDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/service/RegisterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/service/RegisterService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +63,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -83,36 +87,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build Pill-Mate-Backend.executor": "Run",
-    "Gradle.Pill-Mate-Backend.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.PillMateBackendApplication.executor": "Run",
-    "git-widget-placeholder": "#7",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "F:/2024/News-Snap-Backend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build Pill-Mate-Backend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Pill-Mate-Backend.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PillMateBackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#7&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/2024/News-Snap-Backend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;profiler.jvm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.Pill_Mate_Backend.global.common.exception.handler" />
@@ -194,6 +198,14 @@
       <workItem from="1734575642646" duration="109000" />
       <workItem from="1734590491178" duration="249000" />
       <workItem from="1735370768071" duration="2728000" />
+      <workItem from="1735863162694" duration="677000" />
+      <workItem from="1735964728375" duration="4622000" />
+      <workItem from="1736944554566" duration="778000" />
+      <workItem from="1736945358736" duration="1532000" />
+      <workItem from="1736986369605" duration="45000" />
+      <workItem from="1737731471352" duration="1406000" />
+      <workItem from="1737732912409" duration="16884000" />
+      <workItem from="1737792941765" duration="3028000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -219,7 +231,23 @@
       <option name="project" value="LOCAL" />
       <updated>1731042092962</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="[Fix]테이블 수정&#10;- Hopital, Medicine 테이블에 병원 주소, 약국 주소 추가">
+      <option name="closed" value="true" />
+      <created>1737776882741</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1737776882741</updated>
+    </task>
+    <task id="LOCAL-00005" summary="[Fix]인증키 환경 변수 설정&#10;- 인증키 property로 관리하도록 수정">
+      <option name="closed" value="true" />
+      <created>1737793779381</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1737793779381</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,6 +281,9 @@
     <MESSAGE value="ResponseDTO 추가" />
     <MESSAGE value="PR테스트중" />
     <MESSAGE value="[Feat]약물 등록" />
-    <option name="LAST_COMMIT_MESSAGE" value="[Feat]약물 등록" />
+    <MESSAGE value="[Fix]테이블 수정&#10;-medicine table에 제약회사 entpName추가" />
+    <MESSAGE value="[Fix]테이블 수정&#10;- Hopital, Medicine 테이블에 병원 주소, 약국 주소 추가" />
+    <MESSAGE value="[Fix]인증키 환경 변수 설정&#10;- 인증키 property로 관리하도록 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="[Fix]인증키 환경 변수 설정&#10;- 인증키 property로 관리하도록 수정" />
   </component>
 </project>
