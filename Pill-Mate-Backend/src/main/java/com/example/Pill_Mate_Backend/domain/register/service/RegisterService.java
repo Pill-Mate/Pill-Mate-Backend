@@ -127,22 +127,40 @@ public class RegisterService {
                 for (String intakeCount1 : registerDTO.intakeCounts()) {
                     IntakeCount intakeCount = IntakeCount.valueOf(intakeCount1); //String값 IntakeCount로 변환
                     log.info("CreateMedicineSchedule for문 2 value:{}", intakeCount.values());
+                    MedicineSchedule medicineSchedule = null;
                     // 섭취 시간을 계산하여 설정
-                    LocalTime intakeTime = calculateIntakeTime(users, intakeCount, registerDTO.mealUnit(), registerDTO.mealTime());
+                    if(intakeCount == IntakeCount.EMPTY || intakeCount == IntakeCount.SLEEP || intakeCount == IntakeCount.NEEDED) {
+                        LocalTime intakeTime = calculateIntakeTime(users, intakeCount, null, registerDTO.mealTime());
 
-                    MedicineSchedule medicineSchedule = MedicineSchedule.builder()
-                            .medicine(medicine)
-                            .users(schedule.getUsers())
-                            .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
-                            .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
-                            .eatUnit(registerDTO.eatUnit())
-                            .eatCount(registerDTO.eatCount())
-                            .intakeCount(intakeCount)  // Enum 값 설정
-                            .mealUnit(registerDTO.mealUnit())
-                            .mealTime(registerDTO.mealTime())
-                            .eatCheck(false)  // 초기값 false
-                            .build();
+                        medicineSchedule = MedicineSchedule.builder()
+                                .medicine(medicine)
+                                .users(schedule.getUsers())
+                                .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
+                                .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
+                                .eatUnit(registerDTO.eatUnit())
+                                .eatCount(registerDTO.eatCount())
+                                .intakeCount(intakeCount)  // Enum 값 설정
+                                .mealUnit(null)
+                                .mealTime(registerDTO.mealTime())
+                                .eatCheck(false)  // 초기값 false
+                                .build();
+                    }
+                    else {
+                        LocalTime intakeTime = calculateIntakeTime(users, intakeCount, registerDTO.mealUnit(), registerDTO.mealTime());
 
+                        medicineSchedule = MedicineSchedule.builder()
+                                .medicine(medicine)
+                                .users(schedule.getUsers())
+                                .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
+                                .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
+                                .eatUnit(registerDTO.eatUnit())
+                                .eatCount(registerDTO.eatCount())
+                                .intakeCount(intakeCount)  // Enum 값 설정
+                                .mealUnit(registerDTO.mealUnit())
+                                .mealTime(registerDTO.mealTime())
+                                .eatCheck(false)  // 초기값 false
+                                .build();
+                    }
                     schedules.add(medicineSchedule);  // 생성된 인스턴스를 리스트에 추가
                     log.info("medicineSchedule:{}", medicineSchedule);
                     medicineScheduleRepository.save(medicineSchedule);
@@ -190,7 +208,7 @@ public class RegisterService {
         if (mealUnit == MealUnit.MEALBEFORE && (intakeCount != EMPTY || intakeCount != SLEEP ||intakeCount != NEEDED )) {
             log.info("섭취 시간:{}",baseTime.minusMinutes(mealTime));
             return baseTime.minusMinutes(mealTime);  // 식전이면 시간 빼기
-        } else if (mealUnit == MealUnit.MEALAFTER) {
+        } else if (mealUnit == MealUnit.MEALAFTER && (intakeCount != EMPTY || intakeCount != SLEEP ||intakeCount != NEEDED )) {
             return baseTime.plusMinutes(mealTime);   // 식후면 시간 더하기
         } else if (mealUnit == null) {
             return baseTime;

@@ -4,19 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="[Fix]인증키 환경 변수 설정&#10;- 인증키 property로 관리하도록 수정">
-      <change afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/dto/OnboardingDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Pill-Mate-Backend.test.iml" afterDir="false" />
+    <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="[Fix] 설정 파일 변경&#10;- 설정 파일 변경">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Medicine.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Medicine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/controller/OpenApiController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/controller/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/controller/RegisterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/dto/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/dto/RegisterDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/controller/DurApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/controller/DurApiController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/EfcyDplctApiItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/EfcyDplctApiItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/MedicineRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/MedicineRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/service/RegisterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/service/RegisterService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -205,7 +200,10 @@
       <workItem from="1736986369605" duration="45000" />
       <workItem from="1737731471352" duration="1406000" />
       <workItem from="1737732912409" duration="16884000" />
-      <workItem from="1737792941765" duration="3028000" />
+      <workItem from="1737792941765" duration="12966000" />
+      <workItem from="1737818552272" duration="138000" />
+      <workItem from="1737818707750" duration="212000" />
+      <workItem from="1737818933598" duration="3559000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -247,7 +245,47 @@
       <option name="project" value="LOCAL" />
       <updated>1737793779381</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="[Fix]추후 1순위 구현을 위한 수정 &#10;- 인증키 property로 관리하도록 수정">
+      <option name="closed" value="true" />
+      <created>1737796093992</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1737796093992</updated>
+    </task>
+    <task id="LOCAL-00007" summary="[Fix] 취침 전 약물 복용 수정&#10;- 만약에 취침시간이 다음 날 오전 12시 이후일 경우 취침 전 알람은 당일인 그 전날 오후 11시 50분으로 설정하도록 수정">
+      <option name="closed" value="true" />
+      <created>1737796173828</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1737796173828</updated>
+    </task>
+    <task id="LOCAL-00008" summary="[Feat] 로그인 api 별 적용&#10;- 사용자 토큰 받아서 유효성 검사 후 사용자 검색">
+      <option name="closed" value="true" />
+      <created>1737796232882</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1737796232882</updated>
+    </task>
+    <task id="LOCAL-00009" summary="[Fix] 파일 명 변경 및 삭제 &#10;- 테스트 파일 삭제">
+      <option name="closed" value="true" />
+      <created>1737796260360</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1737796260360</updated>
+    </task>
+    <task id="LOCAL-00010" summary="[Fix] 설정 파일 변경&#10;- 설정 파일 변경">
+      <option name="closed" value="true" />
+      <created>1737796294793</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1737796294793</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -284,6 +322,11 @@
     <MESSAGE value="[Fix]테이블 수정&#10;-medicine table에 제약회사 entpName추가" />
     <MESSAGE value="[Fix]테이블 수정&#10;- Hopital, Medicine 테이블에 병원 주소, 약국 주소 추가" />
     <MESSAGE value="[Fix]인증키 환경 변수 설정&#10;- 인증키 property로 관리하도록 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="[Fix]인증키 환경 변수 설정&#10;- 인증키 property로 관리하도록 수정" />
+    <MESSAGE value="[Fix]추후 1순위 구현을 위한 수정 &#10;- 인증키 property로 관리하도록 수정" />
+    <MESSAGE value="[Fix] 취침 전 약물 복용 수정&#10;- 만약에 취침시간이 다음 날 오전 12시 이후일 경우 취침 전 알람은 당일인 그 전날 오후 11시 50분으로 설정하도록 수정" />
+    <MESSAGE value="[Feat] 로그인 api 별 적용&#10;- 사용자 토큰 받아서 유효성 검사 후 사용자 검색" />
+    <MESSAGE value="[Fix] 파일 명 변경 및 삭제 &#10;- 테스트 파일 삭제" />
+    <MESSAGE value="[Fix] 설정 파일 변경&#10;- 설정 파일 변경" />
+    <option name="LAST_COMMIT_MESSAGE" value="[Fix] 설정 파일 변경&#10;- 설정 파일 변경" />
   </component>
 </project>
