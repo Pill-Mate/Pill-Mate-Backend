@@ -1,6 +1,5 @@
 package com.example.Pill_Mate_Backend.domain.conflict.service;
 
-import com.example.Pill_Mate_Backend.domain.conflict.dto.UsjntTabooApiItem;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.UsjntTabooApiItems;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 //병용금기
 @Service
