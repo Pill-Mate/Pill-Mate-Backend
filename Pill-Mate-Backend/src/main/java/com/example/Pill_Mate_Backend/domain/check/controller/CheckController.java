@@ -34,7 +34,7 @@ public class CheckController {
     private ClickMedicineService clickMedicineService;
 
     @SneakyThrows
-    @PatchMapping("/medicinecheck")
+    @PostMapping("/medicinecheck")
     public ResponseDTO updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
         System.out.println(medicineCheckList);
         if (medicineCheckList == null || medicineCheckList.isEmpty()) {
