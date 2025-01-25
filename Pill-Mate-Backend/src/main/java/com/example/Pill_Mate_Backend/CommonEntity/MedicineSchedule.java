@@ -39,7 +39,7 @@ public class MedicineSchedule extends BaseEntity {
     private IntakeCount intakeCount;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column(columnDefinition = "VARCHAR(10)", nullable = true)
     private MealUnit mealUnit;
 
     @Column(nullable = false, length = 50)
