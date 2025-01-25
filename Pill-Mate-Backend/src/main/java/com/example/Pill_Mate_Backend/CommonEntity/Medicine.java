@@ -85,4 +85,5 @@ public class Medicine extends BaseEntity {
 
     @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
     private List<MedicineSchedule> medicineSchedules;
+    
 }
