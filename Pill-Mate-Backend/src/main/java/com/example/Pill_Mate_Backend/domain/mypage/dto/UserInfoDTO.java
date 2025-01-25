@@ -10,9 +10,9 @@ import java.net.URI;
 public class UserInfoDTO {
     private String userName;
     private String email;
-    private URI profileImage;
+    private String profileImage;
 
-    public UserInfoDTO(String username, String email, URI profileImage) {
+    public UserInfoDTO(String username, String email, String profileImage) {
         this.userName = username;
         this.email = email;
         this.profileImage = profileImage;

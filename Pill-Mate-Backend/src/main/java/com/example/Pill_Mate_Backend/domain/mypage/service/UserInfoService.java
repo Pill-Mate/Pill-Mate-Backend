@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -38,6 +39,7 @@ public class UserInfoService {
         System.out.println("Result[0] type: " + result[0].getClass().getName());
         System.out.println("Result[1] type: " + result[1].getClass().getName());
 
+
         byte[] byteArray = (byte[]) result[0];
 
         URI profileImage = null;
@@ -59,7 +61,7 @@ public class UserInfoService {
         UserInfoDTO userInfoDTO = new UserInfoDTO(
                 username,
                 email,
-                profileImage
+                profileImage.toString()
         );
 
         return userInfoDTO;
