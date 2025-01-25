@@ -22,6 +22,9 @@ public class Pharmacy extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String pharmacyPhone;
 
+    @Column(nullable = false, length = 50)
+    private String pharmacyAddress;
+
     //fk
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

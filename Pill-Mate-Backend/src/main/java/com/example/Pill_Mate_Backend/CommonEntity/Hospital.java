@@ -23,6 +23,9 @@ public class Hospital extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String hospitalPhone;
 
+    @Column(nullable = false, length = 50)
+    private String hospitalAddress;
+
     //fk
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
