@@ -158,4 +158,10 @@ public class HomeService {
 
         return weekRange;
     }
+
+    //
+    public Date getDateByScheduleId(Long MedicineScheduleId){
+        Object[] obj = medicineScheduleRepository2.findDateByMedicineScheduleId(MedicineScheduleId);
+        return (Date) obj[0];
+    }
 }
