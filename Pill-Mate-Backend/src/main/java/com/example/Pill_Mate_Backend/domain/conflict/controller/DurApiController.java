@@ -39,9 +39,9 @@ public class DurApiController {
                 //"&typeName=병용금기" + -> 한글로 인코딩
                 "&typeName=" + URLEncoder.encode("병용금기","UTF-8")+
                 //임의값
-                "&itemSeq=201405281" ;
+                //"&itemSeq=201405281" ;
                 //추후 프론트에서 받아올 시 itemSeq requestparam
-                //"&itemSeq="+itemSeq ;
+                "&itemSeq="+itemSeq ;
         URL url = new URL(urlbyeongyong);
         log.info(url.toString());
 
@@ -80,9 +80,9 @@ public class DurApiController {
                 //"&typeName=병용금기" + -> 한글로 인코딩
                 "&typeName=" + URLEncoder.encode("효능군중복","UTF-8")+
                 //임의값
-                "&itemSeq=199102092";
+                //"&itemSeq=199102092";
                 //추후 프론트에서 받아올 시 itemSeq requestparam
-                //"&itemSeq="+itemSeq ;
+                "&itemSeq="+itemSeq ;
         URL url = new URL(urlEfcy);
         log.info(url.toString());
 
