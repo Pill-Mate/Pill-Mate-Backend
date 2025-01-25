@@ -23,7 +23,7 @@ public class Schedule extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column(columnDefinition = "VARCHAR(10)", nullable = true)
     private MealUnit mealUnit;
 
     @Column(nullable = false, length = 50)
