@@ -8,6 +8,7 @@ import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;
 import com.example.Pill_Mate_Backend.domain.register.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -95,6 +96,7 @@ public class RegisterService {
                 .hospitalName(registerDTO.hospitalName())
                 .hospitalPhone(registerDTO.hospitalPhone())
                 .medicine(medicine)
+                .hospitalAddress(registerDTO.hospitalAddress())
                 .build();
         hospitalRepository.save(hospital);
     }
@@ -104,6 +106,7 @@ public class RegisterService {
                 .pharmacyName(registerDTO.pharmacyName())
                 .pharmacyPhone(registerDTO.pharmacyPhone())
                 .medicine(medicine)
+                .pharmacyAddress(registerDTO.pharmacyAddress())
                 .build();
         pharmacyRepository.save(pharmacy);
     }
@@ -116,7 +119,7 @@ public class RegisterService {
         // intakePeriod 동안 반복
         for (int i = 0; i < registerDTO.intakePeriod(); i++) {
             LocalDate currentDate = registerDTO.startDate().toInstant()
-                   .atZone(ZoneId.systemDefault()).toLocalDate().plusDays(i);  // 날짜 계산
+                    .atZone(ZoneId.systemDefault()).toLocalDate().plusDays(i);  // 날짜 계산
             DayOfWeek dayOfWeek = currentDate.getDayOfWeek(); //현재 날짜에 대한 요일
             log.info("CreateMedicineSchedule for문 1 i값:{} , registerDTO.intakePeriod():{} ",i,registerDTO.intakePeriod());
             if (registerDTO.intakeFrequencys().contains(dayOfWeek.toString())) {
@@ -163,15 +166,29 @@ public class RegisterService {
             case LUNCH -> baseTime = users.getLunchTime().toLocalTime();
             case DINNER -> baseTime = users.getDinnerTime().toLocalTime();
             case EMPTY -> baseTime = users.getWakeupTime().toLocalTime();
-            case SLEEP -> baseTime = users.getBedTime().toLocalTime();
+            case SLEEP ->
+            {
+                //만약에 취침시간이 다음 날 오전 12시 이후, 즉 새벽일 경우에는
+                if(users.getBedTime().toLocalTime().getHour() < 12) {
+                    // 전날(당일 날) 오후 11시 50분으로 설정한다.
+                    baseTime = LocalTime.of(23,50,0);
+                }
+                else {
+                    baseTime = users.getBedTime().toLocalTime();
+                }
+            }
             case NEEDED -> baseTime = LocalTime.now();
             default -> throw new IllegalArgumentException("Invalid intake specific: " + intakeCount);
         }
         log.info("intakeFrequency");
 
+        // 만약 취침 시간(SLEEP)이 당일 저녁 12시 이후, 즉 새벽이면 취췸 전 시간은 저녁 11시 50분으로 고정한다.
+        if (users.getBedTime().toLocalTime().getHour() < 12) {
+
+        }
         // MEALBEFORE / MEALAFTER에 따라 시간 조정
         if (mealUnit == MealUnit.MEALBEFORE && (intakeCount != EMPTY || intakeCount != SLEEP ||intakeCount != NEEDED )) {
-        log.info("섭취 시간:{}",baseTime.minusMinutes(mealTime));
+            log.info("섭취 시간:{}",baseTime.minusMinutes(mealTime));
             return baseTime.minusMinutes(mealTime);  // 식전이면 시간 빼기
         } else if (mealUnit == MealUnit.MEALAFTER) {
             return baseTime.plusMinutes(mealTime);   // 식후면 시간 더하기
