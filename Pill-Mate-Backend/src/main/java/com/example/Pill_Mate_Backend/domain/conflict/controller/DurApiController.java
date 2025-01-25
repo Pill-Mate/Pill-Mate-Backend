@@ -2,8 +2,10 @@ package com.example.Pill_Mate_Backend.domain.conflict.controller;
 
 import com.example.Pill_Mate_Backend.domain.conflict.service.ApiService;
 import com.example.Pill_Mate_Backend.domain.conflict.service.EfcyApiService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
@@ -13,17 +15,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+
 @Slf4j
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/dur")
 @RequiredArgsConstructor
-public class ApiTestController {
-    @GetMapping("/api1")
+public class DurApiController {
+    @Value("${openApi.serviceKey}")
+    private String serviceKey;
+    // 병용금기
+    @Operation(summary = "병용금기", description = "헤더의 itemSeq약물 번호로 해당 약물의 병용금기 약물 리턴")
+    @GetMapping("/usjnt-taboo")
     public String UsjntTaboocallapi(@RequestParam String itemSeq) throws IOException {
         StringBuilder sb = new StringBuilder();
         //병용금기 정보조회
         String urlbyeongyong = "http://apis.data.go.kr/1471000/DURPrdlstInfoService03/getUsjntTabooInfoList03?" +
-                "serviceKey=UY683TnxM3KUyQNIcQA5uiJSDCQvR9SYSlBjSqiScBYB2RE/FUWFJ/Q7vpIx9pr12crjptoRu/MX5RKnFzm/SQ=="+
+                "serviceKey="+ serviceKey +
                 //받아올 페이지 수
                 "&pageNo=10" +
                 //한 페이지당 받을 약물 갯수
@@ -57,12 +64,14 @@ public class ApiTestController {
         return resultJson;
 
     }
-    @GetMapping("/api2")
+    //효능군 중복
+    @Operation(summary = "효능군 중복", description = "헤더의 itemSeq약물 번호로 해당 약물의 효능군 중복 약물 리턴")
+    @GetMapping("/efcy-dplct")
     public String EfcyDplctcallapi(@RequestParam String itemSeq) throws IOException {
         StringBuilder sb = new StringBuilder();
         //병용금기 정보조회
         String urlEfcy = "http://apis.data.go.kr/1471000/DURPrdlstInfoService03/getEfcyDplctInfoList03?" +
-                "serviceKey=UY683TnxM3KUyQNIcQA5uiJSDCQvR9SYSlBjSqiScBYB2RE/FUWFJ/Q7vpIx9pr12crjptoRu/MX5RKnFzm/SQ=="+
+                "serviceKey="+ serviceKey +
                 //받아올 페이지 수
                 "&pageNo=1" +
                 //한 페이지당 받을 약물 갯수

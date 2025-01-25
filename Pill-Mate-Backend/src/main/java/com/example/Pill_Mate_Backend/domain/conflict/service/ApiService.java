@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+//병용금기
 @Service
 public class ApiService {
 
@@ -26,15 +27,7 @@ public class ApiService {
         return items;
     }
 
-//    public void processApiItems(String json) {
-//        ApiItems durItems = parseJson(json);
-//        if (durItems != null) {
-//            durItems.getItems().forEach(item -> {
-//                System.out.println("MIXTURE_ITEM_NAME: " + item.getMixtureItemName());
-//                System.out.println("MIXTURE_ITEM_SEQ: " + item.getMixtureItemSeq());
-//                System.out.println("PROHBT_CONTENT: " + item.getProhbtContent());
-//                System.out.println();
-//            });
+    //병용금기
 public String usjntTabooProcessApiItems(String json) {
     UsjntTabooApiItems usjntTabooApiItems = parseJson(json);
     if (usjntTabooApiItems != null) {
@@ -42,8 +35,11 @@ public String usjntTabooProcessApiItems(String json) {
 
         usjntTabooApiItems.getItems().forEach(item -> {
             Map<String, String> itemMap = new HashMap<>();
+            //약물 이름 ex) 로엘디정(심바스타틴)(수출용)
             itemMap.put("MIXTURE_ITEM_NAME", item.getMixtureItemName());
+            //약물 번호
             itemMap.put("MIXTURE_ITEM_SEQ", item.getMixtureItemSeq());
+            //병용금기 사유 ex)횡문근융해증
             itemMap.put("PROHBT_CONTENT", item.getProhbtContent());
             processedItems.add(itemMap);
         });
