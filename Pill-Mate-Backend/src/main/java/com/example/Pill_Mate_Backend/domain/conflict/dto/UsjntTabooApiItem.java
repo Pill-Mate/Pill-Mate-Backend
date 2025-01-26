@@ -15,4 +15,10 @@ public class UsjntTabooApiItem {
 
     @JsonProperty("PROHBT_CONTENT")
     private String prohbtContent;
+
+    @JsonProperty("CLASS_NAME")
+    private String className;
+
+    @JsonProperty("ENTP_NAME")
+    private String entpName;
 }
