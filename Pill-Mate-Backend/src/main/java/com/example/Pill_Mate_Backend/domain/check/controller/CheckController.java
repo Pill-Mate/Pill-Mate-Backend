@@ -36,13 +36,13 @@ public class CheckController {
     @SneakyThrows
     @PatchMapping("/medicinecheck")
     public ResponseDTO updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
-        System.out.print(medicineCheckList);
+        System.out.println(medicineCheckList);
         if (medicineCheckList == null || medicineCheckList.isEmpty()) {
             logger.info("Invalid or empty request body");
             return null;
         }
         medicineCheckService.updateCheckStatus(medicineCheckList);
-
+        System.out.println("오늘 db업데이트 완료!! : ");
 
         //schedule data 보내주기..
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -56,13 +56,16 @@ public class CheckController {
                 logger.info("Invalid JWT");
             }
         }
-
+        System.out.println("오늘 EMAIL!! : " + email);
         long medicineScheduleId = medicineCheckList.get(0).getMedicineScheduleId();
 
         Date mydate = homeService.getDateByScheduleId(medicineScheduleId);
+        mydate = format.parse(String.valueOf(mydate));
+        System.out.println("오늘 DATE!! : " + mydate);
         if (mydate == null) {
+            mydate = new Date(); // 현재 날짜로 설정
             String date = format.format(mydate);
-            mydate = format.parse(date); //date 안 넘겨줄 시 오늘로 date 설정
+            mydate = format.parse(date);
         }
 
         List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate(email, mydate);

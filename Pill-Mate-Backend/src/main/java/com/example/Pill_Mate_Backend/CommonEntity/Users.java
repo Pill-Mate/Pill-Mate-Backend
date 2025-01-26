@@ -83,4 +83,20 @@ public class Users extends BaseEntity {
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
     private List<MedicineSchedule> medicineSchedules;
+
+    //루틴 업데이트
+    public Users(String email, Time wakeupTime, Time bedTime, Time morningTime, Time lunchTime, Time dinnerTime) {
+        this.email = email;
+        this.wakeupTime = wakeupTime;
+        this.bedTime = bedTime;
+        this.morningTime = morningTime;
+        this.lunchTime = lunchTime;
+        this.dinnerTime = dinnerTime;
+    }
+    //알람 업데이트
+    public Users(String email, Boolean alarmMarketing, Boolean alarmInfo) {
+        this.email = email;
+        this.alarmMarketing = alarmMarketing;
+        this.alarmInfo = alarmInfo;
+    }
 }
