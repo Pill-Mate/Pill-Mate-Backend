@@ -67,23 +67,23 @@ public class RegisterController {
             Users user = optionalUser.get(); // Optional에서 값을 추출
 
             log.info(registerDTO.toString());
-            Users users = Users.builder()
-                    .id(null)
-                    .profileImage(URI.create("https://example.com/profile.jpg"))  // 임시 프로필 이미지
-                    .username("testUser")  // 사용자 이름
-                    .email("testuser@example.com")  // 이메일
-                    .wakeupTime(Time.valueOf(LocalTime.of(7, 0)))  // 기상 시간 07:00
-                    .bedTime(Time.valueOf(LocalTime.of(23, 0)))  // 취침 시간 23:00
-                    .morningTime(Time.valueOf(LocalTime.of(8, 0)))  // 아침 08:00
-                    .lunchTime(Time.valueOf(LocalTime.of(12, 0)))  // 점심 12:00
-                    .dinnerTime(Time.valueOf(LocalTime.of(18, 0)))  // 저녁 18:00
-                    .alarmMarketing(true)  // 마케팅 알림 허용
-                    .alarmInfo(true)  // 정보 알림 허용
-                    .build(); //(임시) 로그인 연결 시 삭제
+//            Users users = Users.builder()
+//                    .id(null)
+//                    .profileImage(URI.create("https://example.com/profile.jpg"))  // 임시 프로필 이미지
+//                    .username("testUser")  // 사용자 이름
+//                    .email("testuser@example.com")  // 이메일
+//                    .wakeupTime(Time.valueOf(LocalTime.of(7, 0)))  // 기상 시간 07:00
+//                    .bedTime(Time.valueOf(LocalTime.of(23, 0)))  // 취침 시간 23:00
+//                    .morningTime(Time.valueOf(LocalTime.of(8, 0)))  // 아침 08:00
+//                    .lunchTime(Time.valueOf(LocalTime.of(12, 0)))  // 점심 12:00
+//                    .dinnerTime(Time.valueOf(LocalTime.of(18, 0)))  // 저녁 18:00
+//                    .alarmMarketing(true)  // 마케팅 알림 허용
+//                    .alarmInfo(true)  // 정보 알림 허용
+//                    .build(); //(임시) 로그인 연결 시 삭제
 
-            userRepository.save(users);
-                log.info(users.toString());
-                registerService.Register(registerDTO, users);
+            //userRepository.save(user);
+                //log.info(user.toString());
+                registerService.Register(registerDTO, user);
             return ApiResponse.onSuccess("약물등록 성공");
         } catch (Exception e) {
             //나중에 responseBody 추가
@@ -121,16 +121,9 @@ public class RegisterController {
             );
 
 
-//            OnboardingDTO onboardingDTO = new OnboardingDTO(
-//                    Time.valueOf("08:00:00"),
-//                    Time.valueOf("12:00:00"),
-//                    Time.valueOf("18:00:00"),
-//                        true
-//            );
-
 
             log.info(onboardingDTO.toString());
-            log.info(users.toString());
+            //log.info(users.toString());
 
             return ApiResponse.onSuccess(onboardingDTO);
         } catch (Exception e) {

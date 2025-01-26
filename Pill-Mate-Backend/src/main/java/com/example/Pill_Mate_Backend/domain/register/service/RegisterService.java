@@ -38,22 +38,32 @@ public class RegisterService {
 
     public void Register(RegisterDTO registerDTO,  Users users) {
         log.info("Received DTO: {}", registerDTO);
-        Medicine medicine = CreateMedicine(registerDTO, users);
-        log.info("medicine: {}", medicine);
+        Medicine medicine = null;
+
+        //만약에 이미 기존에 등록된 약물이 있으면 그 약물을 집어넣음
+        if(medicineRepository.findMedicineByIdentifyNumber(registerDTO.identifyNumber()) != null){
+            medicine = medicineRepository.findMedicineByIdentifyNumber(registerDTO.identifyNumber());
+        } else {
+            //만약에 새로운 약물이면 새로 생성
+            medicine = CreateMedicine(registerDTO, users);
+        }
+        //log.info("medicine: {}", medicine);
         CreateHospital(registerDTO, users, medicine);
-        log.info(" CreateHospital: {}", registerDTO);
+        //log.info(" CreateHospital: {}", registerDTO);
         CreatePharmacy(registerDTO, users, medicine);
-        log.info("CreatePharmacy: {}", registerDTO);
+        //log.info("CreatePharmacy: {}", registerDTO);
         Schedule schedule = CreateSchedule(registerDTO, users, medicine);
-        log.info("schedule: {}", registerDTO);
+        //log.info("schedule: {}", registerDTO);
         CreateMedicineSchedule(registerDTO, users, medicine, schedule);
-        log.info("CreateMedicineSchedule: {}");
+        //log.info("CreateMedicineSchedule: {}");
     }
     public Medicine CreateMedicine(RegisterDTO registerDTO,  Users users) {
         log.info("medicine1");
         Medicine medicine = Medicine.builder()
                 //medicine
+                //약물 낱알 식별 번호
                 .identifyNumber(registerDTO.identifyNumber())
+                //약물이름
                 .medicineName(registerDTO.medicineName())
                 .ingredient(registerDTO.ingredient())
                 .medicineImage(registerDTO.medicineImage())
@@ -68,7 +78,7 @@ public class RegisterService {
                 .ingredientAmount(registerDTO.ingredientAmount())
                 .users(users)
                 .build();
-        log.info("medicine2:{}",medicine);
+        //log.info("medicine2:{}",medicine);
         return medicineRepository.save(medicine);
     }
     public Schedule CreateSchedule(RegisterDTO registerDTO, Users users, Medicine medicine
@@ -87,6 +97,7 @@ public class RegisterService {
                 .isAlarm(registerDTO.isAlarm())
                 .status(ScheduleStatus.ACTIVATE)
                 .startDate(registerDTO.startDate())
+                .users(users)
                 .build();
         return scheduleRepository.save(schedule);
     }
@@ -112,8 +123,6 @@ public class RegisterService {
     }
     public void CreateMedicineSchedule(RegisterDTO registerDTO, Users users, Medicine medicine, Schedule schedule) {
         log.info("CreateMedicineSchedule1");
-        //int intakeFrequency = registerDTO.intakeFrequency().size();  // Enum 개수 가져오기
-        //int intakeCounts = registerDTO.intakeCounts().size();  // Enum 개수 가져오기
         List<MedicineSchedule> schedules = new ArrayList<>();      // 스케줄 저장 리스트
 
         // intakePeriod 동안 반복
@@ -143,6 +152,7 @@ public class RegisterService {
                                 .mealUnit(null)
                                 .mealTime(registerDTO.mealTime())
                                 .eatCheck(false)  // 초기값 false
+                                .users(users)
                                 .build();
                     }
                     else {
@@ -159,10 +169,11 @@ public class RegisterService {
                                 .mealUnit(registerDTO.mealUnit())
                                 .mealTime(registerDTO.mealTime())
                                 .eatCheck(false)  // 초기값 false
+                                .users(users)
                                 .build();
                     }
                     schedules.add(medicineSchedule);  // 생성된 인스턴스를 리스트에 추가
-                    log.info("medicineSchedule:{}", medicineSchedule);
+                    //log.info("medicineSchedule:{}", medicineSchedule);
                     medicineScheduleRepository.save(medicineSchedule);
                 }
             }
@@ -200,10 +211,6 @@ public class RegisterService {
         }
         log.info("intakeFrequency");
 
-        // 만약 취침 시간(SLEEP)이 당일 저녁 12시 이후, 즉 새벽이면 취췸 전 시간은 저녁 11시 50분으로 고정한다.
-        if (users.getBedTime().toLocalTime().getHour() < 12) {
-
-        }
         // MEALBEFORE / MEALAFTER에 따라 시간 조정
         if (mealUnit == MealUnit.MEALBEFORE && (intakeCount != EMPTY || intakeCount != SLEEP ||intakeCount != NEEDED )) {
             log.info("섭취 시간:{}",baseTime.minusMinutes(mealTime));
