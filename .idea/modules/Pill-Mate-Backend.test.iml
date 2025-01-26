@@ -13,11 +13,12 @@
     <content url="file://$MODULE_DIR$/../../Pill-Mate-Backend/src/test">
       <sourceFolder url="file://$MODULE_DIR$/../../Pill-Mate-Backend/src/test/java" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="17" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Pill-Mate-Backend.main" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:3.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:3.3.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4" level="project" />
     <orderEntry type="library" name="Gradle: org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.4" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-security:3.3.2" level="project" />
@@ -35,6 +36,7 @@
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-tomcat:3.3.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-webmvc:6.1.11" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-web:6.1.11" level="project" />
+    <orderEntry type="library" name="Gradle: junit:junit:4.13.2" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:swagger-ui:4.18.1" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:webjars-locator-core:0.58" level="project" />
     <orderEntry type="library" name="Gradle: io.github.classgraph:classgraph:4.8.149" level="project" />
@@ -83,6 +85,7 @@
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:10.1.26" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-expression:6.1.11" level="project" />
     <orderEntry type="library" name="Gradle: io.micrometer:micrometer-observation:1.13.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:2.2" level="project" />
     <orderEntry type="library" name="Gradle: io.swagger.core.v3:swagger-core-jakarta:2.2.8" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-core:6.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.17.2" level="project" />
