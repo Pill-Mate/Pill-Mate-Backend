@@ -25,7 +25,7 @@ public class Medicine extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String identifyNumber;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 255)
     private String medicineName;
 
     @Column(nullable = false, length = 50)
@@ -73,20 +73,25 @@ public class Medicine extends BaseEntity {
 
     //fk
     //user_id
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
 
-    //on delete cascade를 위한 one to many
-    @OneToOne(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    @ToString.Exclude
+    @OneToOne(mappedBy = "medicine", cascade = CascadeType.REMOVE)
     private Schedule schedule;
 
-    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE)
     private List<Hospital> hospitals;
 
-    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    @ToString.Exclude
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE)
     private List<Pharmacy> pharmacies;
 
-    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    @ToString.Exclude
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.REMOVE)
     private List<MedicineSchedule> medicineSchedules;
 }
