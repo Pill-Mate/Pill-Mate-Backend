@@ -26,4 +26,7 @@ public interface UsersRepository extends JpaRepository<MedicineSchedule, Long> {
             " where email = :email"
             , nativeQuery = true)
     List<Object[]> findAlarmByEmail(@Param("email") String email);
+    @Query(value = "select id from users where email = :email"
+            , nativeQuery = true)
+    Object[] getIdByEmail(@Param("email") String email);
 }
