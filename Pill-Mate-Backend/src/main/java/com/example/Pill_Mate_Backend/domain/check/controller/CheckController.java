@@ -33,16 +33,58 @@ public class CheckController {
     @Autowired
     private ClickMedicineService clickMedicineService;
 
-
+    @SneakyThrows
     @PatchMapping("/medicinecheck")
-    public ResponseEntity<?> updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList) {
-        System.out.print(medicineCheckList);
+    public ResponseDTO updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
+        System.out.println(medicineCheckList);
         if (medicineCheckList == null || medicineCheckList.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid or empty request body");
+            logger.info("Invalid or empty request body");
+            return null;
+        }
+        medicineCheckService.updateCheckStatus(medicineCheckList);
+        System.out.println("오늘 db업데이트 완료!! : ");
+
+        //schedule data 보내주기..
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+
+            } else {
+                logger.info("Invalid JWT");
+            }
+        }
+        System.out.println("오늘 EMAIL!! : " + email);
+        long medicineScheduleId = medicineCheckList.get(0).getMedicineScheduleId();
+
+        Date mydate = homeService.getDateByScheduleId(medicineScheduleId);
+        mydate = format.parse(String.valueOf(mydate));
+        System.out.println("오늘 DATE!! : " + mydate);
+        if (mydate == null) {
+            mydate = new Date(); // 현재 날짜로 설정
+            String date = format.format(mydate);
+            mydate = format.parse(date);
         }
 
-        medicineCheckService.updateCheckStatus(medicineCheckList);
-        return ResponseEntity.ok().build();
+        List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate(email, mydate);
+        WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
+        System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
+
+        // Return response entity
+        return ResponseDTO.builder()
+                .medicineList(medicineList)
+                .sunday(weekCount.getSunday())
+                .monday(weekCount.getMonday())
+                .tuesday(weekCount.getTuesday())
+                .wednesday(weekCount.getWednesday())
+                .thursday(weekCount.getThursday())
+                .friday(weekCount.getFriday())
+                .saturday(weekCount.getSaturday())
+                .countAll(weekCount.getCountAll())
+                .countLeft(weekCount.getCountLeft())
+                .build();
     }
 
     @SneakyThrows

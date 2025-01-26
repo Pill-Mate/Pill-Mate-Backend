@@ -23,7 +23,7 @@ public class Schedule extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column(columnDefinition = "VARCHAR(10)", nullable = true)
     private MealUnit mealUnit;
 
     @Column(nullable = false, length = 50)
@@ -75,11 +75,14 @@ public class Schedule extends BaseEntity {
 
     //fk
     //user_id, medicine_id
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
+
 }

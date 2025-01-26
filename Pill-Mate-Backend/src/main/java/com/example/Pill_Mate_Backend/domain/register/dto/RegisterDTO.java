@@ -11,11 +11,13 @@ import java.util.Set;
 
 @Builder
 public record RegisterDTO (
-        String username,
+        //String username, -> 헤더에 토큰 보내는 것으로 함
         String pharmacyName,
         String pharmacyPhone,
+        String pharmacyAddress,
         String hospitalName,
         String hospitalPhone,
+        String hospitalAddress,
         String identifyNumber,
         String medicineName,
         String ingredient,
@@ -23,6 +25,7 @@ public record RegisterDTO (
         float ingredientAmount,
 
         URI medicineImage,
+        String entpName,
         String classname,
         String efficacy,
         String sideEffect,

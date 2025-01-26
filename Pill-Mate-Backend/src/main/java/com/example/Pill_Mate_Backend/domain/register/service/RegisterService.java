@@ -8,6 +8,7 @@ import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;
 import com.example.Pill_Mate_Backend.domain.register.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -37,25 +38,36 @@ public class RegisterService {
 
     public void Register(RegisterDTO registerDTO,  Users users) {
         log.info("Received DTO: {}", registerDTO);
-        Medicine medicine = CreateMedicine(registerDTO, users);
-        log.info("medicine: {}", medicine);
+        Medicine medicine = null;
+
+        //만약에 이미 기존에 등록된 약물이 있으면 그 약물을 집어넣음
+        if(medicineRepository.findMedicineByIdentifyNumber(registerDTO.identifyNumber()) != null){
+            medicine = medicineRepository.findMedicineByIdentifyNumber(registerDTO.identifyNumber());
+        } else {
+            //만약에 새로운 약물이면 새로 생성
+            medicine = CreateMedicine(registerDTO, users);
+        }
+        //log.info("medicine: {}", medicine);
         CreateHospital(registerDTO, users, medicine);
-        log.info(" CreateHospital: {}", registerDTO);
+        //log.info(" CreateHospital: {}", registerDTO);
         CreatePharmacy(registerDTO, users, medicine);
-        log.info("CreatePharmacy: {}", registerDTO);
+        //log.info("CreatePharmacy: {}", registerDTO);
         Schedule schedule = CreateSchedule(registerDTO, users, medicine);
-        log.info("schedule: {}", registerDTO);
+        //log.info("schedule: {}", registerDTO);
         CreateMedicineSchedule(registerDTO, users, medicine, schedule);
-        log.info("CreateMedicineSchedule: {}");
+        //log.info("CreateMedicineSchedule: {}");
     }
     public Medicine CreateMedicine(RegisterDTO registerDTO,  Users users) {
         log.info("medicine1");
         Medicine medicine = Medicine.builder()
                 //medicine
+                //약물 낱알 식별 번호
                 .identifyNumber(registerDTO.identifyNumber())
+                //약물이름
                 .medicineName(registerDTO.medicineName())
                 .ingredient(registerDTO.ingredient())
                 .medicineImage(registerDTO.medicineImage())
+                .entpName(registerDTO.entpName())
                 .className(registerDTO.classname())
                 .efficacy(registerDTO.efficacy())
                 .sideEffect(registerDTO.sideEffect())
@@ -66,7 +78,7 @@ public class RegisterService {
                 .ingredientAmount(registerDTO.ingredientAmount())
                 .users(users)
                 .build();
-        log.info("medicine2:{}",medicine);
+        //log.info("medicine2:{}",medicine);
         return medicineRepository.save(medicine);
     }
     public Schedule CreateSchedule(RegisterDTO registerDTO, Users users, Medicine medicine
@@ -85,6 +97,7 @@ public class RegisterService {
                 .isAlarm(registerDTO.isAlarm())
                 .status(ScheduleStatus.ACTIVATE)
                 .startDate(registerDTO.startDate())
+                .users(users)
                 .build();
         return scheduleRepository.save(schedule);
     }
@@ -94,6 +107,7 @@ public class RegisterService {
                 .hospitalName(registerDTO.hospitalName())
                 .hospitalPhone(registerDTO.hospitalPhone())
                 .medicine(medicine)
+                .hospitalAddress(registerDTO.hospitalAddress())
                 .build();
         hospitalRepository.save(hospital);
     }
@@ -103,19 +117,18 @@ public class RegisterService {
                 .pharmacyName(registerDTO.pharmacyName())
                 .pharmacyPhone(registerDTO.pharmacyPhone())
                 .medicine(medicine)
+                .pharmacyAddress(registerDTO.pharmacyAddress())
                 .build();
         pharmacyRepository.save(pharmacy);
     }
     public void CreateMedicineSchedule(RegisterDTO registerDTO, Users users, Medicine medicine, Schedule schedule) {
         log.info("CreateMedicineSchedule1");
-        //int intakeFrequency = registerDTO.intakeFrequency().size();  // Enum 개수 가져오기
-        //int intakeCounts = registerDTO.intakeCounts().size();  // Enum 개수 가져오기
         List<MedicineSchedule> schedules = new ArrayList<>();      // 스케줄 저장 리스트
 
         // intakePeriod 동안 반복
         for (int i = 0; i < registerDTO.intakePeriod(); i++) {
             LocalDate currentDate = registerDTO.startDate().toInstant()
-                   .atZone(ZoneId.systemDefault()).toLocalDate().plusDays(i);  // 날짜 계산
+                    .atZone(ZoneId.systemDefault()).toLocalDate().plusDays(i);  // 날짜 계산
             DayOfWeek dayOfWeek = currentDate.getDayOfWeek(); //현재 날짜에 대한 요일
             log.info("CreateMedicineSchedule for문 1 i값:{} , registerDTO.intakePeriod():{} ",i,registerDTO.intakePeriod());
             if (registerDTO.intakeFrequencys().contains(dayOfWeek.toString())) {
@@ -123,24 +136,44 @@ public class RegisterService {
                 for (String intakeCount1 : registerDTO.intakeCounts()) {
                     IntakeCount intakeCount = IntakeCount.valueOf(intakeCount1); //String값 IntakeCount로 변환
                     log.info("CreateMedicineSchedule for문 2 value:{}", intakeCount.values());
+                    MedicineSchedule medicineSchedule = null;
                     // 섭취 시간을 계산하여 설정
-                    LocalTime intakeTime = calculateIntakeTime(users, intakeCount, registerDTO.mealUnit(), registerDTO.mealTime());
+                    if(intakeCount == IntakeCount.EMPTY || intakeCount == IntakeCount.SLEEP || intakeCount == IntakeCount.NEEDED) {
+                        LocalTime intakeTime = calculateIntakeTime(users, intakeCount, null, registerDTO.mealTime());
 
-                    MedicineSchedule medicineSchedule = MedicineSchedule.builder()
-                            .medicine(medicine)
-                            .users(schedule.getUsers())
-                            .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
-                            .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
-                            .eatUnit(registerDTO.eatUnit())
-                            .eatCount(registerDTO.eatCount())
-                            .intakeCount(intakeCount)  // Enum 값 설정
-                            .mealUnit(registerDTO.mealUnit())
-                            .mealTime(registerDTO.mealTime())
-                            .eatCheck(false)  // 초기값 false
-                            .build();
+                        medicineSchedule = MedicineSchedule.builder()
+                                .medicine(medicine)
+                                .users(schedule.getUsers())
+                                .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
+                                .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
+                                .eatUnit(registerDTO.eatUnit())
+                                .eatCount(registerDTO.eatCount())
+                                .intakeCount(intakeCount)  // Enum 값 설정
+                                .mealUnit(null)
+                                .mealTime(registerDTO.mealTime())
+                                .eatCheck(false)  // 초기값 false
+                                .users(users)
+                                .build();
+                    }
+                    else {
+                        LocalTime intakeTime = calculateIntakeTime(users, intakeCount, registerDTO.mealUnit(), registerDTO.mealTime());
 
+                        medicineSchedule = MedicineSchedule.builder()
+                                .medicine(medicine)
+                                .users(schedule.getUsers())
+                                .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
+                                .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
+                                .eatUnit(registerDTO.eatUnit())
+                                .eatCount(registerDTO.eatCount())
+                                .intakeCount(intakeCount)  // Enum 값 설정
+                                .mealUnit(registerDTO.mealUnit())
+                                .mealTime(registerDTO.mealTime())
+                                .eatCheck(false)  // 초기값 false
+                                .users(users)
+                                .build();
+                    }
                     schedules.add(medicineSchedule);  // 생성된 인스턴스를 리스트에 추가
-                    log.info("medicineSchedule:{}", medicineSchedule);
+                    //log.info("medicineSchedule:{}", medicineSchedule);
                     medicineScheduleRepository.save(medicineSchedule);
                 }
             }
@@ -162,7 +195,17 @@ public class RegisterService {
             case LUNCH -> baseTime = users.getLunchTime().toLocalTime();
             case DINNER -> baseTime = users.getDinnerTime().toLocalTime();
             case EMPTY -> baseTime = users.getWakeupTime().toLocalTime();
-            case SLEEP -> baseTime = users.getBedTime().toLocalTime();
+            case SLEEP ->
+            {
+                //만약에 취침시간이 다음 날 오전 12시 이후, 즉 새벽일 경우에는
+                if(users.getBedTime().toLocalTime().getHour() < 12) {
+                    // 전날(당일 날) 오후 11시 50분으로 설정한다.
+                    baseTime = LocalTime.of(23,50,0);
+                }
+                else {
+                    baseTime = users.getBedTime().toLocalTime();
+                }
+            }
             case NEEDED -> baseTime = LocalTime.now();
             default -> throw new IllegalArgumentException("Invalid intake specific: " + intakeCount);
         }
@@ -170,9 +213,9 @@ public class RegisterService {
 
         // MEALBEFORE / MEALAFTER에 따라 시간 조정
         if (mealUnit == MealUnit.MEALBEFORE && (intakeCount != EMPTY || intakeCount != SLEEP ||intakeCount != NEEDED )) {
-        log.info("섭취 시간:{}",baseTime.minusMinutes(mealTime));
+            log.info("섭취 시간:{}",baseTime.minusMinutes(mealTime));
             return baseTime.minusMinutes(mealTime);  // 식전이면 시간 빼기
-        } else if (mealUnit == MealUnit.MEALAFTER) {
+        } else if (mealUnit == MealUnit.MEALAFTER && (intakeCount != EMPTY || intakeCount != SLEEP ||intakeCount != NEEDED )) {
             return baseTime.plusMinutes(mealTime);   // 식후면 시간 더하기
         } else if (mealUnit == null) {
             return baseTime;
