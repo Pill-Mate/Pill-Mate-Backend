@@ -7,10 +7,6 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EfcyDplctApiItem {
-    //약물종류
-    @JsonProperty("EFFECT_NAME")
-    private String effectName;
-
     //약물 이름
     @JsonProperty("ITEM_NAME")
     private String itemName;
@@ -20,6 +16,13 @@ public class EfcyDplctApiItem {
     private String itemSeq;
 
     //효능
-    //@JsonProperty("CLASS_NAME")
-    //private String className;
+    @JsonProperty("CLASS_NAME")
+    private String className;
+
+    //약물종류
+    @JsonProperty("EFFECT_NAME")
+    private String effectName;
+
+    @JsonProperty("ENTP_NAME")
+    private String entpName;
 }
