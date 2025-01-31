@@ -2,10 +2,7 @@ package com.example.Pill_Mate_Backend.CommonEntity;
 
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 import java.net.URI;
@@ -29,7 +26,7 @@ public class Users extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = true, length = 255)
     private URI profileImage;       //userImage로 바꿔야? -----------------!-------------------
 
     @Column(nullable = false)
@@ -69,18 +66,24 @@ public class Users extends BaseEntity {
     }
 
     //on delete cascade를 위한 one to many
-    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    @ToString.Exclude
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Medicine> medicines;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    @ToString.Exclude
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Schedule> schedules;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Pharmacy> pharmacies;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
     private List<Hospital> hospitals;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
     private List<MedicineSchedule> medicineSchedules;
 

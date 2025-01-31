@@ -38,13 +38,15 @@ public class KakaoService {
         ResponseEntity<Map> response = restTemplate.exchange(
                 userInfoUrl, HttpMethod.GET, request, Map.class
         );
+        URI profileImage = URI.create("");
 
         if (response.getStatusCode() == HttpStatus.OK) {
             Map<String, Object> userInfo = response.getBody();
             String email = (String) ((Map) userInfo.get("kakao_account")).get("email");
             String nickname = (String) ((Map) userInfo.get("properties")).get("nickname");
-            URI profileImage = URI.create(((Map<String, Object>) userInfo.get("properties")).get("profile_image").toString());
-
+            if((((Map<?, ?>) userInfo.get("properties")).get("profile_image") != null)) {
+                profileImage = URI.create(((Map<String, Object>) userInfo.get("properties")).get("profile_image").toString());
+            }
             return new UserInfoResponseDto(nickname, profileImage, email);
         } else {
             throw new RuntimeException("Failed to get user info from Kakao");
