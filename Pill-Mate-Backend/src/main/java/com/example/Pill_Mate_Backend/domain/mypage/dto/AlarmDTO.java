@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class AlarmDTO {
+public class AlarmDTO {//삭제
     private Boolean alarmMarketing;
     private Boolean alarmInfo;
 

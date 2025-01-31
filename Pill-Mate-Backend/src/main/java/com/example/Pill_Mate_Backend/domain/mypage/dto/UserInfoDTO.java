@@ -7,7 +7,7 @@ import java.net.URI;
 
 @Builder
 @Data
-public class UserInfoDTO {
+public class UserInfoDTO {//삭제
     private String userName;
     private String email;
     private String profileImage;
