@@ -2,7 +2,7 @@ package com.example.Pill_Mate_Backend.CommonEntity;
 
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,10 +36,10 @@ public class MedicineSchedule extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
-    private IntakeSpecific intakeSpecific;
+    private IntakeCount intakeCount;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column(columnDefinition = "VARCHAR(10)", nullable = true)
     private MealUnit mealUnit;
 
     @Column(nullable = false, length = 50)
@@ -51,10 +51,12 @@ public class MedicineSchedule extends BaseEntity {
 
     //fk
     //user_id, medicine_id
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
