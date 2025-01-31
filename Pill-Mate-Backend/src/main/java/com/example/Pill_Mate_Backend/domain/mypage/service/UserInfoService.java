@@ -22,7 +22,7 @@ import java.util.*;
 
 @RequiredArgsConstructor
 @Service
-public class UserInfoService {
+public class UserInfoService {//삭제
     @Autowired
     private UsersRepository usersRepository;
 
