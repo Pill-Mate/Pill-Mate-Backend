@@ -24,18 +24,6 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
             "order by ms.intake_time"
             , nativeQuery = true)
     List<Object[]> findByIntakeDate(@Param("email") String email, @Param("date") Date date);
-    //
-    @Query(value = "SELECT ms.id as medicinescheduleid, ms.intake_count as intakecount, ms.intake_time as intaketime, ms.eat_count as eatcount, " +
-            "ms.eat_unit as eatunit, ms.meal_time as mealtime, ms.meal_unit as mealunit, ms.eat_check as eatcheck, m.medicine_name as medicinename, m.medicine_image as medicineimage " +
-            "FROM medicine_schedule ms " +
-            "JOIN medicine m " +
-            "ON ms.medicine_id = m.id "+
-            "JOIN users u " +
-            "ON ms.user_id = u.id " +
-            "WHERE ms.intake_date = :date AND u.email = :email "+
-            "order by ms.intake_time"
-            , nativeQuery = true)
-    List<MedicineDTO> findByIntakeDate2(@Param("email") String email, @Param("date") Date date);
 
     @Query(value = "select m.medicine_name, m.medicine_image, m.class_name, m.ingredient, m.efficacy, m.caution, m.side_effect, m.storage, m.entp_name " +
             "from medicine_schedule ms " +

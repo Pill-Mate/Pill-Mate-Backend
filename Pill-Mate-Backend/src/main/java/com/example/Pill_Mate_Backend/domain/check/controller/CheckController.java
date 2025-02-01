@@ -68,9 +68,9 @@ public class CheckController {
             mydate = format.parse(date);
         }
 
-        List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate2(email, mydate);
+        List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate(email, mydate);
         WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
-        System.out.print(homeService.getMedicineSchedulesByDate2(email, mydate));
+        System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
 
         // Return response entity
         return ResponseDTO.builder()
@@ -109,9 +109,9 @@ public class CheckController {
         }else{
             mydate = format.parse(changeDateDTO.getDate());
         }
-        List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate2(email, mydate);
+        List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate(email, mydate);
         WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
-        System.out.print(homeService.getMedicineSchedulesByDate2(email, mydate));
+        System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
 
         // Return response entity
         return ResponseDTO.builder()
