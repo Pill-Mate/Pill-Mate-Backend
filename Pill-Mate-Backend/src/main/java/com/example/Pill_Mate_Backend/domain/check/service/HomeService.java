@@ -39,6 +39,7 @@ public class HomeService {
                     (Boolean) result[7],
                     (String) result[8],
                     result[9] instanceof byte[] ? new URI(new String((byte[]) result[9])) : null // 바이너리 데이터를 String으로 변환 후 URI로 파싱
+
             );
             medicineDTOList.add(dto);
         }

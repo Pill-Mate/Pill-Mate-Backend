@@ -3,15 +3,15 @@ package com.example.Pill_Mate_Backend.domain.conflict.controller;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.PhoneAddresses;
 import com.example.Pill_Mate_Backend.domain.conflict.service.ApiService;
 import com.example.Pill_Mate_Backend.domain.conflict.service.EfcyApiService;
-import com.example.Pill_Mate_Backend.domain.register.repository.HospitalRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
-import com.example.Pill_Mate_Backend.domain.register.repository.PharmacyRepository;
+import com.example.Pill_Mate_Backend.domain.register.repository.MedicineScheduleRepository;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
@@ -27,13 +27,22 @@ import java.net.URLEncoder;
 @RequestMapping("/api/v1/dur")
 @RequiredArgsConstructor
 public class DurApiController {
-    private final ApiService apiService;
+    @Autowired
+    private ApiService apiService;
 
     @Autowired
-    private final MedicineRepository medicineRepository;
+    private EfcyApiService efcyApiService;
+
+
+    //@Autowired
+    //private MedicineRepository medicineRepository;
+
+
 
     @Value("${openApi.serviceKey}")
     private String serviceKey;
+    @Autowired
+    private MedicineScheduleRepository medicineScheduleRepository;
 
 
     // 병용금기
@@ -71,7 +80,7 @@ public class DurApiController {
         urlConnection.disconnect();
         String json = sb.toString(); // Replace with actual JSON
 
-        ApiService apiService = new ApiService(medicineRepository);
+        //ApiService apiService = new ApiService();
         String resultJson = apiService.usjntTabooProcessApiItems(json);
 
         //return sb.toString();
@@ -122,7 +131,7 @@ public class DurApiController {
         urlConnection.disconnect();
         String json = sb.toString(); // Replace with actual JSON
 
-        EfcyApiService efcyApiService = new EfcyApiService(medicineRepository);
+        //EfcyApiService efcyApiService = new EfcyApiService();
         String resultJson = efcyApiService.efcyDplctProcessApiItems(json);
 
         //return sb.toString();
