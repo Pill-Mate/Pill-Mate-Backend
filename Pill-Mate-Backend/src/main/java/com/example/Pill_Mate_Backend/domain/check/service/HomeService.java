@@ -45,6 +45,29 @@ public class HomeService {
 
         return medicineDTOList;
     }
+    @SneakyThrows
+    public List<MedicineDTO> getMedicineSchedulesByDate2(String email, Date date) {
+        List<MedicineDTO> results = medicineScheduleRepository2.findByIntakeDate2(email, date);
+        //List<MedicineDTO> medicineDTOList = new ArrayList<>();
+        /*
+        for (MedicineDTO result : results) {
+            MedicineDTO dto = new MedicineDTO(
+                    (Long) result[0],
+                    (String) result[1],
+                    (Time) result[2],
+                    (Integer) result[3],
+                    (String) result[4],
+                    (Integer) result[5],
+                    (String) result[6],
+                    (Boolean) result[7],
+                    (String) result[8],
+                    result[9] instanceof byte[] ? new URI(new String((byte[]) result[9])) : null // 바이너리 데이터를 String으로 변환 후 URI로 파싱
+            );
+            medicineDTOList.add(dto);
+        }*/
+
+        return results;
+    }
 
     public WeekCountDTO getWeekCountByDate(String email, Date date){
         Object[] countAllResult = medicineScheduleRepository2.findAllCountByDate(email, date);
