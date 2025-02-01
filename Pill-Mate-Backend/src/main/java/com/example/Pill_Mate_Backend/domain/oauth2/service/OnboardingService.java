@@ -14,7 +14,7 @@ import java.util.Optional;
 public class OnboardingService {
     private final UserRepository userRepository;
 
-    public UserInfoResponseDto setUserInfo(String email, Time wakeupTime, Time bedTime, Time morningTime, Time lunchTime, Time dinnerTime, Boolean alarmMarketing) {
+    public UserInfoResponseDto setUserInfo(String email, Time wakeupTime, Time bedTime, Time morningTime, Time lunchTime, Time dinnerTime, Boolean alarmMarketing, Boolean alarmInfo) {
 
         Optional<Users> optionalUser = userRepository.findByEmail(email);
 
@@ -26,6 +26,7 @@ public class OnboardingService {
             existingUsers.setLunchTime(lunchTime);
             existingUsers.setDinnerTime(dinnerTime);
             existingUsers.setAlarmMarketing(alarmMarketing);
+            existingUsers.setAlarmInfo(alarmInfo);
             userRepository.save(existingUsers);
         } else {
             // 유저가 존재하지 않을 경우 예외 발생

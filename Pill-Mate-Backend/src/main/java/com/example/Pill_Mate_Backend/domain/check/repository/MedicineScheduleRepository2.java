@@ -54,4 +54,9 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
             "order by target"
             , nativeQuery = true)
     List<Object[]> findExitWeekByDate(@Param("email") String email, @Param("startdate") Date startDate, @Param("enddate") Date endDate);
+
+    //medicine_schedule id로 date 받아오기
+    @Query(value = "select intake_date from medicine_schedule where id = :medicineScheduleId;"
+            , nativeQuery = true)
+    Object[] findDateByMedicineScheduleId(@Param("medicineScheduleId") long medicineScheduleId);
 }
