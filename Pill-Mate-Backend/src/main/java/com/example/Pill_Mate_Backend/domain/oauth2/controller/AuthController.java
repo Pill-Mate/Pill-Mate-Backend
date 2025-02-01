@@ -106,7 +106,7 @@ public class AuthController {
             String jwtToken = token.substring(7);
             if (jwtService.validateToken(jwtToken)) {
                 String email = jwtService.extractEmail(jwtToken);
-                onboardingService.setUserInfo(email, onboardingDTO.getWakeupTime(), onboardingDTO.getBedTime(), onboardingDTO.getMorningTime(), onboardingDTO.getLunchTime(), onboardingDTO.getDinnerTime(), onboardingDTO.getAlarmMarketing());
+                onboardingService.setUserInfo(email, onboardingDTO.getWakeupTime(), onboardingDTO.getBedTime(), onboardingDTO.getMorningTime(), onboardingDTO.getLunchTime(), onboardingDTO.getDinnerTime(), onboardingDTO.getAlarmMarketing(), onboardingDTO.getAlarmInfo());
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT");
             }
