@@ -57,10 +57,10 @@ public class Medicine extends BaseEntity {
     private String storage;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column(nullable = true, columnDefinition = "VARCHAR(10)")
     private IngredientUnit ingredientUnit;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private Float ingredientAmount;
 
     //set
