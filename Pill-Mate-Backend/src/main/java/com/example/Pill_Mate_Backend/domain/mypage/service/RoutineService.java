@@ -2,22 +2,15 @@ package com.example.Pill_Mate_Backend.domain.mypage.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
-import com.example.Pill_Mate_Backend.domain.check.service.MedicineCheckService;
 import com.example.Pill_Mate_Backend.domain.mypage.dto.RoutineDTO;
-import com.example.Pill_Mate_Backend.domain.mypage.dto.UserInfoDTO;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.MedicineScheduleRepository3;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.net.URI;
 import java.sql.Time;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Service
