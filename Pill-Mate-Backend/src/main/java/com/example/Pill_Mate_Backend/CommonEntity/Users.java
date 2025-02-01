@@ -29,19 +29,19 @@ public class Users extends BaseEntity {
     @Column(nullable = true, length = 255)
     private URI profileImage;       //userImage로 바꿔야? -----------------!-------------------
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Time wakeupTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Time bedTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Time morningTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Time lunchTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Time dinnerTime;
 
     @Column(nullable = false)
@@ -56,11 +56,11 @@ public class Users extends BaseEntity {
         this.username = username;
         this.email = email;
         this.profileImage = profileImage;
-        this.wakeupTime = Time.valueOf("08:00:00");
-        this.bedTime = Time.valueOf("24:00:00");
-        this.morningTime = Time.valueOf("09:00:00");
-        this.lunchTime = Time.valueOf("12:00:00");
-        this.dinnerTime = Time.valueOf("18:00:00");
+        this.wakeupTime = null;
+        this.bedTime = null;
+        this.morningTime = null;
+        this.lunchTime = null;
+        this.dinnerTime = null;
         this.alarmMarketing = false;
         this.alarmInfo = false;
     }
