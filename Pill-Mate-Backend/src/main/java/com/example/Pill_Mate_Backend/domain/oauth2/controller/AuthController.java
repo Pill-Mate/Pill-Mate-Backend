@@ -55,6 +55,33 @@ public class AuthController {
         if (existingUser.isPresent()) {
             // 이미 존재하는 유저 -> 로그인 처리
             Users users = existingUser.get();
+
+            //onboarding null 시
+            if(users.getMorningTime()==null){
+                // 기존 유저 정보 업데이트
+                users.setUsername(userInfo.getName()); // 닉네임 업데이트
+                users.setProfileImage(userInfo.getProfileImage()); // 프로필 사진 업데이트
+                userRepository.save(users); // 변경된 정보 저장
+
+                String jwtToken = jwtService.generateToken(users.getEmail());
+
+                // 세션에 accessToken 저장
+                session.setAttribute("kakaoToken", kakaoAccessToken);
+
+                // 응답 데이터 준비
+                Map<String, Object> response = new HashMap<>();
+                //response.put("message", "로그인 성공");
+                System.out.println("로그인 성공, 온보딩 null");
+                response.put("jwtToken", jwtToken);
+                response.put("login",false);
+                return ResponseEntity.ok(response);
+            }
+
+            // 기존 유저 정보 업데이트
+            users.setUsername(userInfo.getName()); // 닉네임 업데이트
+            users.setProfileImage(userInfo.getProfileImage()); // 프로필 사진 업데이트
+            userRepository.save(users); // 변경된 정보 저장
+
             String jwtToken = jwtService.generateToken(users.getEmail());
 
             // 세션에 accessToken 저장
@@ -100,7 +127,7 @@ public class AuthController {
             String jwtToken = token.substring(7);
             if (jwtService.validateToken(jwtToken)) {
                 String email = jwtService.extractEmail(jwtToken);
-                onboardingService.setUserInfo(email, onboardingDTO.getWakeupTime(), onboardingDTO.getBedTime(), onboardingDTO.getMorningTime(), onboardingDTO.getLunchTime(), onboardingDTO.getDinnerTime(), onboardingDTO.getAlarmMarketing());
+                onboardingService.setUserInfo(email, onboardingDTO.getWakeupTime(), onboardingDTO.getBedTime(), onboardingDTO.getMorningTime(), onboardingDTO.getLunchTime(), onboardingDTO.getDinnerTime(), onboardingDTO.getAlarmMarketing(), onboardingDTO.getAlarmInfo());
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT");
             }

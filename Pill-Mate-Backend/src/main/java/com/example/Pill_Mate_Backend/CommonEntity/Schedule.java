@@ -75,11 +75,14 @@ public class Schedule extends BaseEntity {
 
     //fk
     //user_id, medicine_id
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
+
 }
