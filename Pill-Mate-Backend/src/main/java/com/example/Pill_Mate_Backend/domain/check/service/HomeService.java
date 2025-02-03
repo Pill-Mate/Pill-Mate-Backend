@@ -10,6 +10,8 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.net.URI;
 import java.sql.Time;
 import java.util.*;
@@ -28,6 +30,23 @@ public class HomeService {
         List<MedicineDTO> medicineDTOList = new ArrayList<>();
 
         for (Object[] result : results) {
+            //uri 변환
+            byte[] byteArray = (byte[]) result[9];
+
+            URI medicineImage = null;
+                // 직렬화 해제 (Deserialization) - 직렬화된 URI 객체를 복원
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
+                 ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+                Object deserializedObject = objectInputStream.readObject();
+                if (deserializedObject instanceof URI) {
+                    medicineImage = (URI) deserializedObject;
+                } else {
+                    throw new IllegalArgumentException("Deserialized object is not a URI");
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to deserialize medicine_image", e);
+            }
+
             MedicineDTO dto = new MedicineDTO(
                     (Long) result[0],
                     (String) result[1],
@@ -38,8 +57,7 @@ public class HomeService {
                     (String) result[6],
                     (Boolean) result[7],
                     (String) result[8],
-                    result[9] instanceof byte[] ? new URI(new String((byte[]) result[9])) : null // 바이너리 데이터를 String으로 변환 후 URI로 파싱
-
+                    medicineImage.toString()
             );
             medicineDTOList.add(dto);
         }
