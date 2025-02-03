@@ -5,32 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f34b6278-2bcd-4a22-b59c-846fe6ec8d69" name="Changes" comment="[Fix] 식전 식후 값 저장 방식 변경&#10;- 공복, 취침, 필요 시에 식전 식후 값 저장하지 않도록 변경">
-      <change afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/PhoneAddresses.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_fasterxml_jackson_dataformat_jackson_dataformat_yaml_2_17_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_h2database_h2_2_2_224.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_github_classgraph_classgraph_4_8_149.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_jsonwebtoken_jjwt_api_0_11_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_jsonwebtoken_jjwt_impl_0_11_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_jsonwebtoken_jjwt_jackson_0_11_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_swagger_core_v3_swagger_annotations_jakarta_2_2_8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_swagger_core_v3_swagger_core_jakarta_2_2_8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__io_swagger_core_v3_swagger_models_jakarta_2_2_8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__jakarta_validation_jakarta_validation_api_3_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_apache_commons_commons_lang3_3_14_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springdoc_springdoc_openapi_starter_common_2_0_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springdoc_springdoc_openapi_starter_webmvc_api_2_0_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springdoc_springdoc_openapi_starter_webmvc_ui_2_0_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_boot_spring_boot_starter_security_3_3_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_security_spring_security_config_6_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_security_spring_security_core_6_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_security_spring_security_crypto_6_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_springframework_security_spring_security_web_6_3_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_webjars_swagger_ui_4_18_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_webjars_webjars_locator_core_0_58.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/8.8/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Hospital.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Hospital.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Medicine.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Medicine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/MedicineSchedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/MedicineSchedule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Pharmacy.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Pharmacy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Schedule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/CommonEntity/Users.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/controller/DurApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/controller/DurApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/EfcyDplctApiItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/EfcyDplctApiItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/EfcyDplctApiItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/EfcyDplctApiItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/UsjntTabooApiItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/UsjntTabooApiItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/UsjntTabooApiItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/dto/UsjntTabooApiItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/EfcyApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/EfcyApiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/oauth2/service/KakaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/oauth2/service/KakaoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/controller/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/controller/RegisterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/HospitalRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/HospitalRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/MedicineRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/MedicineRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/MedicineScheduleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/MedicineScheduleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/PharmacyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/PharmacyRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/ScheduleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/repository/ScheduleRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/service/RegisterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/register/service/RegisterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Pill-Mate-Backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +67,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="main" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -109,8 +111,9 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.PillMateBackendApplication.executor": "Run",
-    "git-widget-placeholder": "#7",
+    "git-widget-placeholder": "#26 on #7",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "F:/2024/News-Snap-Backend",
     "node.js.detected.package.eslint": "true",
@@ -382,67 +385,67 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>40</line>
+          <line>45</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>41</line>
+          <line>46</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>43</line>
+          <line>48</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>64</line>
+          <line>69</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>73</line>
+          <line>80</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>55</line>
+          <line>60</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>79</line>
+          <line>86</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>83</line>
+          <line>90</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>45</line>
+          <line>50</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>51</line>
+          <line>56</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>56</line>
+          <line>61</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>66</line>
+          <line>71</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/Pill-Mate-Backend/src/main/java/com/example/Pill_Mate_Backend/domain/conflict/service/ApiService.java</url>
-          <line>61</line>
+          <line>66</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
