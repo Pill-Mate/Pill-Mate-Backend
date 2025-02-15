@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.check.repository;
 
 import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
+import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDTO;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDetailDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
