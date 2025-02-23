@@ -127,8 +127,7 @@ public class RegisterService {
 
         // intakePeriod 동안 반복
         for (int i = 0; i < registerDTO.intakePeriod(); i++) {
-            LocalDate currentDate = registerDTO.startDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate().plusDays(i);  // 날짜 계산
+            LocalDate currentDate = registerDTO.startDate().plusDays(i);  // 날짜 계산
             DayOfWeek dayOfWeek = currentDate.getDayOfWeek(); //현재 날짜에 대한 요일
             log.info("CreateMedicineSchedule for문 1 i값:{} , registerDTO.intakePeriod():{} ",i,registerDTO.intakePeriod());
             if (registerDTO.intakeFrequencys().contains(dayOfWeek.toString())) {
