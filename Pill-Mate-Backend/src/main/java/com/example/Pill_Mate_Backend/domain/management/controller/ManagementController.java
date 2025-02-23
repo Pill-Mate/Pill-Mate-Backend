@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.function.EntityResponse;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class ManagementController {
 
     @Operation(summary="복용중인 약물 리스트",description = "복용중인 약물 리스트 조회")
     @GetMapping("/home/current")
-    public EntityResponse<ApiResponse> currentHome(@RequestHeader(value = "Authorization", required = true) String token) {
+    public ApiResponse<?> currentHome(@RequestHeader(value = "Authorization", required = true) String token) {
 
         {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -41,12 +39,12 @@ public class ManagementController {
                 }
             }
             ManagementDto.CurrentPillResponseDto dto = managementService.getCurrentList(email);
-            return (EntityResponse<ApiResponse>) ApiResponse.onSuccess(dto);
+            return ApiResponse.onSuccess(dto);
         }
     }
     @Operation(summary="복용중지한 약물 리스트",description = "복용중지한 약물 리스트 조회")
     @GetMapping("/home/stop")
-    public EntityResponse<ApiResponse> stopHome(@RequestHeader(value = "Authorization", required = true)  String token) {
+    public ApiResponse<?> stopHome(@RequestHeader(value = "Authorization", required = true)  String token) {
             {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 String email = "";
@@ -61,7 +59,7 @@ public class ManagementController {
                 }
 
         List<ManagementDto.CurrentPillResponse> dto =  managementService.getStopList(email);
-        return (EntityResponse<ApiResponse>) ApiResponse.onSuccess(dto);
+        return ApiResponse.onSuccess(dto);
     }
 }
     }
