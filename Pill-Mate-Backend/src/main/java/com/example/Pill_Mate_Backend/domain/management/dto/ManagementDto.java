@@ -1,9 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.management.dto;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -11,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 public class ManagementDto {
+
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -19,7 +19,8 @@ public class ManagementDto {
         private Integer pillCount;
         private List<CurrentPillResponse> currentPillResponseList;
     }
-
+    @Setter
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
