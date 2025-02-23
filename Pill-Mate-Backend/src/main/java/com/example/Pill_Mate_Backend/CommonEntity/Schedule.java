@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -54,7 +55,7 @@ public class Schedule extends BaseEntity {
 
 
     @Column(nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(nullable = false, length = 50)
     private Integer intakePeriod;
@@ -84,5 +85,6 @@ public class Schedule extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
+
 
 }
