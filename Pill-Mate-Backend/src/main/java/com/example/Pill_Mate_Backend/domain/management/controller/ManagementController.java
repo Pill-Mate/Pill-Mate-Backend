@@ -7,10 +7,8 @@ import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -58,8 +56,29 @@ public class ManagementController {
                     }
                 }
 
-        List<ManagementDto.CurrentPillResponse> dto =  managementService.getStopList(email);
+        List<ManagementDto.StopPillResponse> dto =  managementService.getStopList(email);
         return ApiResponse.onSuccess(dto);
     }
 }
+    @Operation(summary="스케줄 복용 중지",description = "현재 복용중인 약물 스케줄을 복용 중지 처리 합니다. ")
+    @PatchMapping("/home/current/{scheduleId}")
+    public ApiResponse<?> stopHome(@RequestHeader(value = "Authorization", required = true)  String token,
+                                   @PathVariable("scheduleId") Long scheduleId) {
+        {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String email = "";
+            if (token != null && token.startsWith("Bearer ")) {
+                String jwtToken = token.substring(7);
+                if (jwtService.validateToken(jwtToken)) {
+                    email = jwtService.extractEmail(jwtToken);
+
+                } else {
+                    log.info("Invalid JWT");
+                }
+            }
+
+             managementService.sheduleStop(email,scheduleId);
+            return ApiResponse.onSuccess(null);
+        }
+    }
     }

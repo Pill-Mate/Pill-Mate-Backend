@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public class ManagementDto {
@@ -31,7 +30,53 @@ public class ManagementDto {
         // 복용 종료날짜
         private LocalDate endDate;
         // 약물분류명
-        private String classname;
+        private String className;
+        //약물 복용 일수 계산
+        private Integer intakePeriod;
+        // 약물이름
+        private String medicineName;
+        // 약물 회사명
+        private String entpName;
+        //약물사진
+        private URI image;
+
+
+        private Long scheduleId;
+
+        public static CurrentPillResponse from (Schedule schedule) {
+            return CurrentPillResponse.builder()
+                    .startDate(schedule.getStartDate())
+                    //시작일에서 복용일 더하기
+                    .endDate(schedule.getStartDate().plusDays(schedule.getIntakePeriod()))
+                    .className(schedule.getMedicine().getClassName())
+                    .medicineName(schedule.getMedicine().getMedicineName())
+                    .intakePeriod(schedule.getIntakePeriod())
+                    .entpName(schedule.getMedicine().getEntpName())
+                    .image(schedule.getMedicine().getMedicineImage())
+                    .scheduleId(schedule.getId())
+                    .build();
+
+
+        }
+
+
+    }
+
+    @Setter
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    //복용 중단된  약물
+    public static class StopPillResponse {
+        //복용시작 날짜
+        private LocalDate startDate;
+        // 복용 종료날짜
+        private LocalDate endDate;
+        // 약물분류명
+        private String className;
+        //약물 복용 일수 계산
+        private Integer intakePeriod;
         // 약물이름
         private String medicineName;
         // 약물 회사명
@@ -41,13 +86,14 @@ public class ManagementDto {
 
         private Long scheduleId;
 
-        public static CurrentPillResponse from (Schedule schedule) {
-            return CurrentPillResponse.builder()
+        public static StopPillResponse from (Schedule schedule) {
+            return StopPillResponse.builder()
                     .startDate(schedule.getStartDate())
                     //시작일에서 복용일 더하기
                     .endDate(schedule.getStartDate().plusDays(schedule.getIntakePeriod()))
-                    .classname(schedule.getMedicine().getClassName())
+                    .className(schedule.getMedicine().getClassName())
                     .medicineName(schedule.getMedicine().getMedicineName())
+                    .intakePeriod(schedule.getIntakePeriod())
                     .entpName(schedule.getMedicine().getEntpName())
                     .image(schedule.getMedicine().getMedicineImage())
                     .scheduleId(schedule.getId())
