@@ -143,7 +143,7 @@ public class RegisterService {
                         medicineSchedule = MedicineSchedule.builder()
                                 .medicine(medicine)
                                 .users(schedule.getUsers())
-                                .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
+                                .intakeDate(currentDate)  // LocalDate -> sql Date 변환
                                 .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
                                 .eatUnit(registerDTO.eatUnit())
                                 .eatCount(registerDTO.eatCount())
@@ -160,7 +160,7 @@ public class RegisterService {
                         medicineSchedule = MedicineSchedule.builder()
                                 .medicine(medicine)
                                 .users(schedule.getUsers())
-                                .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
+                                .intakeDate(currentDate)  // LocalDate -> sql Date 변환
                                 .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
                                 .eatUnit(registerDTO.eatUnit())
                                 .eatCount(registerDTO.eatCount())

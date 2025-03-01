@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -86,5 +87,6 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
-
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE)
+    private List<MedicineSchedule> medicineSchedules;
 }
