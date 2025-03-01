@@ -23,8 +23,14 @@ public class ManagementService {
             return ManagementDto.CurrentPillResponseDto.builder().pillCount(dto.size()).currentPillResponseList(dto).build();
     }
 
-    public List<ManagementDto.CurrentPillResponse> getStopList(String email) {
+    public List<ManagementDto.StopPillResponse> getStopList(String email) {
         List<Schedule> schedules = scheduleRepository.findByUsersIdAndStatus(userRepository.findIdxByEmail(email).orElseThrow(), ScheduleStatus.INACTIVATE);
-        return schedules.stream().map(ManagementDto.CurrentPillResponse::from).collect(Collectors.toList());
+        return schedules.stream().map(ManagementDto.StopPillResponse::from).collect(Collectors.toList());
+    }
+
+    public void sheduleStop(String email, Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
+        schedule.setStatus(ScheduleStatus.INACTIVATE);
+        scheduleRepository.save(schedule);
     }
 }
