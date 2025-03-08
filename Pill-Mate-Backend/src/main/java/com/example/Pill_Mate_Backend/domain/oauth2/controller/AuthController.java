@@ -11,6 +11,7 @@ import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
@@ -83,6 +84,7 @@ public class AuthController {
             userRepository.save(users); // 변경된 정보 저장
 
             String jwtToken = jwtService.generateToken(users.getEmail());
+            log.info("token: "+ jwtToken);
 
             // 세션에 accessToken 저장
             session.setAttribute("kakaoToken", kakaoAccessToken);

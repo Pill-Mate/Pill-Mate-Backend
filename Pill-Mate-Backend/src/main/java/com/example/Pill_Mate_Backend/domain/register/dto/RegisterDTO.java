@@ -6,6 +6,7 @@ import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import lombok.Builder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public record RegisterDTO (
         int mealTime,
         EatUnit eatUnit,
         int eatCount,
-        Date startDate,
+        LocalDate startDate,
         int intakePeriod,
         float medicineVolume,
         boolean isAlarm,

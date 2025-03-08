@@ -127,8 +127,7 @@ public class RegisterService {
 
         // intakePeriod 동안 반복
         for (int i = 0; i < registerDTO.intakePeriod(); i++) {
-            LocalDate currentDate = registerDTO.startDate().toInstant()
-                    .atZone(ZoneId.systemDefault()).toLocalDate().plusDays(i);  // 날짜 계산
+            LocalDate currentDate = registerDTO.startDate().plusDays(i);  // 날짜 계산
             DayOfWeek dayOfWeek = currentDate.getDayOfWeek(); //현재 날짜에 대한 요일
             log.info("CreateMedicineSchedule for문 1 i값:{} , registerDTO.intakePeriod():{} ",i,registerDTO.intakePeriod());
             if (registerDTO.intakeFrequencys().contains(dayOfWeek.toString())) {
@@ -144,7 +143,7 @@ public class RegisterService {
                         medicineSchedule = MedicineSchedule.builder()
                                 .medicine(medicine)
                                 .users(schedule.getUsers())
-                                .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
+                                .intakeDate(currentDate)  // LocalDate -> sql Date 변환
                                 .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
                                 .eatUnit(registerDTO.eatUnit())
                                 .eatCount(registerDTO.eatCount())
@@ -161,7 +160,7 @@ public class RegisterService {
                         medicineSchedule = MedicineSchedule.builder()
                                 .medicine(medicine)
                                 .users(schedule.getUsers())
-                                .intakeDate(java.sql.Date.valueOf(currentDate))  // LocalDate -> sql Date 변환
+                                .intakeDate(currentDate)  // LocalDate -> sql Date 변환
                                 .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
                                 .eatUnit(registerDTO.eatUnit())
                                 .eatCount(registerDTO.eatCount())
