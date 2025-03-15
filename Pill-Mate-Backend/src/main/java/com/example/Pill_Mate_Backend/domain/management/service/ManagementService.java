@@ -1,18 +1,23 @@
 package com.example.Pill_Mate_Backend.domain.management.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
+import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDetailDto;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDto;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
+import com.example.Pill_Mate_Backend.domain.register.repository.MedicineScheduleRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.ScheduleRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class ManagementService {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private final MedicineRepository medicineRepository;
+    private final MedicineScheduleRepository medicineScheduleRepository;
 
     public ManagementDto.CurrentPillResponseDto getCurrentList(String email) {
             List<Schedule> schedules = scheduleRepository.findByUsersIdAndStatus(userRepository.findIdxByEmail(email).orElseThrow(), ScheduleStatus.ACTIVATE);
@@ -43,7 +49,8 @@ public class ManagementService {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
         Medicine medicine = medicineRepository.findById(schedule.getMedicine().getId()).orElseThrow();
-
+        List<LocalTime> intakeTimesList = medicineScheduleRepository.findDistinctIntakeTimes(users.getId(), medicine.getId());
+        Set<LocalTime> intakeTimes = new HashSet<>(intakeTimesList);
         return ManagementDetailDto.builder()
                 .identifyNumber(medicine.getIdentifyNumber())
                 .medicineName(medicine.getMedicineName())
@@ -69,6 +76,7 @@ public class ManagementService {
                 .medicineVolume(schedule.getMedicineVolume())
                 .ingredientUnit(schedule.getIngredientUnit())
                 .isAlarm(schedule.getIsAlarm())
+                .intakeTimes(intakeTimes)
                 .build();
     }
 }

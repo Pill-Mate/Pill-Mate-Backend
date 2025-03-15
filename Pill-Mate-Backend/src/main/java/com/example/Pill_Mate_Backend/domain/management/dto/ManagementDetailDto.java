@@ -12,6 +12,7 @@ import lombok.Getter;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Locale;
 import java.util.Set;
 
 @Builder
@@ -35,7 +36,7 @@ public record ManagementDetailDto (
 
 
         //User
-        //Set<Time> intakeTimes,
+        Set<LocalTime> intakeTimes,
         @Schema(description = "기상 시간")
         LocalTime wakeupTime,
         @Schema(description = "아침 시간")
