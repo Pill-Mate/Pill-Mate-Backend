@@ -144,7 +144,7 @@ public class RegisterService {
                                 .medicine(medicine)
                                 .users(schedule.getUsers())
                                 .intakeDate(currentDate)  // LocalDate -> sql Date 변환
-                                .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
+                                .intakeTime(intakeTime)   // 설정된 섭취 시간
                                 .eatUnit(registerDTO.eatUnit())
                                 .eatCount(registerDTO.eatCount())
                                 .intakeCount(intakeCount)  // Enum 값 설정
@@ -161,7 +161,7 @@ public class RegisterService {
                                 .medicine(medicine)
                                 .users(schedule.getUsers())
                                 .intakeDate(currentDate)  // LocalDate -> sql Date 변환
-                                .intakeTime(java.sql.Time.valueOf(intakeTime))   // 설정된 섭취 시간
+                                .intakeTime(intakeTime)   // 설정된 섭취 시간
                                 .eatUnit(registerDTO.eatUnit())
                                 .eatCount(registerDTO.eatCount())
                                 .intakeCount(intakeCount)  // Enum 값 설정
@@ -190,19 +190,19 @@ public class RegisterService {
 
         // 섭취 시간 기준 설정
         switch (intakeCount) {
-            case MORNING -> baseTime = users.getWakeupTime().toLocalTime();
-            case LUNCH -> baseTime = users.getLunchTime().toLocalTime();
-            case DINNER -> baseTime = users.getDinnerTime().toLocalTime();
-            case EMPTY -> baseTime = users.getWakeupTime().toLocalTime();
+            case MORNING -> baseTime = users.getWakeupTime();
+            case LUNCH -> baseTime = users.getLunchTime();
+            case DINNER -> baseTime = users.getDinnerTime();
+            case EMPTY -> baseTime = users.getWakeupTime();
             case SLEEP ->
             {
                 //만약에 취침시간이 다음 날 오전 12시 이후, 즉 새벽일 경우에는
-                if(users.getBedTime().toLocalTime().getHour() < 12) {
+                if(users.getBedTime().getHour() < 12) {
                     // 전날(당일 날) 오후 11시 50분으로 설정한다.
                     baseTime = LocalTime.of(23,50,0);
                 }
                 else {
-                    baseTime = users.getBedTime().toLocalTime();
+                    baseTime = users.getBedTime();
                 }
             }
             case NEEDED -> baseTime = LocalTime.now();

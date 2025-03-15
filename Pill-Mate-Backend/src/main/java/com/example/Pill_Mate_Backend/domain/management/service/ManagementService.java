@@ -1,8 +1,12 @@
 package com.example.Pill_Mate_Backend.domain.management.service;
 
+import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
+import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
+import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDetailDto;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDto;
+import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.ScheduleRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 public class ManagementService {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
+    private final MedicineRepository medicineRepository;
 
     public ManagementDto.CurrentPillResponseDto getCurrentList(String email) {
             List<Schedule> schedules = scheduleRepository.findByUsersIdAndStatus(userRepository.findIdxByEmail(email).orElseThrow(), ScheduleStatus.ACTIVATE);
@@ -32,5 +37,38 @@ public class ManagementService {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         schedule.setStatus(ScheduleStatus.INACTIVATE);
         scheduleRepository.save(schedule);
+    }
+
+    public ManagementDetailDto findScheduleById(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
+        Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
+        Medicine medicine = medicineRepository.findById(schedule.getMedicine().getId()).orElseThrow();
+
+        return ManagementDetailDto.builder()
+                .identifyNumber(medicine.getIdentifyNumber())
+                .medicineName(medicine.getMedicineName())
+                .ingredient(medicine.getIngredient())
+                .ingredientAmount(medicine.getIngredientAmount())
+                .medicineImage(medicine.getMedicineImage())
+                .entpName(medicine.getClassName())
+                .className(medicine.getClassName())
+                .medicineId(medicine.getId())
+                .wakeupTime(users.getWakeupTime())
+                .morningTime(users.getMorningTime())
+                .lunchTime(users.getLunchTime())
+                .dinnerTime(users.getDinnerTime())
+                .bedTime(users.getBedTime())
+                .intakeCounts(schedule.getIntakeCounts())
+                .intakeFrequencys(schedule.getIntakeFrequencys())
+                .mealTime(schedule.getMealTime())
+                .mealUnit(schedule.getMealUnit())
+                .eatUnit(schedule.getEatUnit())
+                .eatCount(schedule.getEatCount())
+                .startDate(schedule.getStartDate())
+                .intakePeriod(schedule.getIntakePeriod())
+                .medicineVolume(schedule.getMedicineVolume())
+                .ingredientUnit(schedule.getIngredientUnit())
+                .isAlarm(schedule.getIsAlarm())
+                .build();
     }
 }

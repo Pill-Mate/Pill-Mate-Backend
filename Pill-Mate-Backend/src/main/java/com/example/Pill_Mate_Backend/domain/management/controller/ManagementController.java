@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.management.controller;
 
+import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDetailDto;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDto;
 import com.example.Pill_Mate_Backend.domain.management.service.ManagementService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
@@ -80,5 +81,13 @@ public class ManagementController {
              managementService.sheduleStop(email,scheduleId);
             return ApiResponse.onSuccess(null);
         }
+    }
+
+    @Operation(summary = "약물 관리 수정페이지", description = "한 약물의 세부사항을 전송합니다.")
+    @GetMapping("/detail/{sheduleId}")
+    public ApiResponse<?> managementDetail(@PathVariable Long sheduleId) {
+        ManagementDetailDto dto = managementService.findScheduleById(sheduleId);
+        return ApiResponse.onSuccess(dto);
+
     }
     }
