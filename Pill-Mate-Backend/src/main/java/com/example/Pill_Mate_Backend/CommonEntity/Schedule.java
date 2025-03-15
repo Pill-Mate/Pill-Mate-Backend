@@ -40,7 +40,7 @@ public class Schedule extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
-    private IngredientUnit medicineUnit;
+    private IngredientUnit ingredientUnit;
 
     @Column(nullable = false, length = 50)
     private Float medicineVolume;
