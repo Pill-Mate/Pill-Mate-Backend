@@ -93,7 +93,7 @@ public class ManagementController {
 
     }
     @Operation(summary = "약물 관리 수정페이지", description = "약물 관리 수정사항을 전송받고 수정합니다.")
-    @PatchMapping("/detail/{scheduleId}")
+    @PutMapping("/detail/{scheduleId}")
     public ApiResponse<?> managementDetailModify(
                                                  @PathVariable Long scheduleId,
                                                  @RequestBody ManagementDetailDto Reqdto,
