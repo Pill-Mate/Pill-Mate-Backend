@@ -93,16 +93,8 @@ public class ManagementService {
                 .id(dto.medicineId())
                 .build();
         medicineRepository.save(medicine);
-        Users usersForId = userRepository.findByEmail(email).orElseThrow();
-        Users user = Users.builder()
-                .id(usersForId.getId())
-                .wakeupTime(dto.wakeupTime())
-                .morningTime(dto.morningTime())
-                .lunchTime(dto.lunchTime())
-                .dinnerTime(dto.dinnerTime())
-                .bedTime(dto.bedTime())
-                .build();
-        userRepository.save(user);
+        Users user = userRepository.findByEmail(email).orElseThrow();
+
         Schedule schedule = Schedule.builder()
                 .id(scheduleId)
                 .intakeCounts(dto.intakeCounts())
