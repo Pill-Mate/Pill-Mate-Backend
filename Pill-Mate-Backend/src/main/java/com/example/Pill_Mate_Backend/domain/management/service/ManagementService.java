@@ -82,35 +82,44 @@ public class ManagementService {
     public void modifyScheduleById(ManagementDetailDto dto,String email,Long scheduleId) {
 
 
-        Medicine medicine = Medicine.builder()
-                .identifyNumber(dto.identifyNumber())
-                .medicineName(dto.medicineName())
-                .ingredient(dto.ingredient())
-                .ingredientAmount(dto.ingredientAmount())
-                .medicineImage(dto.medicineImage())
-                .entpName(dto.entpName())
-                .className(dto.className())
-                .id(dto.medicineId())
-                .build();
+
+        Medicine medicine = medicineRepository.findById(dto.medicineId())
+                .orElseThrow(() -> new RuntimeException("Medicine not found"));
+
+
+        medicine.setIdentifyNumber(dto.identifyNumber());
+        medicine.setMedicineName(dto.medicineName());
+        medicine.setIngredient(dto.ingredient());
+        medicine.setIngredientAmount(dto.ingredientAmount());
+        medicine.setMedicineImage(dto.medicineImage());
+        medicine.setEntpName(dto.entpName());
+        medicine.setClassName(dto.className());
+
+
         medicineRepository.save(medicine);
+
         Users user = userRepository.findByEmail(email).orElseThrow();
 
-        Schedule schedule = Schedule.builder()
-                .id(scheduleId)
-                .intakeCounts(dto.intakeCounts())
-                .intakeFrequencys(dto.intakeFrequencys())
-                .mealTime(dto.mealTime())
-                .mealUnit(dto.mealUnit())
-                .eatUnit(dto.eatUnit())
-                .eatCount(dto.eatCount())
-                .startDate(dto.startDate())
-                .intakePeriod(dto.intakePeriod())
-                .medicineVolume(dto.medicineVolume())
-                .ingredientUnit(dto.ingredientUnit())
-                .isAlarm(dto.isAlarm())
-                .users(user)
-                .medicine(medicine)
-                .build();
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+
+
+        schedule.setIntakeCounts(dto.intakeCounts());
+        schedule.setIntakeFrequencys(dto.intakeFrequencys());
+        schedule.setMealTime(dto.mealTime());
+        schedule.setMealUnit(dto.mealUnit());
+        schedule.setEatUnit(dto.eatUnit());
+        schedule.setEatCount(dto.eatCount());
+        schedule.setStartDate(dto.startDate());
+        schedule.setIntakePeriod(dto.intakePeriod());
+        schedule.setMedicineVolume(dto.medicineVolume());
+        schedule.setIngredientUnit(dto.ingredientUnit());
+        schedule.setIsAlarm(dto.isAlarm());
+        schedule.setUsers(user);
+        schedule.setMedicine(medicine);
+
+// 수정된 Schedule 객체 저장
         scheduleRepository.save(schedule);
 
         //Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
