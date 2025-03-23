@@ -17,8 +17,8 @@ import java.util.Set;
 
 @Builder
 public record ManagementDetailDto (
-        @Schema(description = "스케줄 id")
-        Long scheduleId,
+        //@Schema(description = "스케줄 id")
+        //Long scheduleId,
         //Medicine
         String identifyNumber,
         @Schema(description = "약물 이름")

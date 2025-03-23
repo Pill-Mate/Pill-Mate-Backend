@@ -79,9 +79,9 @@ public class ManagementService {
                 .build();
     }
 
-    public void modifyScheduleById(ManagementDetailDto dto,String email) {
+    public void modifyScheduleById(ManagementDetailDto dto,String email,Long scheduleId) {
         Schedule schedule = Schedule.builder()
-                .id(dto.scheduleId())
+                .id(scheduleId)
                 .intakeCounts(dto.intakeCounts())
                 .intakeFrequencys(dto.intakeFrequencys())
                 .mealTime(dto.mealTime())
