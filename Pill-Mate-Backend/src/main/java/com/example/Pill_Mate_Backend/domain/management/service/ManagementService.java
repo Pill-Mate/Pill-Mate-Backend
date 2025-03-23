@@ -80,21 +80,7 @@ public class ManagementService {
     }
 
     public void modifyScheduleById(ManagementDetailDto dto,String email,Long scheduleId) {
-        Schedule schedule = Schedule.builder()
-                .id(scheduleId)
-                .intakeCounts(dto.intakeCounts())
-                .intakeFrequencys(dto.intakeFrequencys())
-                .mealTime(dto.mealTime())
-                .mealUnit(dto.mealUnit())
-                .eatUnit(dto.eatUnit())
-                .eatCount(dto.eatCount())
-                .startDate(dto.startDate())
-                .intakePeriod(dto.intakePeriod())
-                .medicineVolume(dto.medicineVolume())
-                .ingredientUnit(dto.ingredientUnit())
-                .isAlarm(dto.isAlarm())
-                .build();
-        scheduleRepository.save(schedule);
+
 
         Medicine medicine = Medicine.builder()
                 .identifyNumber(dto.identifyNumber())
@@ -117,7 +103,23 @@ public class ManagementService {
                 .bedTime(dto.bedTime())
                 .build();
         userRepository.save(user);
-
+        Schedule schedule = Schedule.builder()
+                .id(scheduleId)
+                .intakeCounts(dto.intakeCounts())
+                .intakeFrequencys(dto.intakeFrequencys())
+                .mealTime(dto.mealTime())
+                .mealUnit(dto.mealUnit())
+                .eatUnit(dto.eatUnit())
+                .eatCount(dto.eatCount())
+                .startDate(dto.startDate())
+                .intakePeriod(dto.intakePeriod())
+                .medicineVolume(dto.medicineVolume())
+                .ingredientUnit(dto.ingredientUnit())
+                .isAlarm(dto.isAlarm())
+                .users(user)
+                .medicine(medicine)
+                .build();
+        scheduleRepository.save(schedule);
 
         //Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         //Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
