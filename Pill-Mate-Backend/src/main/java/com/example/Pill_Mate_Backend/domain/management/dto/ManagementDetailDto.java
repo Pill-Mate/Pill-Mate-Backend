@@ -12,11 +12,13 @@ import lombok.Getter;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Locale;
 import java.util.Set;
+
 
 @Builder
 public record ManagementDetailDto (
+        @Schema(description = "스케줄 id")
+        Long scheduleId,
         //Medicine
         String identifyNumber,
         @Schema(description = "약물 이름")
