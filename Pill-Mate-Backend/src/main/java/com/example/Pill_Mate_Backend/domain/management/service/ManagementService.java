@@ -1,7 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.management.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
-import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
@@ -15,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,7 +49,7 @@ public class ManagementService {
         Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
         Medicine medicine = medicineRepository.findById(schedule.getMedicine().getId()).orElseThrow();
         List<LocalTime> intakeTimesList = medicineScheduleRepository.findDistinctIntakeTimes(users.getId(), medicine.getId());
-        Set<LocalTime> intakeTimes = new HashSet<>(intakeTimesList);
+        Set<LocalTime> intakeTimes = new LinkedHashSet<>(intakeTimesList);
         return ManagementDetailDto.builder()
                 .identifyNumber(medicine.getIdentifyNumber())
                 .medicineName(medicine.getMedicineName())
@@ -78,5 +77,59 @@ public class ManagementService {
                 .isAlarm(schedule.getIsAlarm())
                 .intakeTimes(intakeTimes)
                 .build();
+    }
+
+    public void modifyScheduleById(ManagementDetailDto dto,String email) {
+        Schedule schedule = Schedule.builder()
+                .id(dto.scheduleId())
+                .intakeCounts(dto.intakeCounts())
+                .intakeFrequencys(dto.intakeFrequencys())
+                .mealTime(dto.mealTime())
+                .mealUnit(dto.mealUnit())
+                .eatUnit(dto.eatUnit())
+                .eatCount(dto.eatCount())
+                .startDate(dto.startDate())
+                .intakePeriod(dto.intakePeriod())
+                .medicineVolume(dto.medicineVolume())
+                .ingredientUnit(dto.ingredientUnit())
+                .isAlarm(dto.isAlarm())
+                .build();
+        scheduleRepository.save(schedule);
+
+        Medicine medicine = Medicine.builder()
+                .identifyNumber(dto.identifyNumber())
+                .medicineName(dto.medicineName())
+                .ingredient(dto.ingredient())
+                .ingredientAmount(dto.ingredientAmount())
+                .medicineImage(dto.medicineImage())
+                .entpName(dto.entpName())
+                .className(dto.className())
+                .id(dto.medicineId())
+                .build();
+        medicineRepository.save(medicine);
+        Users usersForId = userRepository.findByEmail(email).orElseThrow();
+        Users user = Users.builder()
+                .id(usersForId.getId())
+                .wakeupTime(dto.wakeupTime())
+                .morningTime(dto.morningTime())
+                .lunchTime(dto.lunchTime())
+                .dinnerTime(dto.dinnerTime())
+                .bedTime(dto.bedTime())
+                .build();
+        userRepository.save(user);
+
+
+        //Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
+        //Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
+        //Medicine medicine = medicineRepository.findById(schedule.getMedicine().getId()).orElseThrow();
+        //List<LocalTime> intakeTimesList = medicineScheduleRepository.findDistinctIntakeTimes(users.getId(), medicine.getId());
+        //Set<LocalTime> intakeTimes = new LinkedHashSet<>(intakeTimesList);
+//        return ManagementDetailDto.builder()
+//
+//
+//
+//                .intakeTimes(intakeTimes)
+//                .build();
+//    }
     }
 }
