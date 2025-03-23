@@ -94,7 +94,9 @@ public class ManagementController {
     }
     @Operation(summary = "약물 관리 수정페이지", description = "약물 관리 수정사항을 전송받고 수정합니다.")
     @PatchMapping("/detail/{scheduleId}")
-    public ApiResponse<?> managementDetailModify(@RequestBody ManagementDetailDto Reqdto,
+    public ApiResponse<?> managementDetailModify(
+                                                 @PathVariable Long scheduleId,
+                                                 @RequestBody ManagementDetailDto Reqdto,
                                                  @RequestHeader(value = "Authorization", required = true) String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
@@ -107,7 +109,7 @@ public class ManagementController {
                 log.info("Invalid JWT");
             }
         }
-         managementService.modifyScheduleById(Reqdto,email);
+         managementService.modifyScheduleById(Reqdto,email,scheduleId);
         return ApiResponse.onSuccess("성공");
 
     }
