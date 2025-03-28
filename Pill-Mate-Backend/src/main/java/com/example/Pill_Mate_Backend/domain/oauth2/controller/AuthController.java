@@ -1,13 +1,18 @@
 package com.example.Pill_Mate_Backend.domain.oauth2.controller;
 
+import com.example.Pill_Mate_Backend.CommonEntity.RefreshToken;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
+import com.example.Pill_Mate_Backend.domain.oauth2.dto.JwtTokenDto;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.KakaoSignUpDTO;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.OnboardingDTO;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.UserInfoResponseDto;
+import com.example.Pill_Mate_Backend.domain.oauth2.repository.RefreshTokenRepository;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.KakaoService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.OnboardingService;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +35,7 @@ public class AuthController {
     private final OnboardingService onboardingService;
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     //로그 확인
 
@@ -65,15 +71,20 @@ public class AuthController {
                 userRepository.save(users); // 변경된 정보 저장
 
                 String jwtToken = jwtService.generateToken(users.getEmail());
+                String refreshToken = jwtService.generateRefreshToken(users.getEmail());
 
                 // 세션에 accessToken 저장
                 session.setAttribute("kakaoToken", kakaoAccessToken);
+
+                //db refresh token 바꾸기...
+                kakaoService.updateRefreshToken(userInfo.getEmail(),refreshToken);
 
                 // 응답 데이터 준비
                 Map<String, Object> response = new HashMap<>();
                 //response.put("message", "로그인 성공");
                 System.out.println("로그인 성공, 온보딩 null");
                 response.put("jwtToken", jwtToken);
+                response.put("refreshToken", refreshToken);
                 response.put("login",false);
                 return ResponseEntity.ok(response);
             }
@@ -84,16 +95,21 @@ public class AuthController {
             userRepository.save(users); // 변경된 정보 저장
 
             String jwtToken = jwtService.generateToken(users.getEmail());
+            String refreshToken = jwtService.generateRefreshToken(users.getEmail());
             log.info("token: "+ jwtToken);
 
             // 세션에 accessToken 저장
             session.setAttribute("kakaoToken", kakaoAccessToken);
+
+            //db refresh token 바꾸기...
+            kakaoService.updateRefreshToken(userInfo.getEmail(),refreshToken);
 
             // 응답 데이터 준비
             Map<String, Object> response = new HashMap<>();
             //response.put("message", "로그인 성공");
             System.out.println("로그인 성공");
             response.put("jwtToken", jwtToken);
+            response.put("refreshToken", refreshToken);
             response.put("login",true);
             return ResponseEntity.ok(response);
         }
@@ -110,11 +126,17 @@ public class AuthController {
 
         // JWT 토큰 생성
         String jwtToken = jwtService.generateToken(userInfo.getEmail());
+        String refreshToken = jwtService.generateRefreshToken(users.getEmail());
+
+        //refreshtoken DB에 저장
+        RefreshToken refreshToken1 = new RefreshToken(refreshToken, users);
+        refreshTokenRepository.save(refreshToken1);
 
         // 응답 데이터 준비
         Map<String, Object> response = new HashMap<>();
         System.out.println("회원가입 성공");
         response.put("jwtToken", jwtToken);
+        response.put("refreshToken", refreshToken);
         response.put("login",false);
         return ResponseEntity.ok(response);
     }
@@ -131,7 +153,8 @@ public class AuthController {
                 String email = jwtService.extractEmail(jwtToken);
                 onboardingService.setUserInfo(email, onboardingDTO.getWakeupTime(), onboardingDTO.getBedTime(), onboardingDTO.getMorningTime(), onboardingDTO.getLunchTime(), onboardingDTO.getDinnerTime(), onboardingDTO.getAlarmMarketing(), onboardingDTO.getAlarmInfo());
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT");
+                //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
         // 로직 처리 후 응답 반환
@@ -166,6 +189,11 @@ public class AuthController {
         kakaoService.kakaoUnlink(kakaoToken); //카카오에서 연결 해제
         kakaoService.deleteUser(email); //우리 db에서 회원정보 삭제
         return ResponseEntity.ok("회원정보 삭제 완료");
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<JwtTokenDto> reissue(@RequestBody JwtTokenDto tokenRequestDto) {
+        return ResponseEntity.ok(kakaoService.reissue(tokenRequestDto));
     }
 
     // Exception Handler

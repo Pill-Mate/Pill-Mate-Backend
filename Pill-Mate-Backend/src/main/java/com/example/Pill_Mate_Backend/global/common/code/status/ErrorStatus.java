@@ -25,7 +25,11 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // News API 에러
     _NOT_FOUND_NEWS(HttpStatus.NOT_FOUND, "NEWS400", "검색된 뉴스가 존재하지 않습니다."),
-    _UNAVAILABLE_NEWS_API(HttpStatus.SERVICE_UNAVAILABLE, "NEWS503", "Naver API 미작동, 관리자에게 문의 바랍니다.");
+    _UNAVAILABLE_NEWS_API(HttpStatus.SERVICE_UNAVAILABLE, "NEWS503", "Naver API 미작동, 관리자에게 문의 바랍니다."),
+
+    //jwt 만료 에러
+    _EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "JWTEXPIRED401", "만료된 JWT 토큰입니다."), //HttpStatus.UNAUTHORIZED -> 401에러
+    _EXPIRED_REFRESH_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESHEXPIRED401", "만료된 REFRESH JWT 토큰입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

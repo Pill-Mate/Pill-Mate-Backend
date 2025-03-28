@@ -1,6 +1,8 @@
 package com.example.Pill_Mate_Backend.domain.oauth2.jwt;
 
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,6 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 System.out.println("Invalid JWT Token");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         } else {
             System.out.println("Authorization header is missing or invalid");
