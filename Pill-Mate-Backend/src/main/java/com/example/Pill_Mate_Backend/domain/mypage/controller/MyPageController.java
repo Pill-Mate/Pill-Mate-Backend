@@ -6,6 +6,8 @@ import com.example.Pill_Mate_Backend.domain.mypage.service.MyPageService;
 import com.example.Pill_Mate_Backend.domain.mypage.service.RoutineService;
 import com.example.Pill_Mate_Backend.domain.oauth2.controller.AuthController;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,7 @@ public class MyPageController {
                 logger.info("email: "+email);
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
         MyPageDTO myPageDTO = myPageService.getMyPageByEmail(email);
@@ -52,6 +55,7 @@ public class MyPageController {
                 logger.info("email: "+email);
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
         RoutineDTO routineDTO = routineService.getRoutineByEmail(email);
@@ -71,6 +75,7 @@ public class MyPageController {
                 logger.info("email: "+email);
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
 
@@ -97,6 +102,7 @@ public class MyPageController {
                 logger.info("email: "+email);
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
 
@@ -123,6 +129,7 @@ public class MyPageController {
                 logger.info("email: "+email);
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
 
