@@ -27,10 +27,7 @@ public class JwtService {
     private final static Logger log = Logger.getGlobal();
     private final String secretKey;
     private final long expirationTime;
-    //private final long expirationTime2 = 60000; //60초
-    //private final long expirationTime3 = 300000; //5분 ----테스트시 사용
-    private final long expirationTime4 = 60000L * 60 * 24 * 30; //30일?
-    //private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 30;  // 30일
+    private final long expirationTime30 = 60000L * 60 * 24 * 30; //30일?
     private static final long THREE_DAYS = 1000 * 60 * 60 * 24 * 3;  // 3일
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
@@ -55,21 +52,12 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime4))//REFRESH_TOKEN_EXPIRE_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime30))//REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
     // JWT 유효성 검증
-    public boolean validateToken2(String token) {
-        try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
-    }
-
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
