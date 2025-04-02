@@ -45,10 +45,10 @@ public class Users extends BaseEntity {
     @Column(nullable = true)
     private LocalTime dinnerTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean alarmMarketing;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean alarmInfo;
 
 

@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.management.controller;
 
+import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDetailDto;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDto;
 import com.example.Pill_Mate_Backend.domain.management.service.ManagementService;
@@ -10,6 +11,7 @@ import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -89,10 +91,31 @@ public class ManagementController {
     }
 
     @Operation(summary = "약물 관리 수정페이지", description = "한 약물의 세부사항을 전송합니다.")
-    @GetMapping("/detail/{sheduleId}")
-    public ApiResponse<?> managementDetail(@PathVariable Long sheduleId) {
-        ManagementDetailDto dto = managementService.findScheduleById(sheduleId);
+    @GetMapping("/detail/{scheduleId}")
+    public ApiResponse<?> managementDetail(@PathVariable Long scheduleId) {
+        ManagementDetailDto dto = managementService.findScheduleById(scheduleId);
         return ApiResponse.onSuccess(dto);
+
+    }
+    @Operation(summary = "약물 관리 수정페이지", description = "약물 관리 수정사항을 전송받고 수정합니다.")
+    @PutMapping("/detail/{scheduleId}")
+    public ApiResponse<?> managementDetailModify(
+                                                 @PathVariable Long scheduleId,
+                                                 @RequestBody ManagementDetailDto Reqdto,
+                                                 @RequestHeader(value = "Authorization", required = true) String token) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+
+            } else {
+                log.info("Invalid JWT");
+            }
+        }
+         managementService.modifyScheduleById(Reqdto,email,scheduleId);
+        return ApiResponse.onSuccess("성공");
 
     }
     }

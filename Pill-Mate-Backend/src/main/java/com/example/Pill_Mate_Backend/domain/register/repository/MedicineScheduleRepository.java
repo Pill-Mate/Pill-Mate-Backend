@@ -12,7 +12,8 @@ import java.util.List;
 @Repository
 public interface MedicineScheduleRepository extends JpaRepository<MedicineSchedule, Long> {
     @Query("SELECT DISTINCT ms.intakeTime FROM MedicineSchedule ms " +
-            "WHERE ms.users.id = :userId AND ms.medicine.id = :medicineId")
+            "WHERE ms.users.id = :userId AND ms.medicine.id = :medicineId " +
+            "ORDER BY ms.intakeTime ASC")
     List<LocalTime> findDistinctIntakeTimes(@Param("userId") Long userId,
                                             @Param("medicineId") Long medicineId);
 

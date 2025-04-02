@@ -1,7 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.management.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
-import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
@@ -15,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,7 +49,7 @@ public class ManagementService {
         Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
         Medicine medicine = medicineRepository.findById(schedule.getMedicine().getId()).orElseThrow();
         List<LocalTime> intakeTimesList = medicineScheduleRepository.findDistinctIntakeTimes(users.getId(), medicine.getId());
-        Set<LocalTime> intakeTimes = new HashSet<>(intakeTimesList);
+        Set<LocalTime> intakeTimes = new LinkedHashSet<>(intakeTimesList);
         return ManagementDetailDto.builder()
                 .identifyNumber(medicine.getIdentifyNumber())
                 .medicineName(medicine.getMedicineName())
@@ -78,5 +77,62 @@ public class ManagementService {
                 .isAlarm(schedule.getIsAlarm())
                 .intakeTimes(intakeTimes)
                 .build();
+    }
+
+    public void modifyScheduleById(ManagementDetailDto dto,String email,Long scheduleId) {
+
+
+
+        Medicine medicine = medicineRepository.findById(dto.medicineId())
+                .orElseThrow(() -> new RuntimeException("Medicine not found"));
+
+
+        medicine.setIdentifyNumber(dto.identifyNumber());
+        medicine.setMedicineName(dto.medicineName());
+        medicine.setIngredient(dto.ingredient());
+        medicine.setIngredientAmount(dto.ingredientAmount());
+        medicine.setMedicineImage(dto.medicineImage());
+        medicine.setEntpName(dto.entpName());
+        medicine.setClassName(dto.className());
+
+
+        medicineRepository.save(medicine);
+
+        Users user = userRepository.findByEmail(email).orElseThrow();
+
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new RuntimeException("Schedule not found"));
+
+
+        schedule.setIntakeCounts(dto.intakeCounts());
+        schedule.setIntakeFrequencys(dto.intakeFrequencys());
+        schedule.setMealTime(dto.mealTime());
+        schedule.setMealUnit(dto.mealUnit());
+        schedule.setEatUnit(dto.eatUnit());
+        schedule.setEatCount(dto.eatCount());
+        schedule.setStartDate(dto.startDate());
+        schedule.setIntakePeriod(dto.intakePeriod());
+        schedule.setMedicineVolume(dto.medicineVolume());
+        schedule.setIngredientUnit(dto.ingredientUnit());
+        schedule.setIsAlarm(dto.isAlarm());
+        schedule.setUsers(user);
+        schedule.setMedicine(medicine);
+
+// 수정된 Schedule 객체 저장
+        scheduleRepository.save(schedule);
+
+        //Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
+        //Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
+        //Medicine medicine = medicineRepository.findById(schedule.getMedicine().getId()).orElseThrow();
+        //List<LocalTime> intakeTimesList = medicineScheduleRepository.findDistinctIntakeTimes(users.getId(), medicine.getId());
+        //Set<LocalTime> intakeTimes = new LinkedHashSet<>(intakeTimesList);
+//        return ManagementDetailDto.builder()
+//
+//
+//
+//                .intakeTimes(intakeTimes)
+//                .build();
+//    }
     }
 }
