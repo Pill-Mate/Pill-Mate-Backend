@@ -17,6 +17,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount.*;
 
@@ -92,8 +93,12 @@ public class RegisterService {
                 .eatCount(registerDTO.eatCount())
                 .medicineVolume(registerDTO.medicineVolume())
                 .intakePeriod(registerDTO.intakePeriod())
-                .intakeFrequencys(registerDTO.intakeFrequencys())
-                .intakeCounts(registerDTO.intakeCounts())
+                .intakeFrequencys(registerDTO.intakeFrequencys().stream()
+                        .map(Enum::name)
+                        .collect(Collectors.toSet()))
+                .intakeCounts(registerDTO.intakeCounts().stream()
+                        .map(Enum::name)
+                        .collect(Collectors.toSet()))
                 .isAlarm(registerDTO.isAlarm())
                 .status(ScheduleStatus.ACTIVATE)
                 .startDate(registerDTO.startDate())
@@ -132,8 +137,8 @@ public class RegisterService {
             log.info("CreateMedicineSchedule for문 1 i값:{} , registerDTO.intakePeriod():{} ",i,registerDTO.intakePeriod());
             if (registerDTO.intakeFrequencys().contains(dayOfWeek.toString())) {
                 // 매일 Enum 개수만큼 MedicineSchedule 생성
-                for (String intakeCount1 : registerDTO.intakeCounts()) {
-                    IntakeCount intakeCount = IntakeCount.valueOf(intakeCount1); //String값 IntakeCount로 변환
+                for (IntakeCount intakeCount1 : registerDTO.intakeCounts()) {
+                    IntakeCount intakeCount = intakeCount1; //String값 IntakeCount로 변환
                     log.info("CreateMedicineSchedule for문 2 value:{}", intakeCount.values());
                     MedicineSchedule medicineSchedule = null;
                     // 섭취 시간을 계산하여 설정
