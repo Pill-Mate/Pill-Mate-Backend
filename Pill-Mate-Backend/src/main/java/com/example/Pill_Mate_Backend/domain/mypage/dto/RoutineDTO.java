@@ -5,17 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 @Builder
 @Data
 public class RoutineDTO {
-    private Time wakeupTime;
-    private Time bedTime;
-    private Time morningTime;
-    private Time lunchTime;
-    private Time dinnerTime;
+    private LocalTime wakeupTime;
+    private LocalTime bedTime;
+    private LocalTime morningTime;
+    private LocalTime lunchTime;
+    private LocalTime dinnerTime;
 
-    public RoutineDTO(Time wakeupTime, Time bedTime, Time morningTime, Time lunchTime, Time dinnerTime) {
+    public RoutineDTO(LocalTime wakeupTime, LocalTime bedTime, LocalTime morningTime, LocalTime lunchTime, LocalTime dinnerTime) {
         this.wakeupTime = wakeupTime;
         this.bedTime = bedTime;
         this.morningTime = morningTime;

@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -22,10 +24,10 @@ public class MedicineSchedule extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Date intakeDate;
+    private LocalDate intakeDate;
 
     @Column(nullable = false)
-    private Time intakeTime;
+    private LocalTime intakeTime;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
@@ -60,4 +62,9 @@ public class MedicineSchedule extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
+
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 }

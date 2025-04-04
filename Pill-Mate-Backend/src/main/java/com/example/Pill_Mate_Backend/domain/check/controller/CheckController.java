@@ -6,6 +6,8 @@ import com.example.Pill_Mate_Backend.domain.check.service.HomeService;
 import com.example.Pill_Mate_Backend.domain.check.service.MedicineCheckService;
 import com.example.Pill_Mate_Backend.domain.oauth2.controller.AuthController;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -54,6 +56,7 @@ public class CheckController {
 
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
         System.out.println("오늘 EMAIL!! : " + email);
@@ -99,6 +102,7 @@ public class CheckController {
 
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
 
@@ -140,6 +144,7 @@ public class CheckController {
 
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
 
