@@ -35,11 +35,11 @@ public class RoutineService {
         System.out.println("Result[1] type: " + result[1].getClass().getName());
 
         RoutineDTO routineDTO = new RoutineDTO(
-                (LocalTime) result[0],//wake
-                (LocalTime) result[1],//bed
-                (LocalTime) result[2],//morning
-                (LocalTime) result[3],//lunch
-                (LocalTime) result[4]//dinner
+                ((Time) result[0]).toLocalTime(), // wake
+                ((Time) result[1]).toLocalTime(), // bed
+                ((Time) result[2]).toLocalTime(), // morning
+                ((Time) result[3]).toLocalTime(), // lunch
+                ((Time) result[4]).toLocalTime()  // dinner
         );
 
         return routineDTO;

@@ -7,6 +7,8 @@ import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import com.example.Pill_Mate_Backend.domain.register.service.RegisterService;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +61,7 @@ public class RegisterController {
 
             } else {
                 log.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
 
@@ -105,6 +108,7 @@ public class RegisterController {
 
             } else {
                 log.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
         try {
