@@ -7,11 +7,11 @@ import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
 
@@ -38,7 +38,7 @@ public record ManagementDetailDto (
 
 
         //User
-        Set<LocalTime> intakeTimes,
+        List<LocalTime> intakeTimes,
         @Schema(description = "기상 시간")
         LocalTime wakeupTime,
         @Schema(description = "아침 시간")

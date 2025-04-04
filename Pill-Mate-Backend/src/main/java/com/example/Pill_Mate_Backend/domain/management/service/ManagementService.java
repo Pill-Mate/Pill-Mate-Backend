@@ -48,8 +48,8 @@ public class ManagementService {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
         Medicine medicine = medicineRepository.findById(schedule.getMedicine().getId()).orElseThrow();
-        List<LocalTime> intakeTimesList = medicineScheduleRepository.findDistinctIntakeTimes(users.getId(), medicine.getId());
-        Set<LocalTime> intakeTimes = new LinkedHashSet<>(intakeTimesList);
+        List<LocalTime> intakeTimes = medicineScheduleRepository.findDistinctIntakeTimes(users.getId(), medicine.getId());
+        //Set<LocalTime> intakeTimes = new LinkedHashSet<>(intakeTimesList);
         return ManagementDetailDto.builder()
                 .identifyNumber(medicine.getIdentifyNumber())
                 .medicineName(medicine.getMedicineName())
