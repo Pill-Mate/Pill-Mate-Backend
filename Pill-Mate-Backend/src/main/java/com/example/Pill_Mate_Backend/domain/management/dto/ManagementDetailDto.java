@@ -1,9 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.management.dto;
 
 
-import com.example.Pill_Mate_Backend.CommonEntity.enums.EatUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.IngredientUnit;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -52,9 +50,9 @@ public record ManagementDetailDto (
 
         //Shedule
         @Schema(description = "복용 횟수(아점저공취)")
-        Set<String> intakeCounts,
+        List<IntakeCount> intakeCounts,
         @Schema(description = "섭취 요일")
-        Set<String> intakeFrequencys,
+        List<IntakeFrequency> intakeFrequencys,
         @Schema(description = "식전, 식후 선택")
         MealUnit mealUnit,
         @Operation(description = "식전후 시간")

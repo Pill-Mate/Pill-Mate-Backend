@@ -3,6 +3,8 @@ package com.example.Pill_Mate_Backend.domain.management.service;
 import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeFrequency;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDetailDto;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDto;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,8 +67,17 @@ public class ManagementService {
                 .lunchTime(users.getLunchTime())
                 .dinnerTime(users.getDinnerTime())
                 .bedTime(users.getBedTime())
-                .intakeCounts(schedule.getIntakeCounts())
-                .intakeFrequencys(schedule.getIntakeFrequencys())
+                .intakeCounts(
+                        Arrays.stream(IntakeCount.values())
+                                .filter(enumValue -> schedule.getIntakeCounts().contains(enumValue.name()))
+                                .toList()
+                )
+                .intakeFrequencys(
+                        Arrays.stream(IntakeFrequency.values())
+                                .filter(enumValue -> schedule.getIntakeFrequencys().contains(enumValue.name()))
+                                .toList()
+                )
+
                 .mealTime(schedule.getMealTime())
                 .mealUnit(schedule.getMealUnit())
                 .eatUnit(schedule.getEatUnit())
@@ -105,8 +117,12 @@ public class ManagementService {
                 .orElseThrow(() -> new RuntimeException("Schedule not found"));
 
 
-        schedule.setIntakeCounts(dto.intakeCounts());
-        schedule.setIntakeFrequencys(dto.intakeFrequencys());
+        schedule.setIntakeCounts(    dto.intakeCounts().stream()
+                .map(Enum::name)
+                .collect(Collectors.toSet()));
+        schedule.setIntakeFrequencys(    dto.intakeFrequencys().stream()
+                .map(Enum::name)
+                .collect(Collectors.toSet()));
         schedule.setMealTime(dto.mealTime());
         schedule.setMealUnit(dto.mealUnit());
         schedule.setEatUnit(dto.eatUnit());
