@@ -2,6 +2,7 @@ package com.example.Pill_Mate_Backend.domain.register.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.*;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeFrequency;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
 import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;
@@ -135,7 +136,7 @@ public class RegisterService {
             LocalDate currentDate = registerDTO.startDate().plusDays(i);  // 날짜 계산
             DayOfWeek dayOfWeek = currentDate.getDayOfWeek(); //현재 날짜에 대한 요일
             log.info("CreateMedicineSchedule for문 1 i값:{} , registerDTO.intakePeriod():{} ",i,registerDTO.intakePeriod());
-            if (registerDTO.intakeFrequencys().contains(dayOfWeek.toString())) {
+            if (registerDTO.intakeFrequencys().contains(IntakeFrequency.valueOf(dayOfWeek.name()))) {
                 // 매일 Enum 개수만큼 MedicineSchedule 생성
                 for (IntakeCount intakeCount1 : registerDTO.intakeCounts()) {
                     IntakeCount intakeCount = intakeCount1; //String값 IntakeCount로 변환
