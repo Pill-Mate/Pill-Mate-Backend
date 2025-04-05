@@ -158,6 +158,7 @@ public class RegisterService {
                                 .mealTime(registerDTO.mealTime())
                                 .eatCheck(false)  // 초기값 false
                                 .users(users)
+                                .schedule(schedule)
                                 .build();
                     }
                     else {
@@ -175,6 +176,7 @@ public class RegisterService {
                                 .mealTime(registerDTO.mealTime())
                                 .eatCheck(false)  // 초기값 false
                                 .users(users)
+                                .schedule(schedule)
                                 .build();
                     }
                     schedules.add(medicineSchedule);  // 생성된 인스턴스를 리스트에 추가
