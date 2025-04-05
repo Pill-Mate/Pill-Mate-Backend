@@ -87,6 +87,6 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<MedicineSchedule> medicineSchedules;
 }
