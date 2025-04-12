@@ -12,6 +12,7 @@ import com.example.Pill_Mate_Backend.domain.register.repository.MedicineReposito
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineScheduleRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.ScheduleRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
+import com.example.Pill_Mate_Backend.domain.register.service.RegisterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class ManagementService {
     private final ScheduleRepository scheduleRepository;
     private final MedicineRepository medicineRepository;
     private final MedicineScheduleRepository medicineScheduleRepository;
+    private final RegisterService registerService;
 
     public ManagementDto.CurrentPillResponseDto getCurrentList(String email) {
             List<Schedule> schedules = scheduleRepository.findByUsersIdAndStatus(userRepository.findIdxByEmail(email).orElseThrow(), ScheduleStatus.ACTIVATE);
@@ -135,8 +137,11 @@ public class ManagementService {
         schedule.setUsers(user);
         schedule.setMedicine(medicine);
 
+
 // 수정된 Schedule 객체 저장
         scheduleRepository.save(schedule);
+
+        registerService.CreateMedicineSchedule(user, medicine, schedule);
 
         //Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         //Users users = userRepository.findById(schedule.getUsers().getId()).orElseThrow();
