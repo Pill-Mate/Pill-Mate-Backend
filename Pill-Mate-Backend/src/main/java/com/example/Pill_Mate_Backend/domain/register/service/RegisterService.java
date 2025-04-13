@@ -18,6 +18,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount.*;
@@ -37,6 +38,7 @@ public class RegisterService {
     private MedicineScheduleRepository medicineScheduleRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+
 
     public void Register(RegisterDTO registerDTO,  Users users) {
         log.info("Received DTO: {}", registerDTO);
@@ -85,6 +87,11 @@ public class RegisterService {
     }
     public Schedule CreateSchedule(RegisterDTO registerDTO, Users users, Medicine medicine
     ) {
+        Optional<Schedule> existingSchedule = scheduleRepository.findByUsersAndMedicine(users, medicine);
+        if (existingSchedule.isPresent()) {
+            return existingSchedule.get();
+        }
+
         Schedule schedule = Schedule.builder()
                 //schedule
                 .medicine(medicine)
@@ -136,7 +143,7 @@ public class RegisterService {
             LocalDate currentDate = schedule.getStartDate().plusDays(i);  // 날짜 계산
             DayOfWeek dayOfWeek = currentDate.getDayOfWeek(); //현재 날짜에 대한 요일
             log.info("CreateMedicineSchedule for문 1 i값:{} , schedule.intakePeriod():{} ",i,schedule.getIntakePeriod());
-            if (schedule.getIntakeFrequencys().contains(IntakeFrequency.valueOf(dayOfWeek.name()))) {
+            if (schedule.getIntakeFrequencys().contains(dayOfWeek.name())) {
                 // 매일 Enum 개수만큼 MedicineSchedule 생성
                 for (String intakeCount1 : schedule.getIntakeCounts()) {
                     IntakeCount intakeCount = IntakeCount.valueOf(intakeCount1); //String값 IntakeCount로 변환
