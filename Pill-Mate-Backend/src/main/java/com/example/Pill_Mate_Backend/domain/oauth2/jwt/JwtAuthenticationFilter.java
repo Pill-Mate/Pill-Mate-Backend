@@ -22,8 +22,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtService jwtService, UsersRepository usersRepository) {
         this.jwtService = jwtService;
+        this.usersRepository = usersRepository;
     }
 
     private UsersRepository usersRepository;
@@ -35,10 +36,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
 
         // /api 경로에 대한 요청은 인증을 요구하지 않음
-        if (requestURI.startsWith("/api")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        //if (requestURI.startsWith("/api")) {
+        //    filterChain.doFilter(request, response);
+        //    return;
+        //}
 
         String authorizationHeader = request.getHeader("Authorization");
         System.out.println("Authorization Header: " + authorizationHeader);
