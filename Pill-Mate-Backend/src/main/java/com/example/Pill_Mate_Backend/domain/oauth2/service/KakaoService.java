@@ -150,6 +150,12 @@ public class KakaoService {
         //Authentication authentication = jwtService.getAuthentication(tokenRequestDto.getAccessToken());
         String email = jwtService.extractEmail(tokenRequestDto.getRefreshToken());
 
+        //refreshtoken없을때
+        if(refreshTokenRepository.findByEmail(email)==null){
+            System.out.println("db에 refresh token 없음");
+            throw new GeneralException(ErrorStatus._EXPIRED_REFRESH_JWT_TOKEN);
+        }
+
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
         //String refreshToken = tokenRequestDto.getRefreshToken();
         //RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())

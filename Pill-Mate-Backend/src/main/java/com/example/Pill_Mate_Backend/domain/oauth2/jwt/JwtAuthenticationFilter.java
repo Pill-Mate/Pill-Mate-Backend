@@ -49,15 +49,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtService.validateToken(token)) {
                 String email = jwtService.extractEmail(token);
                 System.out.println("Extracted Email: " + email);
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 Optional<Users> optionalUser = usersRepository.findByEmail(email);
                 if(!optionalUser.isPresent()){//db 삭제시
                     System.out.println("DB에 사용자가 없음: "+email);
                     throw new GeneralException(ErrorStatus._USER_NOT_IN_DB);
                 }
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
             } else {
                 System.out.println("Invalid JWT Token");
                 throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
