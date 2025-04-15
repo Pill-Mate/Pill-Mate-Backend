@@ -67,6 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } else {
             System.out.println("Authorization header is missing or invalid");
         }
+        System.out.println("jwt필터 실행됨");
         filterChain.doFilter(request, response);
     }
 }
