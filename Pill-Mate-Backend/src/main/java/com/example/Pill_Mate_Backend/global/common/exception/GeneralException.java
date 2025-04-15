@@ -6,14 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class GeneralException extends RuntimeException {
 
     private BaseErrorCode code;
 
-    public GeneralException(BaseErrorCode code) {
-        super(code.getMessage()); // ✅ 이 한 줄이 로그에 메시지를 출력하게 해줍니다!
-        this.code = code;
-    }
     public ErrorReasonDTO getErrorReason() {
         return this.code.getReason();
     }

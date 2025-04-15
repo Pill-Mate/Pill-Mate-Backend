@@ -57,7 +57,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if(!optionalUser.isPresent()){//db 삭제시
                     System.out.println("DB에 사용자가 없음: "+email);
                     //throw new GeneralException(ErrorStatus._USER_NOT_IN_DB);
-                    System.out.println("Invalid JWT Token");
 
                     ErrorReasonDTO error = ErrorStatus._USER_NOT_IN_DB.getReasonHttpStatus();
                     response.setStatus(error.httpStatus().value());
