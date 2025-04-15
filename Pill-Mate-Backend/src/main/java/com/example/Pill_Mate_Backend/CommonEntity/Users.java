@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.net.URI;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -30,24 +31,24 @@ public class Users extends BaseEntity {
     private URI profileImage;       //userImage로 바꿔야? -----------------!-------------------
 
     @Column(nullable = true)
-    private Time wakeupTime;
+    private LocalTime wakeupTime;
 
     @Column(nullable = true)
-    private Time bedTime;
+    private LocalTime bedTime;
 
     @Column(nullable = true)
-    private Time morningTime;
+    private LocalTime morningTime;
 
     @Column(nullable = true)
-    private Time lunchTime;
+    private LocalTime lunchTime;
 
     @Column(nullable = true)
-    private Time dinnerTime;
+    private LocalTime dinnerTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean alarmMarketing;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean alarmInfo;
 
 
@@ -92,7 +93,7 @@ public class Users extends BaseEntity {
     private List<RefreshToken> refreshTokens;
 
     //루틴 업데이트
-    public Users(String email, Time wakeupTime, Time bedTime, Time morningTime, Time lunchTime, Time dinnerTime) {
+    public Users(String email, LocalTime wakeupTime, LocalTime bedTime, LocalTime morningTime, LocalTime lunchTime, LocalTime dinnerTime) {
         this.email = email;
         this.wakeupTime = wakeupTime;
         this.bedTime = bedTime;

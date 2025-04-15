@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class OnboardingService {
     private final UserRepository userRepository;
 
-    public UserInfoResponseDto setUserInfo(String email, Time wakeupTime, Time bedTime, Time morningTime, Time lunchTime, Time dinnerTime, Boolean alarmMarketing, Boolean alarmInfo) {
+    public UserInfoResponseDto setUserInfo(String email, LocalTime wakeupTime, LocalTime bedTime, LocalTime morningTime, LocalTime lunchTime, LocalTime dinnerTime, Boolean alarmMarketing, Boolean alarmInfo) {
 
         Optional<Users> optionalUser = userRepository.findByEmail(email);
 

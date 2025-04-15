@@ -40,7 +40,7 @@ public class Schedule extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
-    private IngredientUnit medicineUnit;
+    private IngredientUnit ingredientUnit;
 
     @Column(nullable = false, length = 50)
     private Float medicineVolume;
@@ -87,6 +87,6 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<MedicineSchedule> medicineSchedules;
 }

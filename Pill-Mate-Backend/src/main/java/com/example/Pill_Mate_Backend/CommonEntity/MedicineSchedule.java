@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -26,7 +27,7 @@ public class MedicineSchedule extends BaseEntity {
     private LocalDate intakeDate;
 
     @Column(nullable = false)
-    private Time intakeTime;
+    private LocalTime intakeTime;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
