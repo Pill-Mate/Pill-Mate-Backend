@@ -4,8 +4,10 @@ import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
 import com.example.Pill_Mate_Backend.domain.mypage.service.MyPageService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
+import com.example.Pill_Mate_Backend.global.common.code.ErrorReasonDTO;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,11 +37,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String requestURI = request.getRequestURI();
 
-        // /api 경로에 대한 요청은 인증을 요구하지 않음
-        //if (requestURI.startsWith("/api")) {
-        //    filterChain.doFilter(request, response);
-        //    return;
-        //}
+        //api 경로에 대한 요청은 인증을 요구하지 않음
+        if (requestURI.startsWith("/api")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authorizationHeader = request.getHeader("Authorization");
         System.out.println("Authorization Header: " + authorizationHeader);
@@ -54,7 +56,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Optional<Users> optionalUser = usersRepository.findByEmail(email);
                 if(!optionalUser.isPresent()){//db 삭제시
                     System.out.println("DB에 사용자가 없음: "+email);
-                    throw new GeneralException(ErrorStatus._USER_NOT_IN_DB);
+                    //throw new GeneralException(ErrorStatus._USER_NOT_IN_DB);
+                    System.out.println("Invalid JWT Token");
+
+                    ErrorReasonDTO error = ErrorStatus._USER_NOT_IN_DB.getReasonHttpStatus();
+                    response.setStatus(error.httpStatus().value());
+                    response.setContentType("application/json;charset=UTF-8");
+
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    response.getWriter().write(objectMapper.writeValueAsString(error));
+                    return;
                 }
 
                 UsernamePasswordAuthenticationToken authentication =
@@ -62,8 +73,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } else {
+                //System.out.println("Invalid JWT Token");
+                //throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
                 System.out.println("Invalid JWT Token");
-                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
+
+                ErrorReasonDTO error = ErrorStatus._EXPIRED_JWT_TOKEN.getReasonHttpStatus();
+                response.setStatus(error.httpStatus().value());
+                response.setContentType("application/json;charset=UTF-8");
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                response.getWriter().write(objectMapper.writeValueAsString(error));
+                return;
             }
         } else {
             System.out.println("Authorization header is missing or invalid");
