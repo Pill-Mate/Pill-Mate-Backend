@@ -1,5 +1,8 @@
 package com.example.Pill_Mate_Backend.domain.oauth2.jwt;
 
+import com.example.Pill_Mate_Backend.CommonEntity.Users;
+import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
+import com.example.Pill_Mate_Backend.domain.mypage.service.MyPageService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
@@ -13,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -21,6 +25,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(JwtService jwtService) {
         this.jwtService = jwtService;
     }
+
+    private UsersRepository usersRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -46,6 +52,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                Optional<Users> optionalUser = usersRepository.findByEmail(email);
+                if(!optionalUser.isPresent()){//db 삭제시
+                    System.out.println("DB에 사용자가 없음: "+email);
+                    throw new GeneralException(ErrorStatus._USER_NOT_IN_DB);
+                }
             } else {
                 System.out.println("Invalid JWT Token");
                 throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
