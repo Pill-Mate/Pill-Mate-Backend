@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.config;
 
+import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
 import com.example.Pill_Mate_Backend.domain.oauth2.jwt.JwtAuthenticationFilter;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class SecurityConfig {
 
     private final CorsConfig corsConfig;
     private final JwtService jwtService;
+    private final UsersRepository usersRepository;
 
     private static final String[] PERMIT_URL_ARRAY = {
             /* swagger v2 */
@@ -53,7 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                         .anyRequest().authenticated() // 나머지 모든 요청은 인증 필요
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtService),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtService,usersRepository),
                         UsernamePasswordAuthenticationFilter.class) // JWT 필터 추가
                 .build();
     }
