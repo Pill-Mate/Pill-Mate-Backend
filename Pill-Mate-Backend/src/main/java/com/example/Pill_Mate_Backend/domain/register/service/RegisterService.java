@@ -18,6 +18,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount.*;
@@ -38,6 +39,7 @@ public class RegisterService {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+
     public void Register(RegisterDTO registerDTO,  Users users) {
         log.info("Received DTO: {}", registerDTO);
         Medicine medicine = null;
@@ -56,7 +58,7 @@ public class RegisterService {
         //log.info("CreatePharmacy: {}", registerDTO);
         Schedule schedule = CreateSchedule(registerDTO, users, medicine);
         //log.info("schedule: {}", registerDTO);
-        CreateMedicineSchedule(registerDTO, users, medicine, schedule);
+        CreateMedicineSchedule(users, medicine, schedule);
         //log.info("CreateMedicineSchedule: {}");
     }
     public Medicine CreateMedicine(RegisterDTO registerDTO,  Users users) {
@@ -85,6 +87,11 @@ public class RegisterService {
     }
     public Schedule CreateSchedule(RegisterDTO registerDTO, Users users, Medicine medicine
     ) {
+        Optional<Schedule> existingSchedule = scheduleRepository.findByUsersAndMedicine(users, medicine);
+        if (existingSchedule.isPresent()) {
+            return existingSchedule.get();
+        }
+
         Schedule schedule = Schedule.builder()
                 //schedule
                 .medicine(medicine)
@@ -127,53 +134,53 @@ public class RegisterService {
                 .build();
         pharmacyRepository.save(pharmacy);
     }
-    public void CreateMedicineSchedule(RegisterDTO registerDTO, Users users, Medicine medicine, Schedule schedule) {
+    public void CreateMedicineSchedule(Users users, Medicine medicine, Schedule schedule) {
         log.info("CreateMedicineSchedule1");
         List<MedicineSchedule> schedules = new ArrayList<>();      // 스케줄 저장 리스트
 
         // intakePeriod 동안 반복
-        for (int i = 0; i < registerDTO.intakePeriod(); i++) {
-            LocalDate currentDate = registerDTO.startDate().plusDays(i);  // 날짜 계산
+        for (int i = 0; i < schedule.getIntakePeriod(); i++) {
+            LocalDate currentDate = schedule.getStartDate().plusDays(i);  // 날짜 계산
             DayOfWeek dayOfWeek = currentDate.getDayOfWeek(); //현재 날짜에 대한 요일
-            log.info("CreateMedicineSchedule for문 1 i값:{} , registerDTO.intakePeriod():{} ",i,registerDTO.intakePeriod());
-            if (registerDTO.intakeFrequencys().contains(IntakeFrequency.valueOf(dayOfWeek.name()))) {
+            log.info("CreateMedicineSchedule for문 1 i값:{} , schedule.intakePeriod():{} ",i,schedule.getIntakePeriod());
+            if (schedule.getIntakeFrequencys().contains(dayOfWeek.name())) {
                 // 매일 Enum 개수만큼 MedicineSchedule 생성
-                for (IntakeCount intakeCount1 : registerDTO.intakeCounts()) {
-                    IntakeCount intakeCount = intakeCount1; //String값 IntakeCount로 변환
+                for (String intakeCount1 : schedule.getIntakeCounts()) {
+                    IntakeCount intakeCount = IntakeCount.valueOf(intakeCount1); //String값 IntakeCount로 변환
                     log.info("CreateMedicineSchedule for문 2 value:{}", intakeCount.values());
                     MedicineSchedule medicineSchedule = null;
                     // 섭취 시간을 계산하여 설정
                     if(intakeCount == IntakeCount.EMPTY || intakeCount == IntakeCount.SLEEP || intakeCount == IntakeCount.NEEDED) {
-                        LocalTime intakeTime = calculateIntakeTime(users, intakeCount, null, registerDTO.mealTime());
+                        LocalTime intakeTime = calculateIntakeTime(users, intakeCount, null, schedule.getMealTime());
 
                         medicineSchedule = MedicineSchedule.builder()
                                 .medicine(medicine)
                                 .users(schedule.getUsers())
                                 .intakeDate(currentDate)  // LocalDate -> sql Date 변환
                                 .intakeTime(intakeTime)   // 설정된 섭취 시간
-                                .eatUnit(registerDTO.eatUnit())
-                                .eatCount(registerDTO.eatCount())
+                                .eatUnit(schedule.getEatUnit())
+                                .eatCount(schedule.getEatCount())
                                 .intakeCount(intakeCount)  // Enum 값 설정
                                 .mealUnit(null)
-                                .mealTime(registerDTO.mealTime())
+                                .mealTime(schedule.getMealTime())
                                 .eatCheck(false)  // 초기값 false
                                 .users(users)
                                 .schedule(schedule)
                                 .build();
                     }
                     else {
-                        LocalTime intakeTime = calculateIntakeTime(users, intakeCount, registerDTO.mealUnit(), registerDTO.mealTime());
+                        LocalTime intakeTime = calculateIntakeTime(users, intakeCount, schedule.getMealUnit(), schedule.getMealTime());
 
                         medicineSchedule = MedicineSchedule.builder()
                                 .medicine(medicine)
                                 .users(schedule.getUsers())
                                 .intakeDate(currentDate)  // LocalDate -> sql Date 변환
                                 .intakeTime(intakeTime)   // 설정된 섭취 시간
-                                .eatUnit(registerDTO.eatUnit())
-                                .eatCount(registerDTO.eatCount())
+                                .eatUnit(schedule.getEatUnit())
+                                .eatCount(schedule.getEatCount())
                                 .intakeCount(intakeCount)  // Enum 값 설정
-                                .mealUnit(registerDTO.mealUnit())
-                                .mealTime(registerDTO.mealTime())
+                                .mealUnit(schedule.getMealUnit())
+                                .mealTime(schedule.getMealTime())
                                 .eatCheck(false)  // 초기값 false
                                 .users(users)
                                 .schedule(schedule)
