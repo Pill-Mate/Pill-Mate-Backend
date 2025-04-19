@@ -9,6 +9,7 @@ import lombok.Builder;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -62,7 +63,7 @@ public record ManagementDetailDto (
         @Schema(description = "1회 투약량")
         int eatCount,
         @Schema(description = "복약 시작일")
-        LocalDate startDate,
+        OffsetDateTime startDate,
         @Schema(description = "복약일수")
         int intakePeriod,
         @Schema(description = "1회 투여 용량(선택), 0.45")

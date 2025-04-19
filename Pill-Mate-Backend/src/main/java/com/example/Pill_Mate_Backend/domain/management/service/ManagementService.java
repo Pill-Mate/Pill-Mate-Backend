@@ -15,8 +15,11 @@ import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import com.example.Pill_Mate_Backend.domain.register.service.RegisterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -84,7 +87,9 @@ public class ManagementService {
                 .mealUnit(schedule.getMealUnit())
                 .eatUnit(schedule.getEatUnit())
                 .eatCount(schedule.getEatCount())
-                .startDate(schedule.getStartDate())
+                .startDate(schedule.getStartDate()
+                        .atTime(LocalTime.MIDNIGHT)
+                        .atOffset(ZoneOffset.ofHours(9)))
                 .intakePeriod(schedule.getIntakePeriod())
                 .medicineVolume(schedule.getMedicineVolume())
                 .ingredientUnit(schedule.getIngredientUnit())
@@ -93,6 +98,7 @@ public class ManagementService {
                 .build();
     }
 
+    @Transactional
     public void modifyScheduleById(ManagementDetailDto dto,String email,Long scheduleId) {
 
 
@@ -113,6 +119,12 @@ public class ManagementService {
         medicineRepository.save(medicine);
 
         Users user = userRepository.findByEmail(email).orElseThrow();
+        user.setWakeupTime(dto.wakeupTime());
+        user.setMorningTime(dto.morningTime());
+        user.setLunchTime(dto.lunchTime());
+        user.setDinnerTime(dto.dinnerTime());
+        user.setBedTime(dto.bedTime());
+        userRepository.save(user);
 
 
         Schedule schedule = scheduleRepository.findById(scheduleId)
@@ -129,7 +141,9 @@ public class ManagementService {
         schedule.setMealUnit(dto.mealUnit());
         schedule.setEatUnit(dto.eatUnit());
         schedule.setEatCount(dto.eatCount());
-        schedule.setStartDate(dto.startDate());
+        schedule.setStartDate(dto.startDate()
+                .atZoneSameInstant(ZoneId.of("Asia/Seoul"))
+                .toLocalDate());
         schedule.setIntakePeriod(dto.intakePeriod());
         schedule.setMedicineVolume(dto.medicineVolume());
         schedule.setIngredientUnit(dto.ingredientUnit());
