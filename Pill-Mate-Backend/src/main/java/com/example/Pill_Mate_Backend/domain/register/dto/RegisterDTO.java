@@ -5,6 +5,9 @@ import lombok.Builder;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -37,7 +40,7 @@ public record RegisterDTO (
         int mealTime,
         EatUnit eatUnit,
         int eatCount,
-        LocalDate startDate,
+        OffsetDateTime startDate,
         int intakePeriod,
         float medicineVolume,
         boolean isAlarm,
