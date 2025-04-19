@@ -2,11 +2,9 @@ package com.example.Pill_Mate_Backend.domain.oauth2.jwt;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
-import com.example.Pill_Mate_Backend.domain.mypage.service.MyPageService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.global.common.code.ErrorReasonDTO;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
-import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -38,10 +36,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
 
         //api 경로에 대한 요청은 인증을 요구하지 않음
-        //if (requestURI.startsWith("/api")) {
-        //    filterChain.doFilter(request, response);
-        //    return;
-        //}
+        if (requestURI.startsWith("/api/v1/auth/reissue")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authorizationHeader = request.getHeader("Authorization");
         System.out.println("Authorization Header: " + authorizationHeader);
