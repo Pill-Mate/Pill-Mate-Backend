@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.register.repository;
 
 import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
+import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,5 +17,8 @@ public interface MedicineScheduleRepository extends JpaRepository<MedicineSchedu
             "ORDER BY ms.intakeTime ASC")
     List<LocalTime> findDistinctIntakeTimes(@Param("userId") Long userId,
                                             @Param("medicineId") Long medicineId);
+    // MedicineScheduleRepository.java
+    void deleteBySchedule(Schedule schedule);
+
 
 }

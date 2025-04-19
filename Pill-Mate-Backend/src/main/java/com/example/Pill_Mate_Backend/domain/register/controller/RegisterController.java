@@ -66,10 +66,11 @@ public class RegisterController {
         }
 
         try {
+            log.info("startDate:"+registerDTO.startDate().toString());
+
             Optional<Users> optionalUser = userRepository.findByEmail(email);
             Users user = optionalUser.get(); // Optional에서 값을 추출
 
-            log.info(registerDTO.toString());
 //            Users users = Users.builder()
 //                    .id(null)
 //                    .profileImage(URI.create("https://example.com/profile.jpg"))  // 임시 프로필 이미지

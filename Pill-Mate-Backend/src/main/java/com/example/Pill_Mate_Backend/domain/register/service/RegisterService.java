@@ -91,6 +91,7 @@ public class RegisterService {
         if (existingSchedule.isPresent()) {
             return existingSchedule.get();
         }
+        log.info(registerDTO.startDate().toString());
 
         Schedule schedule = Schedule.builder()
                 //schedule
@@ -109,7 +110,9 @@ public class RegisterService {
                         .collect(Collectors.toSet()))
                 .isAlarm(registerDTO.isAlarm())
                 .status(ScheduleStatus.ACTIVATE)
-                .startDate(registerDTO.startDate())
+                .startDate(registerDTO.startDate()
+                        .atZoneSameInstant(ZoneId.of("Asia/Seoul"))
+                        .toLocalDate())
                 .users(users)
                 .build();
         return scheduleRepository.save(schedule);

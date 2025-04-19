@@ -140,6 +140,9 @@ public class ManagementService {
 
 // 수정된 Schedule 객체 저장
         scheduleRepository.save(schedule);
+        // ScheduleId에 해당하는 MedicineSchedule 먼저 삭제
+        medicineScheduleRepository.deleteBySchedule(schedule);
+
 
         registerService.CreateMedicineSchedule(user, medicine, schedule);
 
