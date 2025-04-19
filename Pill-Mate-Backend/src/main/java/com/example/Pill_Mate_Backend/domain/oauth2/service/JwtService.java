@@ -29,6 +29,8 @@ public class JwtService {
     private final long expirationTime;
     private final long expirationTime30 = 60000L * 60 * 24 * 30; //30일?
     private static final long THREE_DAYS = 1000 * 60 * 60 * 24 * 3;  // 3일
+    private final long expirationTimeTest1 = 60000L ; //1분
+    private final long expirationTimeTest2 = 60000L * 5 ; //5분
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     // 생성자를 통한 의존성 주입
@@ -43,7 +45,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTimeTest1))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
@@ -52,7 +54,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime30))//REFRESH_TOKEN_EXPIRE_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTimeTest2))//REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
