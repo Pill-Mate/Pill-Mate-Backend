@@ -33,6 +33,7 @@ out/
 
 # yml
 *.yml
+*.properties
 
 # Compiled class file
 *.class
