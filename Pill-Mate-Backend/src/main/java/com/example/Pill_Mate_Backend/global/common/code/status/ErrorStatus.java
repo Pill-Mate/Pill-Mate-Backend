@@ -30,6 +30,7 @@ public enum ErrorStatus implements BaseErrorCode {
     _USER_NOT_IN_DB(HttpStatus.UNAUTHORIZED, "USERNOTINDB401", "DB에 사용자가 없습니다"),
     //jwt 만료 에러
     _EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "JWTEXPIRED401", "만료된 JWT 토큰입니다."), //HttpStatus.UNAUTHORIZED -> 401에러
+    GOOGLE_REQUEST_TOKEN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GOOGLE_REQUEST_TOKEN_ERROR", "Failed to process Google request token"),
     _EXPIRED_REFRESH_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESHEXPIRED401", "만료된 REFRESH JWT 토큰입니다.");
 
     private final HttpStatus httpStatus;

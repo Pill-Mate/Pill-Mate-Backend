@@ -4,31 +4,23 @@ import com.example.Pill_Mate_Backend.CommonEntity.FcmToken;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.domain.alarm.dto.FcmMessage;
 import com.example.Pill_Mate_Backend.domain.alarm.repository.FcmTokenRepository;
-import com.example.Pill_Mate_Backend.domain.mypage.dto.MyPageDTO;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -91,7 +83,7 @@ public class FcmService {
 
         } catch (IOException e) {
             System.out.println("fcm IOException");
-            throw new GeneralException("Failed to process Google request token", e);//ErrorCode.GOOGLE_REQUEST_TOKEN_ERROR);
+            throw new GeneralException(ErrorStatus.GOOGLE_REQUEST_TOKEN_ERROR);//"Failed to process Google request token", e);//ErrorCode.GOOGLE_REQUEST_TOKEN_ERROR);
         }
     }
 
@@ -118,12 +110,12 @@ public class FcmService {
         fcmTokenRepository.save(fcmToken);
     }
 
-    public List<String> getActiveTokens(String email) {
+    public List<String> getFcmTokens(String email) {
         Optional<Users> users = usersRepository.findByEmail(email);
         List<String> tokenList =  fcmTokenRepository.findActiveTokensByUserId((Long)usersRepository.getIdByEmail(email)[0]);
         return tokenList;
     }
-    public String getActiveToken(String email) {
+    public String getFcmToken(String email) {
         Optional<Users> users = usersRepository.findByEmail(email);
         String tokenList =  fcmTokenRepository.findActiveTokenByUserId((Long)usersRepository.getIdByEmail(email)[0]);
         return tokenList;
