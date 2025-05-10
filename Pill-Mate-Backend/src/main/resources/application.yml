@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: Pill-Mate-Backend
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MariaDBDialect
+    show-sql: true
+
+jwt:
+  secret-key: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:3600000} # 기본값 1시간
+
+openApi:
+  serviceKey: ${OPENAPI_SERVICE_KEY}
