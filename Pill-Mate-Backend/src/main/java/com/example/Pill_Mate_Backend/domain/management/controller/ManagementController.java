@@ -6,6 +6,8 @@ import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDto;
 import com.example.Pill_Mate_Backend.domain.management.service.ManagementService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,7 @@ public class ManagementController {
 
                 } else {
                     log.info("Invalid JWT");
+                    throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
                 }
             }
             ManagementDto.CurrentPillResponseDto dto = managementService.getCurrentList(email);
@@ -56,6 +59,7 @@ public class ManagementController {
 
                     } else {
                         log.info("Invalid JWT");
+                        throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
                     }
                 }
 
@@ -77,6 +81,7 @@ public class ManagementController {
 
                 } else {
                     log.info("Invalid JWT");
+                    throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
                 }
             }
 
