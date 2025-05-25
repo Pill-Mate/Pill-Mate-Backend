@@ -115,9 +115,13 @@ public class FcmService {
         List<String> tokenList =  fcmTokenRepository.findActiveTokensByUserId((Long)usersRepository.getIdByEmail(email)[0]);
         return tokenList;
     }
-    public String getFcmToken(String email) {
+    public String getFcmTokenByEmail(String email) {
         Optional<Users> users = usersRepository.findByEmail(email);
         String tokenList =  fcmTokenRepository.findActiveTokenByUserId((Long)usersRepository.getIdByEmail(email)[0]);
+        return tokenList;
+    }
+    public String getFcmTokenById(Long userId) {
+        String tokenList =  fcmTokenRepository.findActiveTokenByUserId(userId);
         return tokenList;
     }
     /*

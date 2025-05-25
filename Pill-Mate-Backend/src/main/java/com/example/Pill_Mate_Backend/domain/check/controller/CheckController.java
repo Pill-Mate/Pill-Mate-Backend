@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.check.controller;
 
+import com.example.Pill_Mate_Backend.domain.alarm.service.FcmAlarmService;
 import com.example.Pill_Mate_Backend.domain.check.dto.*;
 import com.example.Pill_Mate_Backend.domain.check.service.ClickMedicineService;
 import com.example.Pill_Mate_Backend.domain.check.service.HomeService;
@@ -34,6 +35,8 @@ public class CheckController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     @Autowired
     private ClickMedicineService clickMedicineService;
+    @Autowired
+    private FcmAlarmService fcmAlarmService;
 
     @SneakyThrows
     @PatchMapping("/medicinecheck")
@@ -74,6 +77,12 @@ public class CheckController {
         List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate(email, mydate);
         WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
         System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
+
+        //알람 업데이트
+        if(medicineCheckService.findScheduleIsAfter(medicineScheduleId)==true){//medicineCheckList)==true){
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
+        }
 
         // Return response entity
         return ResponseDTO.builder()

@@ -99,11 +99,11 @@ public class AuthController {
                 return ResponseEntity.ok(response);
             }
             //fcmToken이 새거 일 시(새 디바이스로 로그인 했을 시)
-            List<String> fcmTokens;
-            fcmTokens = fcmTokenRepository2.findFcmTokenByEmail((userInfo.getEmail()));
-            if(fcmTokens==null || !fcmTokens.contains(kakaoSignUpDto.getFcmToken())){
-                fcmService.registerToken(users, kakaoSignUpDto.getFcmToken());
-            }
+            //List<String> fcmTokens;
+            //fcmTokens = fcmTokenRepository2.findFcmTokenByEmail((userInfo.getEmail()));
+            //if(fcmTokens==null || !fcmTokens.contains(kakaoSignUpDto.getFcmToken())){
+            //    fcmService.registerToken(users, kakaoSignUpDto.getFcmToken());
+            //}
 
             // 기존 유저 정보 업데이트
             users.setUsername(userInfo.getName()); // 닉네임 업데이트
@@ -150,7 +150,7 @@ public class AuthController {
 
         //fcmToken
         //String fcmToken = fcmService.generateFcmToken();
-        //System.out.println(fcmToken);
+        System.out.println(kakaoSignUpDto.getFcmToken());
         fcmService.registerToken(users, kakaoSignUpDto.getFcmToken());//-----------일단 회원가입할때만 fcmtoken 생성. 계정 당 한개만 있다 상정. 추후 수정.
 
         // 응답 데이터 준비

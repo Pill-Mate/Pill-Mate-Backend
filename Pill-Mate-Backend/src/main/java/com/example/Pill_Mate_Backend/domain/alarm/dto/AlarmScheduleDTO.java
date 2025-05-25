@@ -4,12 +4,12 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
+@Getter
+@Setter
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 public class AlarmScheduleDTO {
     private Long userId;
     private LocalDate intakeDate;

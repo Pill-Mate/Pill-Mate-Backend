@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.register.controller;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
+import com.example.Pill_Mate_Backend.domain.alarm.service.FcmAlarmService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.domain.register.dto.OnboardingDTO;
 import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;
@@ -33,6 +34,8 @@ public class RegisterController {
     UserRepository userRepository;
     @Autowired
     JwtService jwtService;
+    @Autowired
+    private FcmAlarmService fcmAlarmService;
 
     @PostMapping("/test")
     public ApiResponse test(@RequestBody RegisterDTO registerDTO) {
@@ -88,6 +91,10 @@ public class RegisterController {
             //userRepository.save(user);
                 //log.info(user.toString());
                 registerService.Register(registerDTO, user);
+
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
+
             return ApiResponse.onSuccess("약물등록 성공");
         } catch (Exception e) {
             //나중에 responseBody 추가

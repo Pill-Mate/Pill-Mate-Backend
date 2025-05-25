@@ -13,36 +13,37 @@ import java.util.List;
 public interface ScheduleRepository2 extends JpaRepository<Schedule, Long> {
     //@Query("Select s.start_date, s.intake_period, u.id, m.medicine_name from schedule s join users u join medicine m" +
     //        " where s.is_alarm=true and u.email=:email")
-    @Query("SELECT s.startDate, s.intakePeriod, u.id, m.medicineName " +
-            "FROM Schedule s " +
-            "JOIN s.users u " +
-            "JOIN s.medicine m " +
-            "WHERE s.isAlarm = true AND u.email = :email")
-    List<Object[]> findByIsAlarmTrue(@Param("email") String email);
+    @Query(value = """
+            SELECT DISTINCT s.start_date, s.intake_period, s.user_id, m.medicine_name
+            FROM schedule s
+            JOIN medicine m ON s.medicine_id = m.id
+            WHERE s.is_alarm = true
+            """, nativeQuery = true)
+    List<Object[]> findByIsAlarmTrue();
 
-    @Query("""
-            SELECT new com.example.Pill_Mate_Backend.domain.alarm.dto.AlarmScheduleDTO(
-                ms.userId, ms.intakeDate, ms.intakeTime
-            )
-            FROM Schedule s
-            JOIN MedicineSchedule ms
-            WHERE ms.eatCheck = false
-              AND s.isAlarm = true
-              AND ms.intakeDate BETWEEN CURRENT_DATE AND CURRENT_DATE + 1
-            """)
-    List<AlarmScheduleDTO> findNextDayAlarms();
+    @Query(value = """
+            select distinct mc.user_id, mc.intake_date, mc.intake_time 
+            from schedule sc 
+            join medicine_schedule mc ON mc.schedule_id = sc.id 
+            join users u ON u.id = mc.user_id 
+            where mc.eat_check = false 
+                and sc.is_alarm = true 
+                and mc.intake_date BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)
+                and u.alarm_info = true
+            """, nativeQuery = true)
+    List<Object[]> findNextDayAlarms();
 
-    @Query("""
-            SELECT new com.example.Pill_Mate_Backend.domain.alarm.dto.AlarmScheduleDTO(
-                ms.userId, ms.intakeDate, ms.intakeTime
-            )
-            FROM Schedule s
-            JOIN MedicineSchedule ms
-            WHERE ms.eatCheck = false
-              AND s.isAlarm = true
-              AND ms.intakeDate BETWEEN CURRENT_DATE AND CURRENT_DATE + 1
-              AND ms.userId = :userId
-            """)
-    List<AlarmScheduleDTO> findNextDayAlarmsById(@Param("userId") Long userId);
+    @Query(value = """
+            select distinct mc.user_id, mc.intake_date, mc.intake_time 
+            from schedule sc 
+            join medicine_schedule mc ON mc.schedule_id = sc.id 
+            join users u ON u.id = mc.user_id 
+            where mc.eat_check = false 
+                and sc.is_alarm = true 
+                and mc.intake_date BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) 
+                and u.alarm_info = true 
+                and mc.user_id= :userId
+            """, nativeQuery = true)
+    List<Object[]> findNextDayAlarmsById(@Param("userId") Long userId);
 }
 

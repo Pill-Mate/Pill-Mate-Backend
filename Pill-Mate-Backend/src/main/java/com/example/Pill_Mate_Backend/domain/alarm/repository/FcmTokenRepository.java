@@ -20,6 +20,6 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, Long> {
     List<String> findActiveTokensByUserId(@Param("userId") Long userId);
 
     //@Query("select fcm_token where user_id = :userId")
-    @Query("SELECT f.fcmToken FROM FcmToken f WHERE f.users = :userId") // AND f.active = true")
+    @Query("SELECT f.fcmToken FROM FcmToken f WHERE f.users.id = :userId") // AND f.active = true")
     String findActiveTokenByUserId(@Param("userId") Long userId);
 }
