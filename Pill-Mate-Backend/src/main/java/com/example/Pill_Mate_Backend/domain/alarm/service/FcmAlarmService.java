@@ -140,7 +140,7 @@ public class FcmAlarmService {
     }
 
     //
-    @Scheduled(cron = "0 11 16 * * ?")//(cron = "0 59 23 * * ?") // 매일 11:59 PM
+    @Scheduled(cron = "0 50 23 * * ?")//(cron = "0 59 23 * * ?") // 매일 11:59 PM
     public void prepareNextDayAlarms() {
         List<Object[]> alarmsObject = scheduleRepository2.findNextDayAlarms();
         List<AlarmScheduleDTO> alarms = new ArrayList<>();
@@ -225,7 +225,7 @@ public class FcmAlarmService {
         }
     }*/
 
-    @Scheduled(cron = "0 15 12 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
+    @Scheduled(cron = "0 40 15 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
     public void endDateSendAlarms() throws IOException {
         System.out.println("복용 종료 알람 실행됨");
 
