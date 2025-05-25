@@ -18,7 +18,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +71,7 @@ public class FcmService {
     }
 
     // Firebase Admin SDK의 비공개 키를 참조하여 Bearer 토큰을 발급 받는다.
+    /*
     public String getAccessToken() throws IOException {
         final String firebaseConfigPath = "fcmAccountKey.json";//resources/fcmAccountKey.json";
 
@@ -85,7 +88,29 @@ public class FcmService {
             System.out.println("fcm IOException");
             throw new GeneralException(ErrorStatus.GOOGLE_REQUEST_TOKEN_ERROR);//"Failed to process Google request token", e);//ErrorCode.GOOGLE_REQUEST_TOKEN_ERROR);
         }
+    }*/
+    public String getAccessToken() throws IOException {
+        try {
+            String json = System.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON");
+            if (json == null || json.isBlank()) {
+                log.error("환경변수 GOOGLE_APPLICATION_CREDENTIALS_JSON 이 설정되어 있지 않습니다.");
+                throw new GeneralException(ErrorStatus.GOOGLE_REQUEST_TOKEN_ERROR);
+            }
+
+            final GoogleCredentials googleCredentials = GoogleCredentials
+                    .fromStream(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)))
+                    .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+
+            googleCredentials.refreshIfExpired();
+            log.info("access token: {}", googleCredentials.getAccessToken());
+            return googleCredentials.getAccessToken().getTokenValue();
+
+        } catch (IOException e) {
+            log.error("Firebase 토큰 발급 실패", e);
+            throw new GeneralException(ErrorStatus.GOOGLE_REQUEST_TOKEN_ERROR);
+        }
     }
+
 
     //chat
 
