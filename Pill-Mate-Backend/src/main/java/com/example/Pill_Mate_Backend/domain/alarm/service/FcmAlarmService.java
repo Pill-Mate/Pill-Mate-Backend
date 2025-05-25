@@ -225,7 +225,7 @@ public class FcmAlarmService {
         }
     }*/
 
-    @Scheduled(cron = "0 10 16 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
+    @Scheduled(cron = "0 37 16 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
     public void endDateSendAlarms() throws IOException {
         System.out.println("복용 종료 알람 실행됨");
 
