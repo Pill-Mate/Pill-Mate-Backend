@@ -91,9 +91,9 @@ public class FcmService {
     }*/
     public String getAccessToken() throws IOException {
         try {
-            String json = System.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON");
+            String json = System.getenv("FCM_ACCOUNT_KEY");
             if (json == null || json.isBlank()) {
-                log.error("환경변수 GOOGLE_APPLICATION_CREDENTIALS_JSON 이 설정되어 있지 않습니다.");
+                log.error("환경변수 FCM_ACCOUNT_KEY 이 설정되어 있지 않습니다.");
                 throw new GeneralException(ErrorStatus.GOOGLE_REQUEST_TOKEN_ERROR);
             }
 
