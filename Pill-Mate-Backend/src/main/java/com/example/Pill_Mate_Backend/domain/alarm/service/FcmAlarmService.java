@@ -100,8 +100,8 @@ public class FcmAlarmService {
 
     // 알람 발송
     private void sendAlarm(Long userId) throws IOException {
-        String title = "💊 약 복용 시간입니다!";
-        String body = "지금 약을 드세요";
+        String title = "약 드실 시간이에요💊";
+        String body = "잊지 말고 복약하세요!";
         System.out.println("💊 약 복용 시간!: " + userId);
         fcmService.sendMessageTo(fcmService.getFcmTokenById(userId),title, body);
     }
@@ -178,7 +178,9 @@ public class FcmAlarmService {
         List<AlarmScheduleDTO> alarms = new ArrayList<>();
 
         if (alarmsObject.isEmpty()) {
-            throw new RuntimeException("alarm data not found");
+            //throw new RuntimeException("alarm data not found");
+            System.out.println("알람 대상 스케줄이 없습니다.(약물 복용 시간 알람)");
+            return; // 아무 작업 없이 함수 종료
         }
 
         //object DTO로 mapping
@@ -225,7 +227,7 @@ public class FcmAlarmService {
         }
     }*/
 
-    @Scheduled(cron = "0 52 16 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
+    @Scheduled(cron = "0 0 14 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
     public void endDateSendAlarms() throws IOException {
         System.out.println("복용 종료 알람 실행됨");
 
@@ -235,7 +237,9 @@ public class FcmAlarmService {
         List<Object[]> schedules = scheduleRepository2.findByIsAlarmTrue();
 
         if (schedules.isEmpty()) {
-            throw new RuntimeException("schedule not found");
+            //throw new RuntimeException("schedule not found");
+            System.out.println("알람 대상 스케줄이 없습니다.(복용 종료 알람)");
+            return; // 아무 작업 없이 함수 종료
         }
 
         for (Object schedule : schedules) {

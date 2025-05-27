@@ -99,11 +99,13 @@ public class AuthController {
                 return ResponseEntity.ok(response);
             }
             //fcmToken이 새거 일 시(새 디바이스로 로그인 했을 시)
-            //List<String> fcmTokens;
-            //fcmTokens = fcmTokenRepository2.findFcmTokenByEmail((userInfo.getEmail()));
-            //if(fcmTokens==null || !fcmTokens.contains(kakaoSignUpDto.getFcmToken())){
-            //    fcmService.registerToken(users, kakaoSignUpDto.getFcmToken());
-            //}
+            List<String> fcmTokens;
+            fcmTokens = fcmTokenRepository2.findFcmTokenByEmail((userInfo.getEmail()));
+            //토큰이 null이거나 같은 token이 내부에 없을 시
+            if(fcmTokens==null || !fcmTokenRepository2.existsByUsersAndFcmToken(users, kakaoSignUpDto.getFcmToken())){
+                System.out.println("fcm토큰 새로 등록");
+                fcmService.registerToken(users, kakaoSignUpDto.getFcmToken());
+            }
 
             // 기존 유저 정보 업데이트
             users.setUsername(userInfo.getName()); // 닉네임 업데이트

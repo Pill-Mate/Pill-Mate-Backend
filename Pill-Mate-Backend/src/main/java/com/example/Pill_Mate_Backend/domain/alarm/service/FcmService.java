@@ -39,6 +39,11 @@ public class FcmService {
 
     // 메시지를 구성하고 토큰을 받아서 FCM으로 메시지를 처리한다.
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
+        //fcmToken 없을 시 예외 처리
+        if (targetToken == null || targetToken.trim().isEmpty()) {
+            throw new IllegalArgumentException("Target FCM token must not be null or empty.");
+        }
+
         String message = makeMessage(targetToken, title, body);
 
         OkHttpClient client = new OkHttpClient();
@@ -115,10 +120,10 @@ public class FcmService {
     //chat
 
     public void registerToken(Users user, String token) {
-        // 기존 토큰이 있다면 토큰 삭제
-        //if(fcmTokenRepository.findActiveTokensByUserId(user.getId()) != null){
-        //    fcmTokenRepository.deleteByUserId(user.getId());
-        //}
+        // 기존 토큰이 있다면 토큰 삭제---> 일단 인당 fcmToken 하나만 생성할수 있도록,,
+        if(fcmTokenRepository.findActiveTokensByUserId(user.getId()) != null){
+            fcmTokenRepository.deleteByUserId(user.getId());
+        }
 
 
         // 새 토큰 등록
