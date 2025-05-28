@@ -2,6 +2,7 @@ package com.example.Pill_Mate_Backend.domain.register.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.*;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeFrequency;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
 import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;

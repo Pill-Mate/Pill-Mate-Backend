@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class KakaoSignUpDTO {
     private String kakaoAccessToken; // 프론트에서 전달한 액세스 토큰
+    private String fcmToken;
 
     public String getKakaoAccessToken() {
         return kakaoAccessToken;

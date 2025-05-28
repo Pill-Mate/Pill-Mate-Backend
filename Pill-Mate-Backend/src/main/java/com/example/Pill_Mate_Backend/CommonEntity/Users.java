@@ -87,6 +87,9 @@ public class Users extends BaseEntity {
     @ToString.Exclude
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
     private List<MedicineSchedule> medicineSchedules;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<FcmToken> fcmTokens;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)

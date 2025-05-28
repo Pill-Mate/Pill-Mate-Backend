@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.mypage.controller;
 
+import com.example.Pill_Mate_Backend.domain.alarm.service.FcmAlarmService;
 import com.example.Pill_Mate_Backend.domain.mypage.dto.*;
 import com.example.Pill_Mate_Backend.domain.mypage.service.AlarmService;
 import com.example.Pill_Mate_Backend.domain.mypage.service.MyPageService;
@@ -27,6 +28,8 @@ public class MyPageController {
     private AlarmService alarmService;
     @Autowired
     private MyPageService myPageService;
+    @Autowired
+    private FcmAlarmService fcmAlarmService;
 
     @GetMapping("/mypagereturn")
     public MyPageDTO getmyPageData(@RequestHeader(value = "Authorization", required = true) String token) {
@@ -85,6 +88,8 @@ public class MyPageController {
 
         try {
             routineService.routineUpdate(routineDTO, email);
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
             return ResponseEntity.ok("Routine updated successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -139,6 +144,8 @@ public class MyPageController {
 
         try {
             alarmService.alarmInfoUpdate(alarmInfoDTO, email);
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
             return ResponseEntity.ok("Alarm updated successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

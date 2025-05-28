@@ -2,6 +2,11 @@ package com.example.Pill_Mate_Backend.domain.oauth2.controller;
 
 import com.example.Pill_Mate_Backend.CommonEntity.RefreshToken;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
+import com.example.Pill_Mate_Backend.domain.alarm.service.FcmService;
+import com.example.Pill_Mate_Backend.domain.oauth2.dto.KakaoSignUpDTO;
+import com.example.Pill_Mate_Backend.domain.oauth2.dto.OnboardingDTO;
+import com.example.Pill_Mate_Backend.domain.oauth2.dto.UserInfoResponseDto;
+import com.example.Pill_Mate_Backend.domain.oauth2.repository.FcmTokenRepository2;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.JwtTokenDto;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.KakaoSignUpDTO;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.OnboardingDTO;
@@ -22,7 +27,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 @Slf4j
@@ -35,6 +43,8 @@ public class AuthController {
     private final OnboardingService onboardingService;
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final FcmService fcmService;
+    private final FcmTokenRepository2 fcmTokenRepository2;
     private final RefreshTokenRepository refreshTokenRepository;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     //로그 확인
@@ -44,7 +54,7 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> kakaoLogin(
                                                           @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
                                                           @RequestBody KakaoSignUpDTO kakaoSignUpDto,
-                                                          HttpSession session) {
+                                                          HttpSession session) throws IOException {
 
         // JWT가 존재하는 경우에만 처리
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -87,6 +97,14 @@ public class AuthController {
                 response.put("refreshToken", refreshToken);
                 response.put("login",false);
                 return ResponseEntity.ok(response);
+            }
+            //fcmToken이 새거 일 시(새 디바이스로 로그인 했을 시)
+            List<String> fcmTokens;
+            fcmTokens = fcmTokenRepository2.findFcmTokenByEmail((userInfo.getEmail()));
+            //토큰이 null이거나 같은 token이 내부에 없을 시
+            if(fcmTokens==null || !fcmTokenRepository2.existsByUsersAndFcmToken(users, kakaoSignUpDto.getFcmToken())){
+                System.out.println("fcm토큰 새로 등록");
+                fcmService.registerToken(users, kakaoSignUpDto.getFcmToken());
             }
 
             // 기존 유저 정보 업데이트
@@ -131,6 +149,11 @@ public class AuthController {
         //refreshtoken DB에 저장
         RefreshToken refreshToken1 = new RefreshToken(refreshToken, users);
         refreshTokenRepository.save(refreshToken1);
+
+        //fcmToken
+        //String fcmToken = fcmService.generateFcmToken();
+        System.out.println(kakaoSignUpDto.getFcmToken());
+        fcmService.registerToken(users, kakaoSignUpDto.getFcmToken());//-----------일단 회원가입할때만 fcmtoken 생성. 계정 당 한개만 있다 상정. 추후 수정.
 
         // 응답 데이터 준비
         Map<String, Object> response = new HashMap<>();

@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.management.controller;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
+import com.example.Pill_Mate_Backend.domain.alarm.service.FcmAlarmService;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDetailDto;
 import com.example.Pill_Mate_Backend.domain.management.dto.ManagementDto;
 import com.example.Pill_Mate_Backend.domain.management.service.ManagementService;
@@ -11,6 +12,7 @@ import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,8 @@ import java.util.List;
 public class ManagementController {
     private final ManagementService managementService;
     private final JwtService jwtService;
+    @Autowired
+    private FcmAlarmService fcmAlarmService;
 
     @Operation(summary="복용중인 약물 리스트",description = "복용중인 약물 리스트 조회")
     @GetMapping("/home/current")
@@ -115,6 +119,10 @@ public class ManagementController {
             }
         }
          managementService.modifyScheduleById(Reqdto,email,scheduleId);
+
+        //알람 업데이트
+        fcmAlarmService.resetAlarmTrigger(email);
+
         return ApiResponse.onSuccess("성공");
 
     }
