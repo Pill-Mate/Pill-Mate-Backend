@@ -1,12 +1,17 @@
 package com.example.Pill_Mate_Backend.domain.alarm.controller;
 
+import com.example.Pill_Mate_Backend.CommonEntity.Notification;
 import com.example.Pill_Mate_Backend.domain.alarm.dto.FcmRequestDTO;
+import com.example.Pill_Mate_Backend.domain.alarm.dto.NotificationDTO;
 import com.example.Pill_Mate_Backend.domain.alarm.service.FcmService;
+import com.example.Pill_Mate_Backend.domain.alarm.service.NotificationService;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +19,8 @@ import java.io.IOException;
 
 public class FcmController {
     private final FcmService fcmService;
+    @Autowired
+    private final NotificationService notificationService;
 
     // 1. client가 server로 알림 생성 요청
     @PostMapping("/pushMessage")
@@ -36,5 +43,10 @@ public class FcmController {
             e.printStackTrace();
             return "❌ FCM 알림 전송 실패: " + e.getMessage();
         }
+    }
+
+    @GetMapping("/notification")
+    public List<NotificationDTO> sendAllNotification(){
+        return notificationService.getAllNotification();
     }
 }
