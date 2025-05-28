@@ -28,7 +28,7 @@ public class Medicine extends BaseEntity {
     @Column(nullable = false, length = 255)
     private String medicineName;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String ingredient;
 
     @Column(nullable = false, length = 255)
