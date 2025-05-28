@@ -95,10 +95,6 @@ public class Users extends BaseEntity {
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<RefreshToken> refreshTokens;
 
-    @ToString.Exclude
-    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
-    private List<RefreshToken> refreshTokens;
-
     //루틴 업데이트
     public Users(String email, LocalTime wakeupTime, LocalTime bedTime, LocalTime morningTime, LocalTime lunchTime, LocalTime dinnerTime) {
         this.email = email;
