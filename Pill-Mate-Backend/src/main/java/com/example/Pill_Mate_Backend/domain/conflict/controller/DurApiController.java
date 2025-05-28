@@ -3,15 +3,17 @@ package com.example.Pill_Mate_Backend.domain.conflict.controller;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.PhoneAddresses;
 import com.example.Pill_Mate_Backend.domain.conflict.service.ApiService;
 import com.example.Pill_Mate_Backend.domain.conflict.service.EfcyApiService;
-import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
+import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineScheduleRepository;
+import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
@@ -20,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 
 
 @Slf4j
@@ -34,8 +37,8 @@ public class DurApiController {
     private EfcyApiService efcyApiService;
 
 
-    //@Autowired
-    //private MedicineRepository medicineRepository;
+    @Autowired
+    private JwtService jwtService;
 
 
 
@@ -159,7 +162,22 @@ public class DurApiController {
 
     }
     @DeleteMapping("/conflict-remove")
-    public ApiResponse<?> deleteConflict(@RequestParam String itemSeq) throws IOException {
+    public ApiResponse<?> deleteConflict(@RequestHeader(value = "Authorization", required = true) String token,
+                                         @RequestParam String itemSeq) throws IOException {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+
+            } else {
+                log.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
+            }
+        }
+
         //충돌 실제 약물 넣어놓을 시에 추가
         apiService.delete(itemSeq);
         try {
