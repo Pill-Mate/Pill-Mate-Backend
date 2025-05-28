@@ -47,6 +47,7 @@ public class FcmController {
 
     @GetMapping("/notification")
     public List<NotificationDTO> sendAllNotification(){
+        System.out.println("공지 내용 전송 완료");
         return notificationService.getAllNotification();
     }
 }
