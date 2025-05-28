@@ -17,21 +17,17 @@ public enum ErrorStatus implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
-    // Scrap 에러
-    _NOT_FOUND_SCRAP(HttpStatus.NOT_FOUND, "SCRAP400", "스크랩이 존재하지 않습니다."),
 
     // User 에러
     _NOT_FOUND_USER(HttpStatus.NOT_FOUND, "USER400", "사용자가 존재하지 않습니다."),
-
-    // News API 에러
-    _NOT_FOUND_NEWS(HttpStatus.NOT_FOUND, "NEWS400", "검색된 뉴스가 존재하지 않습니다."),
-    _UNAVAILABLE_NEWS_API(HttpStatus.SERVICE_UNAVAILABLE, "NEWS503", "Naver API 미작동, 관리자에게 문의 바랍니다."),
-
     _USER_NOT_IN_DB(HttpStatus.UNAUTHORIZED, "USERNOTINDB401", "DB에 사용자가 없습니다"),
     //jwt 만료 에러
     _EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "JWTEXPIRED401", "만료된 JWT 토큰입니다."), //HttpStatus.UNAUTHORIZED -> 401에러
-    GOOGLE_REQUEST_TOKEN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GOOGLE_REQUEST_TOKEN_ERROR", "Failed to process Google request token"),
-    _EXPIRED_REFRESH_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESHEXPIRED401", "만료된 REFRESH JWT 토큰입니다.");
+    _EXPIRED_REFRESH_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESHEXPIRED401", "만료된 REFRESH JWT 토큰입니다."),
+
+    //medicine 에러
+    _MEDICINE_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDICINE400", "약물이 존재하지 않습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -7,9 +7,10 @@ import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
 import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;
 import com.example.Pill_Mate_Backend.domain.register.repository.*;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.handler.UserHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -51,15 +52,10 @@ public class RegisterService {
             //만약에 새로운 약물이면 새로 생성
             medicine = CreateMedicine(registerDTO, users);
         }
-        //log.info("medicine: {}", medicine);
         CreateHospital(registerDTO, users, medicine);
-        //log.info(" CreateHospital: {}", registerDTO);
         CreatePharmacy(registerDTO, users, medicine);
-        //log.info("CreatePharmacy: {}", registerDTO);
         Schedule schedule = CreateSchedule(registerDTO, users, medicine);
-        //log.info("schedule: {}", registerDTO);
         CreateMedicineSchedule(users, medicine, schedule);
-        //log.info("CreateMedicineSchedule: {}");
     }
     public Medicine CreateMedicine(RegisterDTO registerDTO,  Users users) {
         log.info("medicine1");
@@ -190,7 +186,6 @@ public class RegisterService {
                                 .build();
                     }
                     schedules.add(medicineSchedule);  // 생성된 인스턴스를 리스트에 추가
-                    //log.info("medicineSchedule:{}", medicineSchedule);
                     medicineScheduleRepository.save(medicineSchedule);
                 }
             }
@@ -241,4 +236,12 @@ public class RegisterService {
         }
     }
 
+    public boolean getPillCounts(String email) {
+        Users user = userRepository.findByEmail(email).orElseThrow(()-> new UserHandler(ErrorStatus._NOT_FOUND_USER));
+        Long pillCounts = scheduleRepository.countByUsersIdAndStatus(user.getId(), ScheduleStatus.ACTIVATE);
+        if (pillCounts >= 4) {
+            return false;
+        }
+        return true;
+    }
 }
