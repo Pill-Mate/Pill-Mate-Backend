@@ -27,6 +27,8 @@ public class NotificationService {
 
         for(Notification noti : notifications){
             NotificationDTO dto = new NotificationDTO(
+                    noti.getNotifyDate(),
+                    noti.getNotifyTime(),
                     noti.getTitle(),
                     noti.getContent()
             );

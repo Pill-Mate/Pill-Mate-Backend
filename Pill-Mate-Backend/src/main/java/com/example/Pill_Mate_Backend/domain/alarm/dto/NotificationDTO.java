@@ -2,6 +2,9 @@ package com.example.Pill_Mate_Backend.domain.alarm.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Getter
 @Setter
 @Builder
@@ -9,6 +12,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificationDTO {
+    private LocalDate notifyDate;
+    private LocalTime notifyTime;
     private String title;
     private String content;
 }
