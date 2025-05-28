@@ -3,6 +3,8 @@ package com.example.Pill_Mate_Backend.domain.alarm.controller;
 import com.example.Pill_Mate_Backend.CommonEntity.Notification;
 import com.example.Pill_Mate_Backend.domain.alarm.dto.FcmRequestDTO;
 import com.example.Pill_Mate_Backend.domain.alarm.dto.NotificationDTO;
+import com.example.Pill_Mate_Backend.domain.alarm.dto.NotificationIdDTO;
+import com.example.Pill_Mate_Backend.domain.alarm.dto.NotificationTitleDTO;
 import com.example.Pill_Mate_Backend.domain.alarm.service.FcmService;
 import com.example.Pill_Mate_Backend.domain.alarm.service.NotificationService;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
@@ -46,8 +48,14 @@ public class FcmController {
     }
 
     @GetMapping("/notification")
-    public List<NotificationDTO> sendAllNotification(){
-        System.out.println("공지 내용 전송 완료");
+    public List<NotificationTitleDTO> sendAllNotification(){
+        System.out.println("공지 전체 내용 전송 완료");
         return notificationService.getAllNotification();
+    }
+
+    @PostMapping("/notificationDetail")
+    public NotificationDTO sendNotificationDetail(@RequestBody NotificationIdDTO notificationId){
+        System.out.println("공지 디테일 전송 완료");
+        return notificationService.getNotificationDetail(notificationId.getNotificationId());
     }
 }
