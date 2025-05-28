@@ -15,10 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Slf4j
@@ -48,8 +45,7 @@ public class RegisterController {
 
     @Operation(summary = "약물등록", description = "사용자가 등록한 약물을 저장하는 api")
     @PostMapping("/register")
-    public ApiResponse<?> medicineRegister(//@AuthenticationPrincipal User user
-                                           @RequestHeader(value = "Authorization", required = true) String token,
+    public ApiResponse<?> medicineRegister(@RequestHeader(value = "Authorization", required = true) String token,
                                            @RequestBody RegisterDTO registerDTO
                                            ) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -136,6 +132,24 @@ public class RegisterController {
             return ApiResponse.onFailure("사용자 시간 가져오기 실패");
 
         }
+    }
+    @Operation(summary = "약물 개수 확인" , description = "현재 날짜를 기준으로 복용중인 약물의 개수가 4개 이상인지 확인 -> 5개 부터 경고")
+    @GetMapping("/pill-count-check")
+    public ApiResponse<?> getPillCounts( @RequestHeader(value = "Authorization", required = true) String token) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+
+            } else {
+                log.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
+            }
+
+        }
+        return ApiResponse.onSuccess(registerService.getPillCounts(email));
     }
 
 }

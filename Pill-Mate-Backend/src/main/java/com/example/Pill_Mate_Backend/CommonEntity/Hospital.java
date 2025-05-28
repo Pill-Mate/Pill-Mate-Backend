@@ -23,7 +23,7 @@ public class Hospital extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String hospitalPhone;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 80)
     private String hospitalAddress;
 
     //fk
