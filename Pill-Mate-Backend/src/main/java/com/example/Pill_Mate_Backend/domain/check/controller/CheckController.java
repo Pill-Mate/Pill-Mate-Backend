@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.check.controller;
 
 import com.example.Pill_Mate_Backend.domain.alarm.service.FcmAlarmService;
+import com.example.Pill_Mate_Backend.domain.alarm.service.NotificationService;
 import com.example.Pill_Mate_Backend.domain.check.dto.*;
 import com.example.Pill_Mate_Backend.domain.check.service.ClickMedicineService;
 import com.example.Pill_Mate_Backend.domain.check.service.HomeService;
@@ -37,6 +38,8 @@ public class CheckController {
     private ClickMedicineService clickMedicineService;
     @Autowired
     private FcmAlarmService fcmAlarmService;
+    @Autowired
+    private NotificationService notificationService;
 
     @SneakyThrows
     @PatchMapping("/medicinecheck")
@@ -84,6 +87,9 @@ public class CheckController {
             fcmAlarmService.resetAlarmTrigger(email);
         }
 
+        //notificationread처리
+        boolean notificationRead = notificationService.getNotificationRead(email);
+
         // Return response entity
         return ResponseDTO.builder()
                 .medicineList(medicineList)
@@ -96,6 +102,7 @@ public class CheckController {
                 .saturday(weekCount.getSaturday())
                 .countAll(weekCount.getCountAll())
                 .countLeft(weekCount.getCountLeft())
+                .notificationRead(notificationRead)
                 .build();
     }
 
@@ -126,6 +133,9 @@ public class CheckController {
         WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
         System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
 
+        //notificationread처리
+        boolean notificationRead = notificationService.getNotificationRead(email);
+
         // Return response entity
         return ResponseDTO.builder()
                 .medicineList(medicineList)
@@ -138,6 +148,7 @@ public class CheckController {
                 .saturday(weekCount.getSaturday())
                 .countAll(weekCount.getCountAll())
                 .countLeft(weekCount.getCountLeft())
+                .notificationRead(notificationRead)
                 .build();
     }
 

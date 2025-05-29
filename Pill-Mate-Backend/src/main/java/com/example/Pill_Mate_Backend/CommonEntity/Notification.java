@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -29,4 +30,9 @@ public class Notification  extends BaseEntity {
 
     @Column(nullable = false, length = 1000)
     private String content;
+
+    //on delete cascade를 위한 one to many
+    @ToString.Exclude
+    @OneToMany(mappedBy = "notification", cascade = CascadeType.REMOVE)
+    private List<NotificationRead> notificationReads;
 }

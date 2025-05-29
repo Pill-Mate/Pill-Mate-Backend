@@ -16,4 +16,5 @@ public class NotificationTitleDTO {
     private LocalDate notifyDate;
     private LocalTime notifyTime;
     private String title;
+    private boolean notificationRead;
 }
