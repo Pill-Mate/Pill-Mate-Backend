@@ -49,25 +49,38 @@ public class NotificationService {
         return notificationTitleDTOS;
     }
 
-    public NotificationDTO getNotificationDetail(Long id, String email){
+    public NotificationDTO getNotificationDetail(Long id, String email) {
         Notification noti = notificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
 
         Users user = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 존재하지 않습니다."));
 
-        Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("해당 id의 공지가 존재하지 않습니다."));
+        // 기존 읽음 기록 있는지 확인
+        Optional<NotificationRead> existingRead = notificationReadRepository
+                .findByNotificationIdAndUsersId(id, user.getId());
 
-        //notification read 인스턴스 생성
-        NotificationRead notificationRead = NotificationRead.builder()
-                .users(user)
-                .notification(notification)
-                .readAt(LocalDateTime.now())
-                .build();
-        notificationReadRepository.save(notificationRead);
+        if (existingRead.isPresent()) {
+            // 이미 읽은 기록이 있으면 readAt만 업데이트
+            NotificationRead read = existingRead.get();
+            read.setReadAt(LocalDateTime.now());
+            notificationReadRepository.save(read);
+        } else {
+            // 없으면 새로 생성
+            NotificationRead notificationRead = NotificationRead.builder()
+                    .users(user)
+                    .notification(noti)
+                    .readAt(LocalDateTime.now())
+                    .build();
+            notificationReadRepository.save(notificationRead);
+        }
 
-        return new NotificationDTO(noti.getNotifyDate(), noti.getNotifyTime(), noti.getTitle(),noti.getContent());
+        return new NotificationDTO(
+                noti.getNotifyDate(),
+                noti.getNotifyTime(),
+                noti.getTitle(),
+                noti.getContent()
+        );
     }
 
     public boolean getNotificationRead(String email){
