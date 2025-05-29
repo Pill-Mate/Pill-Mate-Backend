@@ -11,6 +11,7 @@ import com.example.Pill_Mate_Backend.domain.register.repository.MedicineSchedule
 import com.example.Pill_Mate_Backend.domain.register.repository.PharmacyRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,23 +21,24 @@ import java.util.*;
 //병용금기
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ApiService {
     private final MedicineRepository medicineRepository;
     private final HospitalRepository hospitalRepository;
     private final PharmacyRepository pharmacyRepository;
     private final MedicineScheduleRepository medicineScheduleRepository;
 
-    public ApiService(MedicineRepository medicineRepository, HospitalRepository hospitalRepository, PharmacyRepository pharmacyRepository, MedicineScheduleRepository medicineScheduleRepository) {
-        this.medicineRepository = medicineRepository;
-        this.hospitalRepository = hospitalRepository;
-        this.pharmacyRepository = pharmacyRepository;
-
-        // 로그 출력
-        System.out.println("MedicineRepository is " + (medicineRepository == null ? "NULL" : "NOT NULL"));
-        System.out.println("HospitalRepository is " + (hospitalRepository == null ? "NULL" : "NOT NULL"));
-        System.out.println("PharmacyRepository is " + (pharmacyRepository == null ? "NULL" : "NOT NULL"));
-        this.medicineScheduleRepository = medicineScheduleRepository;
-    }
+//    public ApiService(MedicineRepository medicineRepository, HospitalRepository hospitalRepository, PharmacyRepository pharmacyRepository, MedicineScheduleRepository medicineScheduleRepository) {
+//        this.medicineRepository = medicineRepository;
+//        this.hospitalRepository = hospitalRepository;
+//        this.pharmacyRepository = pharmacyRepository;
+//
+//        // 로그 출력
+//        System.out.println("MedicineRepository is " + (medicineRepository == null ? "NULL" : "NOT NULL"));
+//        System.out.println("HospitalRepository is " + (hospitalRepository == null ? "NULL" : "NOT NULL"));
+//        System.out.println("PharmacyRepository is " + (pharmacyRepository == null ? "NULL" : "NOT NULL"));
+//        this.medicineScheduleRepository = medicineScheduleRepository;
+//    }
 
 
 

@@ -5,7 +5,6 @@ import com.example.Pill_Mate_Backend.domain.conflict.service.ApiService;
 import com.example.Pill_Mate_Backend.domain.conflict.service.EfcyApiService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineScheduleRepository;
-import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
@@ -81,7 +80,8 @@ public class DurApiController {
             sb.append(returnLine+"\n\r");
         }
         urlConnection.disconnect();
-        String json = sb.toString(); // Replace with actual JSON
+        //JSON 글자로 대체
+        String json = sb.toString();
 
         //ApiService apiService = new ApiService();
         String resultJson = apiService.usjntTabooProcessApiItems(json);
@@ -95,7 +95,6 @@ public class DurApiController {
             return "실패";
 
         }
-
 
     }
     //효능군 중복
