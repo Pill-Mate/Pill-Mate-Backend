@@ -17,6 +17,7 @@ public class ResponseDTO {
     private boolean saturday;
     private Integer countAll;
     private Integer countLeft;
+    private boolean notificationRead;
     private List<MedicineDTO> medicineList;
 
     // 생성자, getter, setter
