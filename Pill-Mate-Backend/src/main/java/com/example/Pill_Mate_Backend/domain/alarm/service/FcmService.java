@@ -8,6 +8,7 @@ import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.messaging.AndroidConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -66,6 +67,9 @@ public class FcmService {
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
+                        .android(FcmMessage.Android.builder()
+                                .priority("high") // ✅ 우선순위 설정
+                                .build())
                         .notification(FcmMessage.Notification.builder()
                                 .title(title)
                                 .body(body)
