@@ -109,34 +109,56 @@ public class FcmAlarmService {
     // 이벤트 발생 시 특정 사용자 알람 재설정
     @Transactional
     public void resetAlarmTrigger(String email) {
-        System.out.println("\n 알람 수정 시작됨");
-        Long userId = (Long)usersRepository.getIdByEmail(email)[0];
+        System.out.println("\n[알람 수정 시작됨] 이메일: " + email);
 
+        // 1. 사용자 ID 조회 (예외 방어)
+        Object[] idResult = usersRepository.getIdByEmail(email);
+        if (idResult == null || idResult.length == 0 || idResult[0] == null) {
+            throw new RuntimeException("해당 이메일에 대한 사용자 ID를 찾을 수 없습니다: " + email);
+        }
+        Long userId;
+        try {
+            userId = (Long) idResult[0];
+        } catch (ClassCastException e) {
+            throw new RuntimeException("userId를 Long으로 변환할 수 없습니다. 반환값: " + idResult[0]);
+        }
+
+        // 2. 알람 일정 조회
         List<Object[]> userAlarmsObject = scheduleRepository2.findNextDayAlarmsById(userId);
+        if (userAlarmsObject == null || userAlarmsObject.isEmpty()) {
+            throw new RuntimeException("알람 데이터가 존재하지 않습니다. userId: " + userId);
+        }
+
+        // 3. DTO 매핑
         List<AlarmScheduleDTO> userAlarms = new ArrayList<>();
+        for (Object[] object : userAlarmsObject) {
+            try {
+                if (object[1] == null || object[2] == null) {
+                    System.out.println("⚠️ null 값이 포함된 알람 데이터 건너뜀: " + Arrays.toString(object));
+                    continue; // null date/time 방어 처리
+                }
 
-        if (userAlarmsObject.isEmpty()) {
-            throw new RuntimeException("alarm data not found");
+                AlarmScheduleDTO dto = new AlarmScheduleDTO(
+                        (Long) object[0],
+                        toLocalDate((Date) object[1]),
+                        toLocalTime((Time) object[2])
+                );
+                userAlarms.add(dto);
+            } catch (Exception e) {
+                System.out.println("❌ DTO 매핑 중 오류 발생: " + Arrays.toString(object));
+                e.printStackTrace();
+            }
         }
 
-        //object DTO로 mapping
-        for (Object[] object : userAlarmsObject){
-            AlarmScheduleDTO dto = new AlarmScheduleDTO(
-                    (Long) object[0],
-                    toLocalDate((Date) object[1]),
-                    toLocalTime((Time) object[2])
-            );
-            userAlarms.add(dto);
-        }
-
-        //List<AlarmScheduleDTO> userAlarms = scheduleRepository2.findNextDayAlarmsById(userId);
-
+        // 4. LocalDateTime 리스트 생성
         List<LocalDateTime> intakeTimes = userAlarms.stream()
                 .map(dto -> LocalDateTime.of(dto.getIntakeDate(), dto.getIntakeTime()))
                 .collect(Collectors.toList());
 
+        // 5. 알람 등록
         scheduleAlarms(userId, intakeTimes);
-        System.out.println("[알람 재등록 완료] User ID: " + userId);
+
+        System.out.println("[✅ 알람 재등록 완료] User ID: " + userId + ", 등록된 알람 수: " + intakeTimes.size());
     }
 
     //
