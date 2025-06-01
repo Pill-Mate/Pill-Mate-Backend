@@ -2,6 +2,7 @@ package com.example.Pill_Mate_Backend.domain.alarm.repository;
 
 import com.example.Pill_Mate_Backend.CommonEntity.FcmToken;
 import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
+import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -26,4 +27,10 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, Long> {
     //@Query("select fcm_token where user_id = :userId")
     @Query("SELECT f.fcmToken FROM FcmToken f WHERE f.users.id = :userId") // AND f.active = true")
     String findActiveTokenByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT f.fcmToken FROM FcmToken f WHERE f.users.email = :email")//"select fcm_token from fcm_token join users where email = :email")// AND f.active = true")
+    List<String> findFcmTokenByEmail(@Param("email") String email);
+
+    boolean existsByUsersAndFcmToken(Users users, String fcmToken);
+    boolean existsByUsersIdAndFcmToken(Long userId, String fcmToken);
 }

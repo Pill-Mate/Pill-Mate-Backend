@@ -9,15 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class KakaoSignUpDTO {
+public class KakaoSignOutDTO {
     private String kakaoAccessToken; // 프론트에서 전달한 액세스 토큰
-
-    public String getKakaoAccessToken() {
-        return kakaoAccessToken;
-    }
-
-    public void setKakaoAccessToken(String kakaoAccessToken) {
-        this.kakaoAccessToken = kakaoAccessToken;
-    }
-
 }
