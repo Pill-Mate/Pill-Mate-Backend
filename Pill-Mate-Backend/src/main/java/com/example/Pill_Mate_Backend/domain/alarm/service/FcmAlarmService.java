@@ -125,13 +125,17 @@ public class FcmAlarmService {
 
         // 2. 알람 일정 조회
         List<Object[]> userAlarmsObject = scheduleRepository2.findNextDayAlarmsById(userId);
-        if (userAlarmsObject == null || userAlarmsObject.isEmpty()) {
-            throw new RuntimeException("알람 데이터가 존재하지 않습니다. userId: " + userId);
+        if (Objects.isNull(userAlarmsObject) || userAlarmsObject.isEmpty()) {//userAlarmsObject == null || userAlarmsObject.isEmpty()) {
+            System.out.println("현재 등록할 알람이 없습니다.");
+            cancelAlarms(userId);
+            return;
         }
 
         // 3. DTO 매핑
         List<AlarmScheduleDTO> userAlarms = new ArrayList<>();
+        System.out.println("조회된 알람 데이터 수: " + userAlarmsObject.size());
         for (Object[] object : userAlarmsObject) {
+            System.out.println("알람 raw 데이터: " + Arrays.toString(object));
             try {
                 if (object[1] == null || object[2] == null) {
                     System.out.println("⚠️ null 값이 포함된 알람 데이터 건너뜀: " + Arrays.toString(object));
