@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.management.dto;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.net.URI;
@@ -15,7 +16,10 @@ public class ManagementDto {
     @Builder
     public static class CurrentPillResponseDto {
         //복용중인 약물 갯수
+        @Schema(description = "복용 중인 약물 수", example = "2")
         private Integer pillCount;
+
+        @Schema(description = "복용 중인 약물 목록")
         private List<CurrentPillResponse> currentPillResponseList;
     }
     @Setter
@@ -25,23 +29,31 @@ public class ManagementDto {
     @Builder
     //현재 복용중인 약물
     public static class CurrentPillResponse {
-        //복용시작 날짜
+
+        @Schema(description = "복용 시작 날짜", example = "2025-04-20")
         private LocalDate startDate;
-        // 복용 종료날짜
+
+        @Schema(description = "복용 종료 날짜", example = "2025-05-04")
         private LocalDate endDate;
-        // 약물분류명
+
+        @Schema(description = "약물 분류명", example = "해열.진통.소염제")
         private String className;
-        //약물 복용 일수 계산
+
+        @Schema(description = "복용 기간 (일)", example = "14")
         private Integer intakePeriod;
-        // 약물이름
+
+        @Schema(description = "약물 이름", example = "이지에스정(방기황기탕건조엑스)")
         private String medicineName;
-        // 약물 회사명
+
+        @Schema(description = "약물 회사명", example = "해열.진통.소염제")
         private String entpName;
-        //약물사진
+
+        @Schema(description = "약물 사진 URI", example = "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/154333330132500115")
         private URI image;
 
-
+        @Schema(description = "스케줄 ID", example = "1")
         private Long scheduleId;
+
 
         public static CurrentPillResponse from (Schedule schedule) {
             return CurrentPillResponse.builder()
@@ -69,21 +81,28 @@ public class ManagementDto {
     @Builder
     //복용 중단된  약물
     public static class StopPillResponse {
-        //복용시작 날짜
+        @Schema(description = "복용 시작 날짜", example = "2025-04-20")
         private LocalDate startDate;
-        // 복용 종료날짜
+
+        @Schema(description = "복용 종료 날짜", example = "2025-05-04")
         private LocalDate endDate;
-        // 약물분류명
+
+        @Schema(description = "약물 분류명", example = "해열.진통.소염제")
         private String className;
-        //약물 복용 일수 계산
+
+        @Schema(description = "복용 기간 (일)", example = "14")
         private Integer intakePeriod;
-        // 약물이름
+
+        @Schema(description = "약물 이름", example = "이지에스정(방기황기탕건조엑스)")
         private String medicineName;
-        // 약물 회사명
+
+        @Schema(description = "약물 회사명", example = "해열.진통.소염제")
         private String entpName;
-        //약물사진
+
+        @Schema(description = "약물 사진 URI", example = "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/154333330132500115")
         private URI image;
 
+        @Schema(description = "스케줄 ID", example = "1")
         private Long scheduleId;
 
         public static StopPillResponse from (Schedule schedule) {
