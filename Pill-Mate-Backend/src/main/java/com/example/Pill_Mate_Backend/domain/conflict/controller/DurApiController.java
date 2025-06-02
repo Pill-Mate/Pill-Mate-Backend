@@ -1,11 +1,12 @@
 package com.example.Pill_Mate_Backend.domain.conflict.controller;
 
+import com.example.Pill_Mate_Backend.domain.conflict.dto.AllConflictResponse;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.PhoneAddresses;
 import com.example.Pill_Mate_Backend.domain.conflict.service.ApiService;
 import com.example.Pill_Mate_Backend.domain.conflict.service.EfcyApiService;
+import com.example.Pill_Mate_Backend.domain.conflict.service.MedicineService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineScheduleRepository;
-import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
@@ -40,12 +41,34 @@ public class DurApiController {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private MedicineService medicineService;
 
 
     @Value("${openApi.serviceKey}")
     private String serviceKey;
     @Autowired
     private MedicineScheduleRepository medicineScheduleRepository;
+
+    @Operation(summary = "전체 약물 충돌 검사", description = "itemSeq 기반으로 DUR 병용금기/효능군 중복, 서버 내 내 약물과의 충돌 여부를 모두 검사")
+    @GetMapping("/check-conflict")
+    public ApiResponse<AllConflictResponse> checkConflictAll(
+            @RequestParam String itemSeq,
+            @RequestHeader(value = "Authorization", required = true) String token) {
+
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+            } else {
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
+            }
+        }
+
+        return ApiResponse.onSuccess(medicineService.checkAllConflicts(itemSeq, email));
+    }
+
 
 
     // 병용금기
@@ -54,7 +77,6 @@ public class DurApiController {
     public String UsjntTaboocallapi(@RequestParam String itemSeq) throws IOException {
         StringBuilder sb = new StringBuilder();
         //병용금기 정보조회
-        try {
         String urlbyeongyong = "http://apis.data.go.kr/1471000/DURPrdlstInfoService03/getUsjntTabooInfoList03?" +
                 "serviceKey="+ serviceKey +
                 //받아올 페이지 수
@@ -89,12 +111,6 @@ public class DurApiController {
         //return sb.toString();
             System.out.println(resultJson);
             return resultJson;
-        } catch (Exception e) {
-            //나중에 responseBody 추가
-            System.out.println(e.getMessage());
-            return "실패";
-
-        }
 
 
     }
@@ -103,7 +119,6 @@ public class DurApiController {
     @GetMapping("/efcy-dplct")
     public String EfcyDplctcallapi(@RequestParam String itemSeq) throws IOException {
         StringBuilder sb = new StringBuilder();
-        try {
         //병용금기 정보조회
         String urlEfcy = "http://apis.data.go.kr/1471000/DURPrdlstInfoService03/getEfcyDplctInfoList03?" +
                 "serviceKey="+ serviceKey +
@@ -140,29 +155,23 @@ public class DurApiController {
         //return sb.toString();
             System.out.println(resultJson);
         return resultJson;
-    } catch (Exception e) {
-        //나중에 responseBody 추가
-        return "효능군 중복 리턴 실패";
 
-    }
 
 
     }
 
     @Operation(summary = "약국 병원 이름 주소 전화번호 ", description = "약국 병원 이름 주소 전화번호 리턴")
     @GetMapping("get-phone-address")
-    public ApiResponse<?> getPhoneNumber(@RequestParam String itemSeq) throws IOException {
-    try {
+    public ApiResponse<PhoneAddresses> getPhoneNumber(@RequestParam String itemSeq) throws IOException {
 
         PhoneAddresses phoneAddresses = apiService.getPhoneAddresses(itemSeq);
         return ApiResponse.onSuccess(phoneAddresses);
-    } catch (Exception e) {
-        return ApiResponse.onFailure(e.getMessage());
-    }
+
 
     }
+
     @DeleteMapping("/conflict-remove")
-    public ApiResponse<?> deleteConflict(@RequestHeader(value = "Authorization", required = true) String token,
+    public ApiResponse<Void> deleteConflict(@RequestHeader(value = "Authorization", required = true) String token,
                                          @RequestParam String itemSeq) throws IOException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -180,11 +189,8 @@ public class DurApiController {
 
         //충돌 실제 약물 넣어놓을 시에 추가
         apiService.delete(itemSeq);
-        try {
-            return ApiResponse.onSuccess("성공");
-        } catch (Exception e) {
-            return ApiResponse.onFailure(e.getMessage());
+            return ApiResponse.onSuccess(null);
         }
     }
 
-}
+

@@ -7,6 +7,7 @@ import com.example.Pill_Mate_Backend.global.common.code.status.SuccessStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,10 +16,14 @@ import lombok.Getter;
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 public class ApiResponse<T> {
 
+    @Schema(description = "성공 여부", example = "true")
     @JsonProperty("isSuccess")
     private final Boolean isSuccess;
+    @Schema(description = "응답 코드", example = "200")
     private final String code;
+    @Schema(description = "응답 메시지", example = "OK")
     private final String message;
+    @Schema(description = "응답 결과 데이터")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
 
