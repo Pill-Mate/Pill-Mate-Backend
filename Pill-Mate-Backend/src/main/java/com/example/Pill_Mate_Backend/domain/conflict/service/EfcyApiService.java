@@ -1,14 +1,22 @@
 package com.example.Pill_Mate_Backend.domain.conflict.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
+import com.example.Pill_Mate_Backend.domain.conflict.dto.EfcyDplctApiItem;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.EfcyDplctApiItems;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +27,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor // Lombok을 이용한 자동 생성자 주입
 public class EfcyApiService {
+    @Value("${openApi.serviceKey}")
+    private String serviceKey;
 
     private final MedicineRepository medicineRepository; // final 추가하여 불변성 유지
 
@@ -67,4 +77,37 @@ public class EfcyApiService {
             return "[]";
         }
     }
+
+    public List<EfcyDplctApiItem> getEfcyItemsFromDur(String itemSeq) {
+        try {
+            String url = "http://apis.data.go.kr/1471000/DURPrdlstInfoService03/getEfcyDplctInfoList03?" +
+                    "serviceKey=" + serviceKey +
+                    "&pageNo=1" +
+                    "&numOfRows=20" +
+                    "&type=json" +
+                    "&typeName=" + URLEncoder.encode("효능군중복", StandardCharsets.UTF_8) +
+                    "&itemSeq=" + URLEncoder.encode(itemSeq, StandardCharsets.UTF_8);
+
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            connection.disconnect();
+
+            ObjectMapper mapper = new ObjectMapper();
+            EfcyDplctApiItems result = mapper.readValue(sb.toString(), EfcyDplctApiItems.class);
+            return result.getItems();
+
+        } catch (Exception e) {
+            log.error("효능군 중복 DUR API 호출 실패", e);
+            return List.of(); // 비어 있는 리스트 반환
+        }
+    }
+
 }
