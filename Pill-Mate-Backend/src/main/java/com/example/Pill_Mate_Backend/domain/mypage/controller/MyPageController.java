@@ -67,7 +67,7 @@ public class MyPageController {
     }
 
     @PatchMapping("/routineupdate")
-    public ResponseEntity<?> routineUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody RoutineDTO routineDTO) {
+    public ResponseEntity<String> routineUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody RoutineDTO routineDTO) {
         System.out.print(routineDTO);
 
         String email = "";
@@ -96,7 +96,7 @@ public class MyPageController {
         }
     }
     @PatchMapping("/alarmupdate/marketing")
-    public ResponseEntity<?> alarmMarketingUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmMarketingDTO alarmMarketingDTO) {
+    public ResponseEntity<String> alarmMarketingUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmMarketingDTO alarmMarketingDTO) {
         System.out.print(alarmMarketingDTO);
 
         String email = "";
@@ -123,7 +123,7 @@ public class MyPageController {
         }
     }
     @PatchMapping("/alarmupdate/information")
-    public ResponseEntity<?> alarmInfoUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmInfoDTO alarmInfoDTO) {
+    public ResponseEntity<String> alarmInfoUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmInfoDTO alarmInfoDTO) {
         System.out.print(alarmInfoDTO);
 
         String email = "";

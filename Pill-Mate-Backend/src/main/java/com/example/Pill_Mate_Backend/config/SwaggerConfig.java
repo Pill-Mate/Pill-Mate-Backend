@@ -20,7 +20,9 @@ import java.time.OffsetDateTime;
 
 @Configuration
 public class SwaggerConfig {
+    // Swagger UI: http://localhost:8080/swagger-ui/index.html#/
 
+    //java타입 String으로 수정
     @PostConstruct
     public void customizeSchemas() {
         SpringDocUtils.getConfig()
@@ -30,7 +32,6 @@ public class SwaggerConfig {
                 .replaceWithSchema(OffsetDateTime.class, new StringSchema().example("2025-06-03T15:30:00+09:00").description("날짜, 시간 및 시간대 (ISO 8601)"));
     }
 
-    // Swagger UI: http://localhost:8080/swagger-ui/index.html#/
     @Bean
     public OpenAPI getOpenApi() {
         Server server = new Server().url("/");
