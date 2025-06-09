@@ -25,7 +25,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-//병용금기
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,6 @@ public class ApiService {
 
 
 
-
     public UsjntTabooApiItems parseJson(String json) {
         UsjntTabooApiItems items = null;
         try {
@@ -52,7 +50,6 @@ public class ApiService {
         return items;
     }
 
-    //병용금기
 //병용금기
     public String usjntTabooProcessApiItems(String json) {
         UsjntTabooApiItems usjntTabooApiItems = parseJson(json);

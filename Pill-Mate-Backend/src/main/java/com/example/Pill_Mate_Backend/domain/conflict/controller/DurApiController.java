@@ -103,7 +103,8 @@ public class DurApiController {
             sb.append(returnLine+"\n\r");
         }
         urlConnection.disconnect();
-        String json = sb.toString(); // Replace with actual JSON
+        //JSON 글자로 대체
+        String json = sb.toString();
 
         //ApiService apiService = new ApiService();
         String resultJson = apiService.usjntTabooProcessApiItems(json);
@@ -111,7 +112,6 @@ public class DurApiController {
         //return sb.toString();
             System.out.println(resultJson);
             return resultJson;
-
 
     }
     //효능군 중복
