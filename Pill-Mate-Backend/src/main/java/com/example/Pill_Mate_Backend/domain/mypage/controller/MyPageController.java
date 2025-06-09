@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.mypage.controller;
 
+import com.example.Pill_Mate_Backend.domain.alarm.service.FcmAlarmService;
 import com.example.Pill_Mate_Backend.domain.mypage.dto.*;
 import com.example.Pill_Mate_Backend.domain.mypage.service.AlarmService;
 import com.example.Pill_Mate_Backend.domain.mypage.service.MyPageService;
@@ -27,6 +28,8 @@ public class MyPageController {
     private AlarmService alarmService;
     @Autowired
     private MyPageService myPageService;
+    @Autowired
+    private FcmAlarmService fcmAlarmService;
 
     @GetMapping("/mypagereturn")
     public MyPageDTO getmyPageData(@RequestHeader(value = "Authorization", required = true) String token) {
@@ -64,7 +67,7 @@ public class MyPageController {
     }
 
     @PatchMapping("/routineupdate")
-    public ResponseEntity<?> routineUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody RoutineDTO routineDTO) {
+    public ResponseEntity<String> routineUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody RoutineDTO routineDTO) {
         System.out.print(routineDTO);
 
         String email = "";
@@ -85,13 +88,15 @@ public class MyPageController {
 
         try {
             routineService.routineUpdate(routineDTO, email);
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
             return ResponseEntity.ok("Routine updated successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
     @PatchMapping("/alarmupdate/marketing")
-    public ResponseEntity<?> alarmMarketingUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmMarketingDTO alarmMarketingDTO) {
+    public ResponseEntity<String> alarmMarketingUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmMarketingDTO alarmMarketingDTO) {
         System.out.print(alarmMarketingDTO);
 
         String email = "";
@@ -118,7 +123,7 @@ public class MyPageController {
         }
     }
     @PatchMapping("/alarmupdate/information")
-    public ResponseEntity<?> alarmInfoUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmInfoDTO alarmInfoDTO) {
+    public ResponseEntity<String> alarmInfoUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmInfoDTO alarmInfoDTO) {
         System.out.print(alarmInfoDTO);
 
         String email = "";
@@ -139,6 +144,8 @@ public class MyPageController {
 
         try {
             alarmService.alarmInfoUpdate(alarmInfoDTO, email);
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
             return ResponseEntity.ok("Alarm updated successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

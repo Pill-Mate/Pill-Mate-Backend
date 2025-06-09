@@ -20,3 +20,10 @@ jwt:
 
 openApi:
   serviceKey: ${OPENAPI_SERVICE_KEY}
+
+fcm:
+  api:
+    url: https://fcm.googleapis.com/v1/projects/pillmate-c9a64/messages:send
+  key:
+    json: ${FCM_ACCOUNT_KEY}
+    scope: https://www.googleapis.com/auth/firebase.messageing
