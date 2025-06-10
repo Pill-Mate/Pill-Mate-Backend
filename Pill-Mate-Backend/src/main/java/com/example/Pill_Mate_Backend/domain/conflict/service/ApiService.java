@@ -38,17 +38,7 @@ public class ApiService {
     private final HospitalRepository hospitalRepository;
     private final PharmacyRepository pharmacyRepository;
 
-    public ApiService(MedicineRepository medicineRepository, HospitalRepository hospitalRepository, PharmacyRepository pharmacyRepository, MedicineScheduleRepository medicineScheduleRepository) {
-        this.medicineRepository = medicineRepository;
-        this.hospitalRepository = hospitalRepository;
-        this.pharmacyRepository = pharmacyRepository;
 
-        // 로그 출력
-        System.out.println("MedicineRepository is " + (medicineRepository == null ? "NULL" : "NOT NULL"));
-        System.out.println("HospitalRepository is " + (hospitalRepository == null ? "NULL" : "NOT NULL"));
-        System.out.println("PharmacyRepository is " + (pharmacyRepository == null ? "NULL" : "NOT NULL"));
-        this.medicineScheduleRepository = medicineScheduleRepository;
-    }
 
 
 
