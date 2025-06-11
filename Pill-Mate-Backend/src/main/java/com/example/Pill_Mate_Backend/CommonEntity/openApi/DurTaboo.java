@@ -22,9 +22,6 @@ public class DurTaboo extends BaseEntity {
     @Column(name = "ingr_kor_name")
     private String ingrKorName;
 
-    @Column(name = "ingr_eng_name")
-    private String ingrEngName;
-
     @Column(name = "item_seq")
     private String itemSeq;
 
@@ -33,12 +30,6 @@ public class DurTaboo extends BaseEntity {
 
     @Column(name = "entp_name")
     private String entpName;
-
-    @Column(name = "mix_ingr_kor_name")
-    private String mixIngrKorName;
-
-    @Column(name = "mix_ingr_eng_name")
-    private String mixIngrEngName;
 
     @Column(name = "mix_item_name")
     private String mixItemName;

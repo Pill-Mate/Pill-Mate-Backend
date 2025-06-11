@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "pharmacy")
+@Table(name = "openapi_pharmacy")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class OpenapiPharmacy extends BaseEntity {
 
