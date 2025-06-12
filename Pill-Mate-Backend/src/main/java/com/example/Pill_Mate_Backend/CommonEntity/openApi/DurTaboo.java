@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.CommonEntity.openApi;
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import lombok.*;
 import jakarta.persistence.*;
@@ -42,4 +43,12 @@ public class DurTaboo extends BaseEntity {
 
     @Column(name = "notification_date")
     private LocalDate notificationDate;
+
+    //약물 식별 번호
+    @Column(name = "mixture_item_seq")
+    private String mixtureItemSeq;
+
+    //약물 분류명
+    @Column(name = "class_name")
+    private String className;
 }
