@@ -6,27 +6,28 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+//v2
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class MedicineConflict {
 
-    @JsonProperty("ITEM_NAME")
-    private String ITEM_NAME;
+    @JsonProperty("item_name")
+    private String itemName;
 
-    @JsonProperty("ITEM_SEQ")
-    private String ITEM_SEQ;
+    @JsonProperty("item_seq")
+    private String itemSeq;
 
-    @JsonProperty("EFFECT_NAME")
-    private String EFFECT_NAME;
+    @JsonProperty("effect_name")
+    private String effectName;
 
-    @JsonProperty("CLASS_NAME")
-    private String CLASS_NAME;
+    @JsonProperty("class_name")
+    private String className;
 
-    @JsonProperty("ENTP_NAME")
-    private String ENTP_NAME;
+    @JsonProperty("entp_name")
+    private String entpName;
 
-    @JsonProperty("ITEM_IMAGE")
-    private String ITEM_IMAGE;
+    @JsonProperty("item_image")
+    private String itemImage;
 }

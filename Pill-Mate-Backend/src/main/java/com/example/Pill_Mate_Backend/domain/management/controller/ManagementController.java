@@ -27,7 +27,7 @@ public class ManagementController {
     @Autowired
     private FcmAlarmService fcmAlarmService;
 
-    @Operation(summary="복용중인 약물 리스트",description = "복용중인 약물 리스트 조회")
+    @Operation(summary="복용중인 약물 리스트", description = "복용중인 약물 리스트 조회")
     @GetMapping("/home/current")
     public ApiResponse<ManagementDto.CurrentPillResponseDto> currentHome(@RequestHeader(value = "Authorization", required = true) String token) {
 

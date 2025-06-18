@@ -1,8 +1,10 @@
 package com.example.Pill_Mate_Backend.domain.conflict.controller;
 
 import com.example.Pill_Mate_Backend.domain.conflict.dto.AllConflictResponse;
+import com.example.Pill_Mate_Backend.domain.conflict.dto.EfcyDto;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.PhoneAddresses;
-import com.example.Pill_Mate_Backend.domain.conflict.service.ApiService;
+import com.example.Pill_Mate_Backend.domain.conflict.dto.TabooDto;
+import com.example.Pill_Mate_Backend.domain.conflict.service.TabooApiService;
 import com.example.Pill_Mate_Backend.domain.conflict.service.EfcyApiService;
 import com.example.Pill_Mate_Backend.domain.conflict.service.MedicineService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
@@ -24,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 
 @Slf4j
@@ -32,7 +35,7 @@ import java.text.SimpleDateFormat;
 @RequiredArgsConstructor
 public class DurApiController {
     @Autowired
-    private ApiService apiService;
+    private TabooApiService tabooApiService;
 
     @Autowired
     private EfcyApiService efcyApiService;
@@ -107,7 +110,7 @@ public class DurApiController {
         String json = sb.toString();
 
         //ApiService apiService = new ApiService();
-        String resultJson = apiService.usjntTabooProcessApiItems(json);
+        String resultJson = tabooApiService.usjntTabooProcessApiItems(json);
 
         //return sb.toString();
             System.out.println(resultJson);
@@ -164,7 +167,7 @@ public class DurApiController {
     @GetMapping("get-phone-address")
     public ApiResponse<PhoneAddresses> getPhoneNumber(@RequestParam String itemSeq) throws IOException {
 
-        PhoneAddresses phoneAddresses = apiService.getPhoneAddresses(itemSeq);
+        PhoneAddresses phoneAddresses = tabooApiService.getPhoneAddresses(itemSeq);
         return ApiResponse.onSuccess(phoneAddresses);
 
 
@@ -188,9 +191,56 @@ public class DurApiController {
         }
 
         //충돌 실제 약물 넣어놓을 시에 추가
-        apiService.delete(itemSeq);
+        tabooApiService.delete(itemSeq);
             return ApiResponse.onSuccess(null);
         }
+
+
+
+// 병용금기02
+@Operation(summary = "병용금기02", description = "헤더의 itemSeq약물 번호로 해당 약물의 병용금기 약물 리턴")
+@GetMapping("/usjnt-taboo02")
+public ApiResponse<List<TabooDto>> UsjntTaboocallapi02 (@RequestParam String itemSeq,
+                                                        @RequestHeader(value = "Authorization", required = true) String token) throws IOException {
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    String email = "";
+    if (token != null && token.startsWith("Bearer ")) {
+        String jwtToken = token.substring(7);
+        if (jwtService.validateToken(jwtToken)) {
+            email = jwtService.extractEmail(jwtToken);
+
+        } else {
+            log.info("Invalid JWT");
+            throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
+        }
     }
+        return ApiResponse.onSuccess(tabooApiService.tabooSearchWithUser(itemSeq, token));
 
 
+}
+//효능군 중복 02
+@Operation(summary = "효능군 중복02", description = "헤더의 itemSeq약물 번호로 해당 약물의 효능군 중복 약물 리턴")
+@GetMapping("/efcy-dplct02")
+public ApiResponse<List<EfcyDto>> EfcyDplctcallapi02 (@RequestParam String itemSeq,
+                                                      @RequestHeader(value = "Authorization", required = true) String token) throws IOException {
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    String email = "";
+    if (token != null && token.startsWith("Bearer ")) {
+        String jwtToken = token.substring(7);
+        if (jwtService.validateToken(jwtToken)) {
+            email = jwtService.extractEmail(jwtToken);
+
+        } else {
+            log.info("Invalid JWT");
+            throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
+        }
+    }
+    return ApiResponse.onSuccess(efcyApiService.efcySearchWithUser(itemSeq,email));
+
+
+
+
+}
+
+
+}

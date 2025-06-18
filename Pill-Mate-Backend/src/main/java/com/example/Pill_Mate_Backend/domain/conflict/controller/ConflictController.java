@@ -21,7 +21,7 @@ public class ConflictController {
     private final MedicineService medicineService;
     private final JwtService jwtService;
 
-    @Operation
+    @Operation(summary = "중복 약물 검사", description = "등록하려는 약물을 이미 복용중인지  조회합니다.")
     @GetMapping("/check-duplicate-drug")
     public MedicineConflict getConflict(@RequestParam String itemSeq,
                                         @RequestHeader(value = "Authorization", required = true)  String token) {

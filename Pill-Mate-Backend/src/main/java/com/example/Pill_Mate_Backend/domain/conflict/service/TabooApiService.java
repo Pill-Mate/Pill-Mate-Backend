@@ -4,8 +4,10 @@ import com.example.Pill_Mate_Backend.CommonEntity.Hospital;
 import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
 import com.example.Pill_Mate_Backend.CommonEntity.Pharmacy;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.PhoneAddresses;
+import com.example.Pill_Mate_Backend.domain.conflict.dto.TabooDto;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.UsjntTabooApiItem;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.UsjntTabooApiItems;
+import com.example.Pill_Mate_Backend.domain.conflict.repository.DurTabooRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.HospitalRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.PharmacyRepository;
@@ -28,7 +30,7 @@ import java.net.URL;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ApiService {
+public class TabooApiService {
 
     @Value("${openApi.serviceKey}")
     private String serviceKey;
@@ -36,9 +38,40 @@ public class ApiService {
     private final MedicineRepository medicineRepository;
     private final HospitalRepository hospitalRepository;
     private final PharmacyRepository pharmacyRepository;
+    private final DurTabooRepository durRepository;
+
+    //병용금기 버전2( DB에서 직접 호출 )
+    public List<TabooDto> tabooSearchWithUser(String itemSeq, String email){
+        List<TabooDto> mixtureList = durRepository.findTabooByMixtureItemSeq(itemSeq);
 
 
+        //병용 금기 약물 있는지 검색
 
+        List<TabooDto> userHasList = new ArrayList<>();
+
+        //사용자가 가지고 있으면 리스트에 추가
+        for (TabooDto mixtureSeq : mixtureList) {
+            if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email) != null) {
+                userHasList.add(mixtureSeq);
+            }
+        }
+        return userHasList;
+    }
+
+    public List<String> tabooSearch(String itemSeq) {
+        //병용 금기 약물 있는지 검색
+        List<TabooDto> mixtureSeqList = durRepository.findTabooByMixtureItemSeq(itemSeq);
+
+        List<String> itemSeqList = new ArrayList<>();
+
+        //사용자가 가지고 있으면 리스트에 추가
+        for (TabooDto mixtureSeq : mixtureSeqList) {
+            itemSeqList.add(mixtureSeq.getMixtureItemSeq());
+
+        }
+            return itemSeqList;
+
+    }
 
     public UsjntTabooApiItems parseJson(String json) {
         UsjntTabooApiItems items = null;
