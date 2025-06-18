@@ -1,8 +1,11 @@
 package com.example.Pill_Mate_Backend.domain.conflict.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
+import com.example.Pill_Mate_Backend.CommonEntity.openApi.DurEffDuplication;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.EfcyDplctApiItem;
 import com.example.Pill_Mate_Backend.domain.conflict.dto.EfcyDplctApiItems;
+import com.example.Pill_Mate_Backend.domain.conflict.dto.EfcyDto;
+import com.example.Pill_Mate_Backend.domain.conflict.repository.DurEffDuplicationRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +33,61 @@ public class EfcyApiService {
     @Value("${openApi.serviceKey}")
     private String serviceKey;
 
-    private final MedicineRepository medicineRepository; // final 추가하여 불변성 유지
+    private final MedicineRepository medicineRepository;
+    private final DurEffDuplicationRepository durEffDuplicationRepository;
+
+
+    //효능군 중복 버전2( DB에서 직접 호출 )
+    public List<EfcyDto> efcySearchWithUser(String itemSeq, String email) {
+        DurEffDuplication entity = durEffDuplicationRepository.findByItemSeq(itemSeq);
+        String durSeq = "";
+        List<EfcyDto> itemSeqList;
+
+        List<EfcyDto> efcyDtoList = new ArrayList<>();
+        if (entity != null) {
+            durSeq = entity.getDurSeq();
+            itemSeqList = durEffDuplicationRepository.findEfcyByDurSeq(durSeq);
+            for (EfcyDto dto : itemSeqList) {
+                if (medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).isPresent()) {
+                    Medicine medicine = medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).orElseThrow();
+                    efcyDtoList.add(EfcyDto.builder()
+                            .className(medicine.getClassName())
+                            //추후 effectname으로 수정
+                            .effectName(dto.getEffectName())
+                            .entpName(medicine.getEntpName())
+                            .itemName(medicine.getMedicineName())
+                            .itemSeq(dto.getItemSeq())
+                            .build());
+                }
+            }
+
+        }
+            return efcyDtoList;
+
+        //사용자가 가지고 있으면 리스트에 추가
+
+
+    }
+
+    //효능군 중복 itemSeq리스트 리턴
+    public List<String> efcySearch(String itemSeq) {
+        DurEffDuplication entity = durEffDuplicationRepository.findByItemSeq(itemSeq);
+        String durSeq = "";
+        List<String> itemSeqList = new ArrayList<>();
+
+        List<EfcyDto> efcyDtoList = new ArrayList<>();
+        if (entity != null) {
+            durSeq = entity.getDurSeq();
+            itemSeqList = durEffDuplicationRepository.findAllByDurSeq(durSeq);
+
+        }
+        return itemSeqList;
+
+        //사용자가 가지고 있으면 리스트에 추가
+
+
+    }
+
 
     public EfcyDplctApiItems parseJson(String json) {
         EfcyDplctApiItems items = null;
