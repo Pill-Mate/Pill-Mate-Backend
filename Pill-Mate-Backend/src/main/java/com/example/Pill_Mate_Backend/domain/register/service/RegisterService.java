@@ -13,6 +13,7 @@ import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.handler.UserHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -254,14 +255,15 @@ public class RegisterService {
     }
 
     public List<PillResponseDto> getPills(String itemSeq) {
-        return drugBasicRepository.findByItemNameContainingAsDto(itemSeq);
+        return drugBasicRepository.findByItemNameContainingAsDto(itemSeq, PageRequest.of(0, 10)  // 0번째 페이지, 10개
+        );
     }
 
     public List<HospitalResponseDTO> getHospitals(String name) {
-        return openapiHospitalRepository.findByDutyNameContainingAsDto(name);
+        return openapiHospitalRepository.findByDutyNameContainingAsDto(name, PageRequest.of(0,10));
     }
 
     public List<PharmacyResponseDTO> getPharmacies(String name) {
-        return openapiPharmacyRepository.findByDutyNameContainingAsDto(name);
+        return openapiPharmacyRepository.findByDutyNameContainingAsDto(name,PageRequest.of(0,10));
     }
 }
