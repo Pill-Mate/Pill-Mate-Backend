@@ -2,15 +2,18 @@ package com.example.Pill_Mate_Backend.domain.register.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.*;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeFrequency;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
+import com.example.Pill_Mate_Backend.domain.register.dto.HospitalResponseDTO;
+import com.example.Pill_Mate_Backend.domain.register.dto.PharmacyResponseDTO;
+import com.example.Pill_Mate_Backend.domain.register.dto.PillResponseDto;
 import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;
 import com.example.Pill_Mate_Backend.domain.register.repository.*;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.handler.UserHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -39,6 +42,12 @@ public class RegisterService {
     private MedicineScheduleRepository medicineScheduleRepository;
     @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
+    private DrugBasicRepository drugBasicRepository;
+    @Autowired
+    private OpenapiPharmacyRepository openapiPharmacyRepository;
+    @Autowired
+    private OpenapiHospitalRepository openapiHospitalRepository;
 
 
     public void Register(RegisterDTO registerDTO,  Users users) {
@@ -243,5 +252,18 @@ public class RegisterService {
             return false;
         }
         return true;
+    }
+
+    public List<PillResponseDto> getPills(String itemSeq) {
+        return drugBasicRepository.findByItemNameContainingAsDto(itemSeq, PageRequest.of(0, 10)  // 0번째 페이지, 10개
+        );
+    }
+
+    public List<HospitalResponseDTO> getHospitals(String name) {
+        return openapiHospitalRepository.findByDutyNameContainingAsDto(name, PageRequest.of(0,10));
+    }
+
+    public List<PharmacyResponseDTO> getPharmacies(String name) {
+        return openapiPharmacyRepository.findByDutyNameContainingAsDto(name,PageRequest.of(0,10));
     }
 }
