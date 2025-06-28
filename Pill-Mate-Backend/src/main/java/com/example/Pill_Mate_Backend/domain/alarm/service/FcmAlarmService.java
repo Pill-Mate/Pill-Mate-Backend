@@ -103,7 +103,13 @@ public class FcmAlarmService {
         String title = "약 드실 시간이에요💊";
         String body = "잊지 말고 복약하세요!";
         System.out.println("💊 약 복용 시간!: " + userId);
-        fcmService.sendMessageTo(fcmService.getFcmTokenById(userId),title, body);
+        List<String> userFcmTokens = fcmTokenRepository.findActiveTokensByUserId(userId);
+        if (userFcmTokens != null && !userFcmTokens.isEmpty()) {
+            for (String token : userFcmTokens) {
+                fcmService.sendMessageTo(token, title, body);
+            }
+        }
+        //fcmService.sendMessageTo(fcmService.getFcmTokenById(userId),title, body);
     }
 
     // 이벤트 발생 시 특정 사용자 알람 재설정
@@ -292,10 +298,18 @@ public class FcmAlarmService {
                 System.out.println("알람 실행됨: "+body);
 
                 // 사용자 FCM 토큰 가져오기
+                /*
                 String userFcmToken = fcmTokenRepository.findActiveTokenByUserId(userId);//schedule.getUsers().getFcmTokens()[0].getFcmToken();
                 if (userFcmToken != null) {
                     //fcmService.sendNotification(userFcmToken, title, body);
                     fcmService.sendMessageTo(userFcmToken, title, body);  //fcm알람 보내기,,,,,,
+                }*/
+                //한 계정당 여러 기기 가능하게 변경.....
+                List<String> userFcmTokens = fcmTokenRepository.findActiveTokensByUserId(userId);
+                if (userFcmTokens != null && !userFcmTokens.isEmpty()) {
+                    for (String token : userFcmTokens) {
+                        fcmService.sendMessageTo(token, title, body);
+                    }
                 }
             }
         }
