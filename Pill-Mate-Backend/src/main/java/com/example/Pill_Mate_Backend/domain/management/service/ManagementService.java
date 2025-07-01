@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -49,6 +50,7 @@ public class ManagementService {
     public void sheduleStop(String email, Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         schedule.setStatus(ScheduleStatus.INACTIVATE);
+        schedule.setStopppedDate(LocalDateTime.now());
         scheduleRepository.save(schedule);
     }
 
