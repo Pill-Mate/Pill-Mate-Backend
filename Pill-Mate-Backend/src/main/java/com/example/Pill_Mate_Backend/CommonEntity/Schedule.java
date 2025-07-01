@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -47,6 +48,9 @@ public class Schedule extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean isAlarm;
+
+    @Column
+    private LocalDateTime stopppedDate;
 
     @Enumerated(EnumType.STRING)
     //@Column(nullable = false)// 이거 하면 varchar이 아닌 enum으로 mysql에 저장 되는(타 db와의 연동 문제)
