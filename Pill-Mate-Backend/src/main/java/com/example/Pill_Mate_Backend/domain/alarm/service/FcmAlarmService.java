@@ -1,9 +1,12 @@
 package com.example.Pill_Mate_Backend.domain.alarm.service;
 
 
+import com.example.Pill_Mate_Backend.CommonEntity.Notification;
+import com.example.Pill_Mate_Backend.CommonEntity.NotificationRead;
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
 import com.example.Pill_Mate_Backend.domain.alarm.dto.AlarmScheduleDTO;
 import com.example.Pill_Mate_Backend.domain.alarm.repository.FcmTokenRepository;
+import com.example.Pill_Mate_Backend.domain.alarm.repository.NotificationRepository;
 import com.example.Pill_Mate_Backend.domain.alarm.repository.ScheduleRepository2;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDTO;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
@@ -49,6 +52,8 @@ public class FcmAlarmService {
     private final TaskScheduler taskScheduler;
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     // userId별 현재 등록된 ScheduledFuture 리스트 관리<약물 시간 알람>
     private final Map<Long, List<ScheduledFuture<?>>> userScheduledTasks = new ConcurrentHashMap<>();
@@ -259,7 +264,7 @@ public class FcmAlarmService {
         }
     }*/
 
-    @Scheduled(cron = "0 0 14 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
+    @Scheduled(cron = "0 25 21 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
     public void endDateSendAlarms() throws IOException {
         System.out.println("복용 종료 알람 실행됨");
 
@@ -296,6 +301,16 @@ public class FcmAlarmService {
                 String title = "복약 종료 알림";
                 String body = String.format("'%s'의 복용이 3일 후 종료됩니다.", (String) innerArray[3]);
                 System.out.println("알람 실행됨: "+body);
+
+                //notification에 3일전 알람 데이터 넣기
+                Notification notification = Notification.builder()
+                        .notifyDate(LocalDate.now())
+                        .notifyTime(LocalTime.parse("14:00:00"))
+                        .userIdNoti(userId)
+                        .title(title + ": " + body)
+                        .content("FcmAlarm,no Content")
+                        .build();
+                notificationRepository.save(notification);
 
                 // 사용자 FCM 토큰 가져오기
                 /*

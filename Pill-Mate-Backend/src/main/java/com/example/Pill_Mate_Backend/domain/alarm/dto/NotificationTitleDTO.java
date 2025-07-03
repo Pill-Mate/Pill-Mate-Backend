@@ -17,4 +17,5 @@ public class NotificationTitleDTO {
     private LocalTime notifyTime;
     private String title;
     private boolean notificationRead;
+    private boolean isFcm;
 }
