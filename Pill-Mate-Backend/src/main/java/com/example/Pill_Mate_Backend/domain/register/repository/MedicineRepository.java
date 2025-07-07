@@ -14,8 +14,18 @@ import java.util.Optional;
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
     Medicine findMedicineByIdentifyNumber(String identifyNumber); // 엔티티 반환
     List<Medicine> findAllByIdentifyNumber(String identifyNumber);
-    @Query("SELECT m FROM Medicine m WHERE m.identifyNumber = :identifyNumber AND m.users.email = :email And m.schedule.status = 'ACTIVATE' ")
-    Optional<Medicine> findByIdentifyNumberAndEmail(@Param("identifyNumber") String identifyNumber, @Param("email") String email);
+
+    @Query("""
+    SELECT m
+    FROM Medicine m
+    JOIN m.users u
+    JOIN Schedule s ON s.medicine = m
+    WHERE m.identifyNumber = :identifyNumber
+      AND u.email = :email
+      AND s.status = 'ACTIVATE'
+""")
+    Optional<Medicine> findByIdentifyNumberAndEmail(@Param("identifyNumber") String identifyNumber,
+                                                    @Param("email") String email);
 
     @Query("SELECT m.id FROM Medicine m WHERE m.identifyNumber = :identifyNumber")
     Long findMedicineIdByIdentifyNumber(@Param("identifyNumber") String identifyNumber); // ID 반환

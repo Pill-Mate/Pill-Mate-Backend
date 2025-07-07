@@ -214,7 +214,7 @@ public ApiResponse<List<TabooDto>> UsjntTaboocallapi02 (@RequestParam String ite
             throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
         }
     }
-        return ApiResponse.onSuccess(tabooApiService.tabooSearchWithUser(itemSeq, token));
+        return ApiResponse.onSuccess(tabooApiService.tabooSearchWithUser(itemSeq, email));
 
 
 }
