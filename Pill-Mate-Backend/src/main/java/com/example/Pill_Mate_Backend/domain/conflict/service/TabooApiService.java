@@ -54,7 +54,7 @@ public class TabooApiService {
         for (TabooDto mixtureSeq : mixtureList) {
             if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
 
-                mixtureSeq.setImage(medicineRepository.findMedicineImageByEmail(mixtureSeq.getMixtureItemSeq()));
+                mixtureSeq.setImage(medicineRepository.findMedicineImageByItemSeq(mixtureSeq.getMixtureItemSeq()));
                 userHasList.add(mixtureSeq);
             }
         }

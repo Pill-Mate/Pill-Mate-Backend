@@ -44,8 +44,9 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
 """)
     List<Medicine> findAllByIdentifyNumberInAndUserEmail(@Param("identifyNumbers") Collection<String> identifyNumbers,
                                                          @Param("email") String email);
-    @Query("SELECT m.medicineImage FROM Medicine m WHERE m.users.email = :email")
-    String findMedicineImageByEmail(@Param("email") String email);
+
+    @Query("SELECT m.medicineImage FROM Medicine m WHERE m.identifyNumber = :itemSeq")
+    String findMedicineImageByItemSeq(@Param("itemSeq") String itemSeq);
 
 }
 
