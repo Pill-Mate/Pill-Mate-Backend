@@ -2,13 +2,13 @@ package com.example.Pill_Mate_Backend.domain.conflict.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 @Data
+@Setter
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TabooDto {
     //약물 이름
@@ -27,4 +27,17 @@ public class TabooDto {
     // 약물 회사명
     @JsonProperty("entpName")
     private String entpName;
+
+    //약물 이미지
+    @JsonProperty("image")
+    private String image;
+
+    public TabooDto(String mixItemName, String mixtureItemSeq, String prohbtContent, String className, String entpName) {
+        this.mixItemName = mixItemName;
+        this.mixtureItemSeq = mixtureItemSeq;
+        this.prohbtContent = prohbtContent;
+        this.className = className;
+        this.entpName = entpName;
+        this.image = null;
+    }
 }

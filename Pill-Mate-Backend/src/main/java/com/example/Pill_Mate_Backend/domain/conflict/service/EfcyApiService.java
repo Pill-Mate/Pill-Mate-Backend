@@ -50,14 +50,8 @@ public class EfcyApiService {
             for (EfcyDto dto : itemSeqList) {
                 if (medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).isPresent()) {
                     Medicine medicine = medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).orElseThrow();
-                    efcyDtoList.add(EfcyDto.builder()
-                            .className(medicine.getClassName())
-                            //추후 effectname으로 수정
-                            .effectName(dto.getEffectName())
-                            .entpName(medicine.getEntpName())
-                            .itemName(medicine.getMedicineName())
-                            .itemSeq(dto.getItemSeq())
-                            .build());
+                    dto.setImage(medicine.getMedicineImage().toString());
+                    efcyDtoList.add(dto);
                 }
             }
 
