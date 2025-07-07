@@ -11,6 +11,7 @@ import com.example.Pill_Mate_Backend.domain.conflict.repository.DurTabooReposito
 import com.example.Pill_Mate_Backend.domain.register.repository.HospitalRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.PharmacyRepository;
+import com.example.Pill_Mate_Backend.domain.register.repository.ScheduleRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +52,7 @@ public class TabooApiService {
 
         //사용자가 가지고 있으면 리스트에 추가
         for (TabooDto mixtureSeq : mixtureList) {
-            if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email) != null) {
+            if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
 
                 mixtureSeq.setImage(medicineRepository.findMedicineImageByEmail(mixtureSeq.getMixtureItemSeq()));
                 userHasList.add(mixtureSeq);
