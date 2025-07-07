@@ -52,6 +52,8 @@ public class TabooApiService {
         //사용자가 가지고 있으면 리스트에 추가
         for (TabooDto mixtureSeq : mixtureList) {
             if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email) != null) {
+
+                mixtureSeq.setImage(medicineRepository.findMedicineImageByEmail(mixtureSeq.getMixtureItemSeq()));
                 userHasList.add(mixtureSeq);
             }
         }
