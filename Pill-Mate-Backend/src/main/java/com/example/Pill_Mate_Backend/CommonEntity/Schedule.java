@@ -50,7 +50,7 @@ public class Schedule extends BaseEntity {
     private Boolean isAlarm;
 
     @Column
-    private LocalDateTime stopppedDate;
+    private LocalDateTime stoppedDate;
 
     @Enumerated(EnumType.STRING)
     //@Column(nullable = false)// 이거 하면 varchar이 아닌 enum으로 mysql에 저장 되는(타 db와의 연동 문제)
