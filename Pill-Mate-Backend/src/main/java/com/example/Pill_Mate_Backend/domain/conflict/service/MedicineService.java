@@ -55,7 +55,8 @@ public class MedicineService {
 
         //사용자가 가지고 있으면 리스트에 추가
         for (TabooDto mixtureSeq : mixtureList) {
-            if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email) != null) {
+            if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
+                mixtureSeq.setImage(medicineRepository.findMedicineImageByItemSeq(mixtureSeq.getMixtureItemSeq()));
                 usjntList.add(mixtureSeq);
             }
         }
@@ -70,14 +71,17 @@ public class MedicineService {
             for (EfcyDto dto : itemSeqList) {
                 if (medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).isPresent()) {
                     Medicine medicine = medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).orElseThrow();
-                    efcyList.add(EfcyDto.builder()
+
+                    EfcyDto efcy = EfcyDto.builder()
                             .className(medicine.getClassName())
                             //추후 effectname으로 수정
                             .effectName(dto.getEffectName())
                             .entpName(medicine.getEntpName())
                             .itemName(medicine.getMedicineName())
                             .itemSeq(dto.getItemSeq())
-                            .build());
+                            .build();
+                    efcy.setImage(medicine.getMedicineImage().toString());
+                    efcyList.add(efcy);
                 }
             }
 

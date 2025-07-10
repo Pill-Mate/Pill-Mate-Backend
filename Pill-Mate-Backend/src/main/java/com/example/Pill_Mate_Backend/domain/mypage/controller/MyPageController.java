@@ -7,6 +7,7 @@ import com.example.Pill_Mate_Backend.domain.mypage.service.MyPageService;
 import com.example.Pill_Mate_Backend.domain.mypage.service.RoutineService;
 import com.example.Pill_Mate_Backend.domain.oauth2.controller.AuthController;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
+import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class MyPageController {
     private FcmAlarmService fcmAlarmService;
 
     @GetMapping("/mypagereturn")
-    public MyPageDTO getmyPageData(@RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<MyPageDTO>> getmyPageData(@RequestHeader(value = "Authorization", required = true) String token) {
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
             String jwtToken = token.substring(7);
@@ -45,11 +46,11 @@ public class MyPageController {
             }
         }
         MyPageDTO myPageDTO = myPageService.getMyPageByEmail(email);
-        return myPageDTO;
+        return ResponseEntity.ok(ApiResponse.onSuccess(myPageDTO));
     }
 
     @GetMapping("/routinedata")
-    public RoutineDTO getRoutineData(@RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<RoutineDTO>> getRoutineData(@RequestHeader(value = "Authorization", required = true) String token) {
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
             String jwtToken = token.substring(7);
@@ -63,11 +64,11 @@ public class MyPageController {
         }
         RoutineDTO routineDTO = routineService.getRoutineByEmail(email);
 
-        return routineDTO;
+        return ResponseEntity.ok(ApiResponse.onSuccess(routineDTO)) ;
     }
 
     @PatchMapping("/routineupdate")
-    public ResponseEntity<String> routineUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody RoutineDTO routineDTO) {
+    public ResponseEntity<ApiResponse<String>> routineUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody RoutineDTO routineDTO) {
         System.out.print(routineDTO);
 
         String email = "";
@@ -83,20 +84,20 @@ public class MyPageController {
         }
 
         if (routineDTO == null) {
-            return ResponseEntity.badRequest().body("Invalid or empty request body");
+            return ResponseEntity.badRequest().body(ApiResponse.onFailure("Invalid or empty request body"));
         }
 
         try {
             routineService.routineUpdate(routineDTO, email);
             //알람 업데이트
             fcmAlarmService.resetAlarmTrigger(email);
-            return ResponseEntity.ok("Routine updated successfully.");
+            return ResponseEntity.ok(ApiResponse.onSuccess("Routine updated successfully."));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(ApiResponse.onFailure(e.getMessage()));
         }
     }
     @PatchMapping("/alarmupdate/marketing")
-    public ResponseEntity<String> alarmMarketingUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmMarketingDTO alarmMarketingDTO) {
+    public ResponseEntity<ApiResponse<String>> alarmMarketingUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmMarketingDTO alarmMarketingDTO) {
         System.out.print(alarmMarketingDTO);
 
         String email = "";
@@ -112,18 +113,18 @@ public class MyPageController {
         }
 
         if (alarmMarketingDTO == null) {
-            return ResponseEntity.badRequest().body("Invalid or empty request body");
+            return ResponseEntity.badRequest().body(ApiResponse.onFailure("Invalid or empty request body"));
         }
 
         try {
             alarmService.alarmMarketingUpdate(alarmMarketingDTO, email);
-            return ResponseEntity.ok("Alarm updated successfully.");
+            return ResponseEntity.ok(ApiResponse.onSuccess("Alarm updated successfully."));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(ApiResponse.onFailure(e.getMessage()));
         }
     }
     @PatchMapping("/alarmupdate/information")
-    public ResponseEntity<String> alarmInfoUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmInfoDTO alarmInfoDTO) {
+    public ResponseEntity<ApiResponse<String>> alarmInfoUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmInfoDTO alarmInfoDTO) {
         System.out.print(alarmInfoDTO);
 
         String email = "";
@@ -139,16 +140,16 @@ public class MyPageController {
         }
 
         if (alarmInfoDTO == null) {
-            return ResponseEntity.badRequest().body("Invalid or empty request body");
+            return ResponseEntity.badRequest().body(ApiResponse.onSuccess("Invalid or empty request body"));
         }
 
         try {
             alarmService.alarmInfoUpdate(alarmInfoDTO, email);
             //알람 업데이트
             fcmAlarmService.resetAlarmTrigger(email);
-            return ResponseEntity.ok("Alarm updated successfully.");
+            return ResponseEntity.ok(ApiResponse.onFailure("Alarm updated successfully."));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(ApiResponse.onFailure(e.getMessage()));
         }
     }
 }

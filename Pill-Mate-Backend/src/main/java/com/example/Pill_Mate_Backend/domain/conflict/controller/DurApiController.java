@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
@@ -55,7 +56,7 @@ public class DurApiController {
 
     @Operation(summary = "전체 약물 충돌 검사", description = "itemSeq 기반으로 DUR 병용금기/효능군 중복, 서버 내 내 약물과의 충돌 여부를 모두 검사")
     @GetMapping("/check-conflict")
-    public ApiResponse<AllConflictResponse> checkConflictAll(
+    public ResponseEntity<ApiResponse<AllConflictResponse>> checkConflictAll(
             @RequestParam String itemSeq,
             @RequestHeader(value = "Authorization", required = true) String token) {
 
@@ -69,7 +70,7 @@ public class DurApiController {
             }
         }
 
-        return ApiResponse.onSuccess(medicineService.checkAllConflicts(itemSeq, email));
+        return ResponseEntity.ok(ApiResponse.onSuccess(medicineService.checkAllConflicts(itemSeq, email)));
     }
 
 
@@ -165,16 +166,16 @@ public class DurApiController {
 
     @Operation(summary = "약국 병원 이름 주소 전화번호 ", description = "약국 병원 이름 주소 전화번호 리턴")
     @GetMapping("get-phone-address")
-    public ApiResponse<PhoneAddresses> getPhoneNumber(@RequestParam String itemSeq) throws IOException {
+    public ResponseEntity<ApiResponse<PhoneAddresses>> getPhoneNumber(@RequestParam String itemSeq) throws IOException {
 
         PhoneAddresses phoneAddresses = tabooApiService.getPhoneAddresses(itemSeq);
-        return ApiResponse.onSuccess(phoneAddresses);
+        return ResponseEntity.ok(ApiResponse.onSuccess(phoneAddresses));
 
 
     }
 
     @DeleteMapping("/conflict-remove")
-    public ApiResponse<Void> deleteConflict(@RequestHeader(value = "Authorization", required = true) String token,
+    public ResponseEntity<ApiResponse<Void>> deleteConflict(@RequestHeader(value = "Authorization", required = true) String token,
                                          @RequestParam String itemSeq) throws IOException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -192,7 +193,7 @@ public class DurApiController {
 
         //충돌 실제 약물 넣어놓을 시에 추가
         tabooApiService.delete(itemSeq);
-            return ApiResponse.onSuccess(null);
+            return ResponseEntity.ok(ApiResponse.onSuccess(null));
         }
 
 
@@ -200,7 +201,7 @@ public class DurApiController {
 // 병용금기02
 @Operation(summary = "병용금기02", description = "헤더의 itemSeq약물 번호로 해당 약물의 병용금기 약물 리턴")
 @GetMapping("/usjnt-taboo02")
-public ApiResponse<List<TabooDto>> UsjntTaboocallapi02 (@RequestParam String itemSeq,
+public ResponseEntity<ApiResponse<List<TabooDto>>> UsjntTaboocallapi02 (@RequestParam String itemSeq,
                                                         @RequestHeader(value = "Authorization", required = true) String token) throws IOException {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     String email = "";
@@ -214,14 +215,14 @@ public ApiResponse<List<TabooDto>> UsjntTaboocallapi02 (@RequestParam String ite
             throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
         }
     }
-        return ApiResponse.onSuccess(tabooApiService.tabooSearchWithUser(itemSeq, token));
+        return ResponseEntity.ok(ApiResponse.onSuccess(tabooApiService.tabooSearchWithUser(itemSeq, email)));
 
 
 }
 //효능군 중복 02
 @Operation(summary = "효능군 중복02", description = "헤더의 itemSeq약물 번호로 해당 약물의 효능군 중복 약물 리턴")
 @GetMapping("/efcy-dplct02")
-public ApiResponse<List<EfcyDto>> EfcyDplctcallapi02 (@RequestParam String itemSeq,
+public ResponseEntity<ApiResponse<List<EfcyDto>>> EfcyDplctcallapi02 (@RequestParam String itemSeq,
                                                       @RequestHeader(value = "Authorization", required = true) String token) throws IOException {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     String email = "";
@@ -235,7 +236,7 @@ public ApiResponse<List<EfcyDto>> EfcyDplctcallapi02 (@RequestParam String itemS
             throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
         }
     }
-    return ApiResponse.onSuccess(efcyApiService.efcySearchWithUser(itemSeq,email));
+    return ResponseEntity.ok(ApiResponse.onSuccess(efcyApiService.efcySearchWithUser(itemSeq,email)));
 
 
 

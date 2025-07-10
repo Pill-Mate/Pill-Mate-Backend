@@ -8,14 +8,15 @@ import com.example.Pill_Mate_Backend.domain.check.service.HomeService;
 import com.example.Pill_Mate_Backend.domain.check.service.MedicineCheckService;
 import com.example.Pill_Mate_Backend.domain.oauth2.controller.AuthController;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
+import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
+import com.google.protobuf.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
@@ -43,7 +44,7 @@ public class CheckController {
 
     @SneakyThrows
     @PatchMapping("/medicinecheck")
-    public ResponseDTO updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<ResponseDTO>> updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
         System.out.println(medicineCheckList);
         if (medicineCheckList == null || medicineCheckList.isEmpty()) {
             logger.info("Invalid or empty request body");
@@ -91,7 +92,7 @@ public class CheckController {
         boolean notificationRead = notificationService.getNotificationRead(email);
 
         // Return response entity
-        return ResponseDTO.builder()
+        return ResponseEntity.ok(ApiResponse.onSuccess(ResponseDTO.builder()
                 .medicineList(medicineList)
                 .sunday(weekCount.getSunday())
                 .monday(weekCount.getMonday())
@@ -103,12 +104,12 @@ public class CheckController {
                 .countAll(weekCount.getCountAll())
                 .countLeft(weekCount.getCountLeft())
                 .notificationRead(notificationRead)
-                .build();
+                .build()));
     }
 
     @SneakyThrows
     @PostMapping("/scheduledata")
-    public ResponseDTO getMedicineSchedulesByDate(@RequestBody(required = false) ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<ResponseDTO>> getMedicineSchedulesByDate(@RequestBody(required = false) ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
@@ -137,7 +138,7 @@ public class CheckController {
         boolean notificationRead = notificationService.getNotificationRead(email);
 
         // Return response entity
-        return ResponseDTO.builder()
+        return ResponseEntity.ok(ApiResponse.onSuccess(ResponseDTO.builder()
                 .medicineList(medicineList)
                 .sunday(weekCount.getSunday())
                 .monday(weekCount.getMonday())
@@ -149,12 +150,12 @@ public class CheckController {
                 .countAll(weekCount.getCountAll())
                 .countLeft(weekCount.getCountLeft())
                 .notificationRead(notificationRead)
-                .build();
+                .build()));
     }
 
     @SneakyThrows
     @PostMapping("/weekscroll")
-    public WeekDTO getWeekDateByDate(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<WeekDTO>> getWeekDateByDate(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
@@ -179,12 +180,12 @@ public class CheckController {
         WeekDTO weekData = homeService.getWeekByDate(email, mydate);
         System.out.print(homeService.getWeekByDate(email, mydate));
 
-        return weekData;
+        return ResponseEntity.ok(ApiResponse.onSuccess(weekData));
     }
 
     @PostMapping("/clickmedicine")
-    public MedicineDetailDTO getMedicineDetail(@RequestBody ClickMedicineDTO clickMedicineDTO){
+    public ResponseEntity<ApiResponse<MedicineDetailDTO>> getMedicineDetail(@RequestBody ClickMedicineDTO clickMedicineDTO){
         System.out.print(clickMedicineDTO);
-        return clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getMedicineScheduleId());
+        return  ResponseEntity.ok(ApiResponse.onSuccess(clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getMedicineScheduleId())));
     }
 }
