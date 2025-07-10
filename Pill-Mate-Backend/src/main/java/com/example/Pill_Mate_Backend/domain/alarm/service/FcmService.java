@@ -125,9 +125,9 @@ public class FcmService {
 
     public void registerToken(Users user, String token) {
         // 기존 토큰이 있다면 토큰 삭제---> 일단 인당 fcmToken 하나만 생성할수 있도록,,
-        if(fcmTokenRepository.findActiveTokensByUserId(user.getId()) != null){
-            fcmTokenRepository.deleteByUserId(user.getId());
-        }
+        //if(fcmTokenRepository.findActiveTokensByUserId(user.getId()) != null){
+        //    fcmTokenRepository.deleteByUserId(user.getId());
+        //}
 
 
         // 새 토큰 등록
@@ -156,6 +156,10 @@ public class FcmService {
     }
     public String getFcmTokenById(Long userId) {
         String tokenList =  fcmTokenRepository.findActiveTokenByUserId(userId);
+        return tokenList;
+    }
+    public List<String> getFcmTokensById(Long userId) {
+        List<String> tokenList =  fcmTokenRepository.findActiveTokensByUserId(userId);
         return tokenList;
     }
     /*

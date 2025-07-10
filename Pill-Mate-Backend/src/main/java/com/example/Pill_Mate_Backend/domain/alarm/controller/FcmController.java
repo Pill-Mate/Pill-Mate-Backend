@@ -1,6 +1,5 @@
 package com.example.Pill_Mate_Backend.domain.alarm.controller;
 
-import com.example.Pill_Mate_Backend.CommonEntity.Notification;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
 import com.example.Pill_Mate_Backend.domain.alarm.dto.*;
 import com.example.Pill_Mate_Backend.domain.alarm.repository.FcmTokenRepository;

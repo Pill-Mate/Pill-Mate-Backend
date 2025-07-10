@@ -50,7 +50,7 @@ public class ManagementService {
     public void sheduleStop(String email, Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         schedule.setStatus(ScheduleStatus.INACTIVATE);
-        schedule.setStopppedDate(LocalDateTime.now());
+        schedule.setStoppedDate(LocalDateTime.now());
         scheduleRepository.save(schedule);
     }
 

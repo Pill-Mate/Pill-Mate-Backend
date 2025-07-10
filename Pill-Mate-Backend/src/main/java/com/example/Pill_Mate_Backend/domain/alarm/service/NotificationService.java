@@ -37,12 +37,18 @@ public class NotificationService {
         List<NotificationTitleDTO> notificationTitleDTOS = new ArrayList<> ();
 
         for(Notification noti : notifications){
+            //noti의 userIdNoti가 0(공지)가 아닐때 true.
+            boolean isFcm = false;
+            if (noti.getUserIdNoti() != 0)
+                isFcm = true;
+
             NotificationTitleDTO dto = new NotificationTitleDTO(
                     noti.getId(),
                     noti.getNotifyDate(),
                     noti.getNotifyTime(),
                     noti.getTitle(),
-                    notificationReadRepository.existsByNotificationIdAndUsersId(noti.getId(), (Long)usersRepository.getIdByEmail(email)[0])
+                    notificationReadRepository.existsByNotificationIdAndUsersId(noti.getId(), (Long)usersRepository.getIdByEmail(email)[0]),
+                    isFcm
             );
             notificationTitleDTOS.add(dto);
         }
