@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -35,20 +36,15 @@ public class RegisterController {
     private FcmAlarmService fcmAlarmService;
 
     @PostMapping("/test")
-    public ApiResponse test(@RequestBody RegisterDTO registerDTO) {
-        try {
+    public ResponseEntity<ApiResponse<String>> test(@RequestBody RegisterDTO registerDTO) {
             log.info(registerDTO.toString());
-            return ApiResponse.onSuccess("약물등록 성공");
-        } catch (Exception e) {
-            //나중에 responseBody 추가
-            return ApiResponse.onFailure("약물등록 실패");
+            return ResponseEntity.ok(ApiResponse.onSuccess("약물등록 성공"));
 
-        }
     }
 
     @Operation(summary = "약물등록", description = "사용자가 등록한 약물을 저장하는 api")
     @PostMapping("/register")
-    public ApiResponse<Void> medicineRegister(@RequestHeader(value = "Authorization", required = true) String token,
+    public ResponseEntity<ApiResponse<Void>> medicineRegister(@RequestHeader(value = "Authorization", required = true) String token,
                                            @RequestBody RegisterDTO registerDTO
                                            ) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -90,13 +86,13 @@ public class RegisterController {
             //알람 업데이트
             fcmAlarmService.resetAlarmTrigger(email);
 
-            return ApiResponse.onSuccess(null);
+            return ResponseEntity.ok(ApiResponse.onSuccess(null));
 
     }
 
     @Operation(summary = "온보딩", description = "온보딩 시에 사용자의 아침, 점심, 저녁 설정 시간과 마케팅 알림 동의 여부 출력")
     @GetMapping("onboarding")
-    public ApiResponse<OnboardingDTO> onboarding( @RequestHeader(value = "Authorization", required = true) String token
+    public ResponseEntity<ApiResponse<OnboardingDTO>> onboarding( @RequestHeader(value = "Authorization", required = true) String token
     ) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
@@ -127,12 +123,12 @@ public class RegisterController {
             log.info(onboardingDTO.toString());
             //log.info(users.toString());
 
-            return ApiResponse.onSuccess(onboardingDTO);
+            return ResponseEntity.ok(ApiResponse.onSuccess(onboardingDTO));
 
     }
     @Operation(summary = "약물 개수 확인" , description = "현재 날짜를 기준으로 복용중인 약물의 개수가 4개 이상인지 확인 -> 5개 부터 경고")
     @GetMapping("/pill-count-check")
-    public ApiResponse<Boolean> getPillCounts( @RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<Boolean>> getPillCounts( @RequestHeader(value = "Authorization", required = true) String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
@@ -146,30 +142,30 @@ public class RegisterController {
             }
 
         }
-        return ApiResponse.onSuccess(registerService.getPillCounts(email));
+        return ResponseEntity.ok(ApiResponse.onSuccess(registerService.getPillCounts(email)));
     }
 
     @Operation(summary = "약물 이름 검색", description = "약물을 이름으로(포함) 검색해서 보여줍니다.")
     @GetMapping("/search")
-    public ApiResponse<List<PillResponseDto>> getPill (@RequestHeader(value = "Authorization", required = true) String token,
+    public ResponseEntity<ApiResponse<List<PillResponseDto>>> getPill (@RequestHeader(value = "Authorization", required = true) String token,
                                                        @RequestParam String itemName) {
-        return ApiResponse.onSuccess(registerService.getPills(itemName));
+        return ResponseEntity.ok(ApiResponse.onSuccess(registerService.getPills(itemName)));
 
     }
 
     @Operation(summary = "약국 이름 검색", description = "약국을 이름으로(포함) 검색해서 보여줍니다.")
     @GetMapping("/search/pharmacy")
-    public ApiResponse<List<PharmacyResponseDTO>> getPharmacyList (@RequestHeader(value = "Authorization", required = true) String token,
+    public ResponseEntity<ApiResponse<List<PharmacyResponseDTO>>> getPharmacyList (@RequestHeader(value = "Authorization", required = true) String token,
                                                            @RequestParam String name) {
-        return ApiResponse.onSuccess(registerService.getPharmacies(name));
+        return ResponseEntity.ok(ApiResponse.onSuccess(registerService.getPharmacies(name)));
 
     }
 
     @Operation(summary = "병원 이름 검색", description = "약국을 이름으로(포함) 검색해서 보여줍니다.")
     @GetMapping("/search/hospital")
-    public ApiResponse<List<HospitalResponseDTO>> getHospitalList (@RequestHeader(value = "Authorization", required = true) String token,
+    public ResponseEntity<ApiResponse<List<HospitalResponseDTO>>> getHospitalList (@RequestHeader(value = "Authorization", required = true) String token,
                                                                    @RequestParam String name) {
-        return ApiResponse.onSuccess(registerService.getHospitals(name));
+        return ResponseEntity.ok(ApiResponse.onSuccess(registerService.getHospitals(name)));
 
     }
 

@@ -14,6 +14,7 @@ import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.KakaoService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.OnboardingService;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
+import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,7 +50,7 @@ public class AuthController {
 
     // 프론트에서 인가코드를 받으면 이 엔드포인트가 호출됨
     @PostMapping("/signup")
-    public SignUpDTO kakaoLogin(
+    public ResponseEntity<ApiResponse<SignUpDTO>> kakaoLogin(
                                                           @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
                                                           @RequestBody KakaoSignUpDTO kakaoSignUpDto,
                                                           HttpSession session) throws IOException {
@@ -94,11 +95,12 @@ public class AuthController {
                 //response.put("jwtToken", jwtToken);
                 //response.put("refreshToken", refreshToken);
                 //response.put("login",false);
-                return SignUpDTO.builder()
+                return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
                         .login(false)
                         .refreshToken(refreshToken)
-                        .jwtToken(jwtToken).build();
+                        .jwtToken(jwtToken).build()));
             }
+
             //fcmToken이 새거 일 시(새 디바이스로 로그인 했을 시)
             //List<String> fcmTokens;
             //fcmTokens = fcmTokenRepository2.findFcmTokenByEmail((userInfo.getEmail()));
@@ -130,10 +132,10 @@ public class AuthController {
             //response.put("jwtToken", jwtToken);
             //response.put("refreshToken", refreshToken);
             //response.put("login",true);
-            return SignUpDTO.builder()
+            return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
                     .login(true)
                     .refreshToken(refreshToken)
-                    .jwtToken(jwtToken).build();
+                    .jwtToken(jwtToken).build()));
         }
 
 
@@ -165,15 +167,14 @@ public class AuthController {
         //response.put("refreshToken", refreshToken);
         //response.put("login",false);
 
-        return SignUpDTO.builder()
+        return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
                 .login(false)
                 .refreshToken(refreshToken)
-                .jwtToken(jwtToken).build();
-        //return ResponseEntity.ok(response);
+                .jwtToken(jwtToken).build()));
     }
 
     @PostMapping("/onboarding")
-    public ResponseEntity<String> onboarding(@RequestBody OnboardingDTO onboardingDTO, @RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<String>> onboarding(@RequestBody OnboardingDTO onboardingDTO, @RequestHeader(value = "Authorization", required = true) String token) {
 
         logger.info("Received Authorization Header: {}", token);//로그 확인
         logger.info("Request Body: {}", onboardingDTO);
@@ -184,24 +185,23 @@ public class AuthController {
                 String email = jwtService.extractEmail(jwtToken);
                 onboardingService.setUserInfo(email, onboardingDTO.getWakeupTime(), onboardingDTO.getBedTime(), onboardingDTO.getMorningTime(), onboardingDTO.getLunchTime(), onboardingDTO.getDinnerTime(), onboardingDTO.getAlarmMarketing(), onboardingDTO.getAlarmInfo());
             } else {
-                //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT");
                 throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
         // 로직 처리 후 응답 반환
-        return ResponseEntity.ok("Onboarding success");
+        return ResponseEntity.ok(ApiResponse.onSuccess("Onboarding success"));
     }
 
     //밑은 아직 ing
     @PostMapping("/logout")
-    public String logout(HttpSession session) {
+    public ResponseEntity<ApiResponse<String>> logout(HttpSession session) {
         String accessToken = (String) session.getAttribute("kakaoToken");
 
         if(accessToken != null && !"".equals(accessToken)){
             try {
                 kakaoService.kakaoDisconnect(accessToken);
             } catch (JsonProcessingException e) {
-                return String.valueOf(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Logout failed"));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.onFailure("Logout failed"));
             }
             session.removeAttribute("kakaoToken");
             session.removeAttribute("loginMember");
@@ -209,28 +209,28 @@ public class AuthController {
         }else{
             System.out.println("accessToken is null");
         }
-        return "redirect:/";
+        return ResponseEntity.ok(ApiResponse.onSuccess("redirect:/"));
     }
 
     // 카카오 회원탈퇴
     @PostMapping("/signout")
-    public ResponseEntity<String> unlink(@RequestHeader("Authorization") String jwtToken, @RequestBody KakaoSignOutDTO kakaoSignUpDto) {
+    public ResponseEntity<ApiResponse<String>> unlink(@RequestHeader("Authorization") String jwtToken, @RequestBody KakaoSignOutDTO kakaoSignUpDto) {
         String kakaoToken = kakaoSignUpDto.getKakaoAccessToken();
         String email = jwtService.extractEmail(jwtToken.substring(7)); // Bearer 제거 후 파싱
         kakaoService.kakaoUnlink(kakaoToken); //카카오에서 연결 해제
         kakaoService.deleteUser(email); //우리 db에서 회원정보 삭제
-        return ResponseEntity.ok("회원정보 삭제 완료");
+        return ResponseEntity.ok(ApiResponse.onSuccess("회원정보 삭제 완료"));
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<JwtTokenDto> reissue(@RequestBody JwtTokenDto tokenRequestDto) {
-        return ResponseEntity.ok(kakaoService.reissue(tokenRequestDto));
+    public ResponseEntity<ApiResponse<JwtTokenDto>> reissue(@RequestBody JwtTokenDto tokenRequestDto) {
+        return ResponseEntity.ok(ApiResponse.onSuccess(kakaoService.reissue(tokenRequestDto)));
     }
 
     // Exception Handler
     @ExceptionHandler(OnboardingService.UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(OnboardingService.UserNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    public ResponseEntity<ApiResponse<String>> handleUserNotFoundException(OnboardingService.UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.onFailure(ex.getMessage()));
     }
 
 }

@@ -13,6 +13,7 @@ import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -35,29 +36,30 @@ public class FcmController {
     private final UsersRepository usersRepository;
     // 1. client가 server로 알림 생성 요청
     @PostMapping("/pushMessage")
-    public ApiResponse<String> pushMessage(@RequestBody FcmRequestDTO requestDTO) throws IOException {
+    public ResponseEntity<ApiResponse<String>> pushMessage(@RequestBody FcmRequestDTO requestDTO) throws IOException {
         System.out.println(requestDTO.getDeviceToken() + " "
                 +requestDTO.getTitle() + " " + requestDTO.getBody());
         fcmService.sendMessageTo(
                 requestDTO.getDeviceToken(),
                 requestDTO.getTitle(),
                 requestDTO.getBody());
-        return ApiResponse.onSuccess("FCM_SEND_SUCCESS");//SuccessCode.FCM_SEND_SUCCESS, "fcm alarm success");
+        return ResponseEntity.ok(ApiResponse.onSuccess("FCM_SEND_SUCCESS"));//SuccessCode.FCM_SEND_SUCCESS, "fcm alarm success");
     }
 
     @PostMapping("/send")
-    public String sendFcm(@RequestParam String token, @RequestParam String title, @RequestParam String body) {
+    public ResponseEntity<ApiResponse<String>> sendFcm(@RequestParam String token, @RequestParam String title, @RequestParam String body) {
         try {
             fcmService.sendMessageTo(token, title, body);
-            return "✅ FCM 알림 전송 성공!";
+            return ResponseEntity.ok(ApiResponse.onSuccess("✅ FCM 알림 전송 성공!")) ;
         } catch (IOException e) {
             e.printStackTrace();
-            return "❌ FCM 알림 전송 실패: " + e.getMessage();
+            return ResponseEntity.internalServerError()
+                    .body(ApiResponse.onFailure("❌ FCM 알림 전송 실패: "+ e.getMessage() ));
         }
     }
 
     @GetMapping("/notification")
-    public List<NotificationTitleDTO> sendAllNotification(@RequestHeader(value = "Authorization", required = true) String token){
+    public ResponseEntity<ApiResponse<List<NotificationTitleDTO>>> sendAllNotification(@RequestHeader(value = "Authorization", required = true) String token){
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
             String jwtToken = token.substring(7);
@@ -71,11 +73,11 @@ public class FcmController {
         }
 
         System.out.println("공지 전체 내용 전송 완료");
-        return notificationService.getAllNotification(email);
+        return ResponseEntity.ok(ApiResponse.onSuccess(notificationService.getAllNotification(email)));
     }
 
     @PostMapping("/notificationDetail")
-    public NotificationDTO sendNotificationDetail(@RequestBody NotificationIdDTO notificationId,@RequestHeader(value = "Authorization", required = true) String token){
+    public ResponseEntity<ApiResponse<NotificationDTO>> sendNotificationDetail(@RequestBody NotificationIdDTO notificationId, @RequestHeader(value = "Authorization", required = true) String token){
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
             String jwtToken = token.substring(7);
@@ -89,10 +91,10 @@ public class FcmController {
         }
 
         System.out.println("공지 디테일 전송 완료");
-        return notificationService.getNotificationDetail(notificationId.getNotificationId(),email);
+        return ResponseEntity.ok(ApiResponse.onSuccess(notificationService.getNotificationDetail(notificationId.getNotificationId(),email)));
     }
     @PostMapping("/registerFcmToken")
-    public ApiResponse<String> regesterFcmToken(@RequestBody RegisterFcmTokenDTO registerFcmTokenDTO, @RequestHeader(value = "Authorization", required = true) String token){
+    public ResponseEntity<ApiResponse<String>> regesterFcmToken(@RequestBody RegisterFcmTokenDTO registerFcmTokenDTO, @RequestHeader(value = "Authorization", required = true) String token){
         String email;
         if (token != null && token.startsWith("Bearer ")) {
             String jwtToken = token.substring(7);
@@ -119,6 +121,6 @@ public class FcmController {
             System.out.println("fcm토큰 새로 등록");
             fcmService.registerToken(users, registerFcmTokenDTO.getFcmToken());
         }
-        return ApiResponse.onSuccess("FCM_REGISTER_SUCCESS");
+        return ResponseEntity.ok(ApiResponse.onSuccess("FCM_REGISTER_SUCCESS"));
     }
 }
