@@ -92,7 +92,7 @@ public class RegisterService {
     }
     public Schedule CreateSchedule(RegisterDTO registerDTO, Users users, Medicine medicine
     ) {
-        Optional<Schedule> existingSchedule = scheduleRepository.findByUsersAndMedicine(users, medicine);
+        Optional<Schedule> existingSchedule = scheduleRepository.findByUsersAndMedicineAndStatus(users, medicine);
         if (existingSchedule.isPresent()) {
             return existingSchedule.get();
         }

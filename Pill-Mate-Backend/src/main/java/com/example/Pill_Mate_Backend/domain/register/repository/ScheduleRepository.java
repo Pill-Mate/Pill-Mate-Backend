@@ -21,4 +21,9 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
 
     Optional<Schedule> findByUsersAndMedicine(Users users, Medicine medicine);
+
+    @Query("SELECT s FROM Schedule s WHERE s.users = :users AND s.medicine = :medicine AND s.status = 'ACTIVATE'")
+    Optional<Schedule> findByUsersAndMedicineAndStatus(@Param("users") Users users,
+                                                       @Param("medicine") Medicine medicine);
+
 }
