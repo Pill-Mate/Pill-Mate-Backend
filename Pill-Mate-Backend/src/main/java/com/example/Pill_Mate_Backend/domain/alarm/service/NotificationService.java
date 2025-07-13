@@ -40,16 +40,14 @@ public class NotificationService {
 
         for(Notification noti : notifications){
             //noti의 userIdNoti가 0(공지)가 아닐때 true.
-            boolean isFcm = false;
-            if(noti.getUserIdNoti() == 0 ){
-                isFcm = false;
-            }
-            else if (noti.getUserIdNoti() != userId){
+            Long notiUserId = noti.getUserIdNoti();
+
+            // 본인 알림도 아니고 공지도 아니라면 스킵
+            if (notiUserId != 0 && !userId.equals(notiUserId)) {
                 continue;
             }
-            else{
-                isFcm = true;
-            }
+
+            boolean isFcm = notiUserId != 0;
 
             NotificationTitleDTO dto = new NotificationTitleDTO(
                     noti.getId(),

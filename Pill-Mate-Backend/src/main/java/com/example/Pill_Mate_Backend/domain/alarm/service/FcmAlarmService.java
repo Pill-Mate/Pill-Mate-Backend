@@ -307,7 +307,7 @@ public class FcmAlarmService {
                         .notifyDate(LocalDate.now())
                         .notifyTime(LocalTime.parse("14:00:00"))
                         .userIdNoti(userId)
-                        .title(title + ": " + body)
+                        .title(title + " - " + body)
                         .content("FcmAlarm,no Content")
                         .build();
                 notificationRepository.save(notification);
