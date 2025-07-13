@@ -37,6 +37,7 @@ public class NotificationService {
         List<NotificationTitleDTO> notificationTitleDTOS = new ArrayList<> ();
 
         Long userId = (Long) usersRepository.getIdByEmail(email)[0];
+        System.out.println("현재 로그인한 유저 ID: " + userId);
 
         for(Notification noti : notifications){
             //noti의 userIdNoti가 0(공지)가 아닐때 true.
