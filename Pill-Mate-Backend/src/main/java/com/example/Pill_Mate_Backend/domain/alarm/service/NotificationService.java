@@ -37,7 +37,6 @@ public class NotificationService {
         List<NotificationTitleDTO> notificationTitleDTOS = new ArrayList<> ();
 
         Long userId = (Long) usersRepository.getIdByEmail(email)[0];
-        System.out.println("현재 로그인한 유저 ID: " + userId);
 
         for(Notification noti : notifications){
             //noti의 userIdNoti가 0(공지)가 아닐때 true.
@@ -98,10 +97,11 @@ public class NotificationService {
     }
 
     public boolean getNotificationRead(String email){
-        Long countUnread = notificationRepository.countUnreadByUserId(email);
-        boolean result;
-        if  (countUnread>0) result = false; //안 읽은게 있음
-        else result = true; //다 읽음
-        return result;
+        Long userId = (Long) usersRepository.getIdByEmail(email)[0];
+
+        // 공지 또는 본인 알림 중에서 읽지 않은 알림 개수 조회
+        Long countUnread = notificationReadRepository.countUnreadByUserIdOrPublic(userId);
+
+        return countUnread == 0;
     }
 }
