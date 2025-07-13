@@ -23,4 +23,5 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
         )
     """)
     long countUnreadByUserId(@Param("email") String email);
+
 }

@@ -97,10 +97,11 @@ public class NotificationService {
     }
 
     public boolean getNotificationRead(String email){
-        Long countUnread = notificationRepository.countUnreadByUserId(email);
-        boolean result;
-        if  (countUnread>0) result = false; //안 읽은게 있음
-        else result = true; //다 읽음
-        return result;
+        Long userId = (Long) usersRepository.getIdByEmail(email)[0];
+
+        // 공지 또는 본인 알림 중에서 읽지 않은 알림 개수 조회
+        Long countUnread = notificationReadRepository.countUnreadByUserIdOrPublic(userId);
+
+        return countUnread == 0;
     }
 }
