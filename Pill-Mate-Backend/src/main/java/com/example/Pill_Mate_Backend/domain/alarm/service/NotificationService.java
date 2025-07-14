@@ -65,7 +65,7 @@ public class NotificationService {
                 //fcm 알람은 미리 읽음 처리 해버리기.
                 // 기존 읽음 기록 있는지 확인
                 Optional<NotificationRead> existingRead = notificationReadRepository
-                        .findByNotificationIdAndUsersId(userId, user.getId());
+                        .findByNotificationIdAndUsersId(noti.getId(), userId);
 
                 if (existingRead.isPresent()) {
                     // 이미 읽은 기록이 있으면 readAt만 업데이트

@@ -8,6 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "notification_read", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"notification_id", "user_id"})
+})//noti_id, user_ID 중복 저장 시도 시 예외 발생 (DataIntegrityViolationException)
 @AllArgsConstructor
 @NoArgsConstructor//(access = AccessLevel.PROTECTED)
 @Builder
