@@ -37,6 +37,8 @@ public class NotificationService {
         List<NotificationTitleDTO> notificationTitleDTOS = new ArrayList<> ();
 
         Long userId = (Long) usersRepository.getIdByEmail(email)[0];
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 존재하지 않습니다."));
 
         for(Notification noti : notifications){
             //noti의 userIdNoti가 0(공지)가 아닐때 true.
@@ -58,6 +60,28 @@ public class NotificationService {
                     isFcm
             );
             notificationTitleDTOS.add(dto);
+
+            if (userId.equals(notiUserId)) {
+                //fcm 알람은 미리 읽음 처리 해버리기.
+                // 기존 읽음 기록 있는지 확인
+                Optional<NotificationRead> existingRead = notificationReadRepository
+                        .findByNotificationIdAndUsersId(userId, user.getId());
+
+                if (existingRead.isPresent()) {
+                    // 이미 읽은 기록이 있으면 readAt만 업데이트
+                    NotificationRead read = existingRead.get();
+                    read.setReadAt(LocalDateTime.now());
+                    notificationReadRepository.save(read);
+                } else {
+                    // 없으면 새로 생성
+                    NotificationRead notificationRead = NotificationRead.builder()
+                            .users(user)
+                            .notification(noti)
+                            .readAt(LocalDateTime.now())
+                            .build();
+                    notificationReadRepository.save(notificationRead);
+                }
+            }
         }
         return notificationTitleDTOS;
     }
