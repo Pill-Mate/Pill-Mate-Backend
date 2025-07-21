@@ -17,7 +17,7 @@ public interface ScheduleRepository2 extends JpaRepository<Schedule, Long> {
             SELECT DISTINCT s.start_date, s.intake_period, s.user_id, m.medicine_name
             FROM schedule s
             JOIN medicine m ON s.medicine_id = m.id
-            WHERE s.is_alarm = true
+            WHERE s.is_alarm = true and status = 'ACTIVATE'
             """, nativeQuery = true)
     List<Object[]> findByIsAlarmTrue();
 
@@ -30,6 +30,7 @@ public interface ScheduleRepository2 extends JpaRepository<Schedule, Long> {
                 and sc.is_alarm = true 
                 and mc.intake_date BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)
                 and u.alarm_info = true
+                and sc.status = 'ACTIVATE'
             """, nativeQuery = true)
     List<Object[]> findNextDayAlarms();
 
@@ -43,6 +44,7 @@ public interface ScheduleRepository2 extends JpaRepository<Schedule, Long> {
                 and mc.intake_date BETWEEN CURRENT_DATE AND DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY) 
                 and u.alarm_info = true 
                 and mc.user_id= :userId
+                and sc.status = 'ACTIVATE'
             """, nativeQuery = true)
     List<Object[]> findNextDayAlarmsById(@Param("userId") Long userId);
 }

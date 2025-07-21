@@ -270,7 +270,7 @@ public class FcmAlarmService {
 
         Date today = new Date(); // 현재 날짜 (시간 포함)
 
-        // isAlarm = true인 스케줄 조회
+        // isAlarm = true, status = ACTIVATE 인 스케줄 조회
         List<Object[]> schedules = scheduleRepository2.findByIsAlarmTrue();
 
         if (schedules.isEmpty()) {
