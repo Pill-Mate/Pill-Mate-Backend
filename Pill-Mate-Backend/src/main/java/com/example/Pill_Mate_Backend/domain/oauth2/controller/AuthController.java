@@ -18,6 +18,7 @@ import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,7 @@ public class AuthController {
     //로그 확인
 
     // 프론트에서 인가코드를 받으면 이 엔드포인트가 호출됨
+    @Operation(summary="카카오 회원가입/로그인", description = "카카오 로그인 및 회원가입 모두 처리")
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<SignUpDTO>> kakaoLogin(
                                                           @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
@@ -172,7 +174,7 @@ public class AuthController {
                 .refreshToken(refreshToken)
                 .jwtToken(jwtToken).build()));
     }
-
+    @Operation(summary="온보딩", description = "온보딩 정보 받아 삽입")
     @PostMapping("/onboarding")
     public ResponseEntity<ApiResponse<String>> onboarding(@RequestBody OnboardingDTO onboardingDTO, @RequestHeader(value = "Authorization", required = true) String token) {
 
@@ -192,7 +194,7 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.onSuccess("Onboarding success"));
     }
 
-    //밑은 아직 ing
+    @Operation(summary="로그아웃", description = "안쓰는중인 로그아웃,, 아마도")
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<String>> logout(HttpSession session) {
         String accessToken = (String) session.getAttribute("kakaoToken");
@@ -213,6 +215,7 @@ public class AuthController {
     }
 
     // 카카오 회원탈퇴
+    @Operation(summary="카카오 회원탈퇴", description = "카카오 회원탈퇴..카카오와 연결 끊기")
     @PostMapping("/signout")
     public ResponseEntity<ApiResponse<String>> unlink(@RequestHeader("Authorization") String jwtToken, @RequestBody KakaoSignOutDTO kakaoSignUpDto) {
         String kakaoToken = kakaoSignUpDto.getKakaoAccessToken();
@@ -221,7 +224,7 @@ public class AuthController {
         kakaoService.deleteUser(email); //우리 db에서 회원정보 삭제
         return ResponseEntity.ok(ApiResponse.onSuccess("회원정보 삭제 완료"));
     }
-
+    @Operation(summary="jwt토큰 검증", description = "jwt 토큰 만료 시 자동 로그인 위한 토큰 검증 - refresh 토큰 있을 시 jwt 발급 후 자동 로그인, 없을 시 재 로그인")
     @PostMapping("/reissue")
     public ResponseEntity<ApiResponse<JwtTokenDto>> reissue(@RequestBody JwtTokenDto tokenRequestDto) {
         return ResponseEntity.ok(ApiResponse.onSuccess(kakaoService.reissue(tokenRequestDto)));

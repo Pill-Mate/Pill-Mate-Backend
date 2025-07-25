@@ -12,6 +12,7 @@ import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.google.protobuf.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class CheckController {
     private FcmAlarmService fcmAlarmService;
     @Autowired
     private NotificationService notificationService;
-
+    @Operation(summary="약물 복용 체크 정보 수정", description = "medicine_schedule 약물 복용 체크시 정보 수정, 그 후 모든 당일 약물 리스트도 전송")
     @SneakyThrows
     @PatchMapping("/medicinecheck")
     public ResponseEntity<ApiResponse<ResponseDTO>> updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
@@ -107,6 +108,7 @@ public class CheckController {
                 .build()));
     }
 
+    @Operation(summary="약물 체크 페이지 정보 전송", description = "특정 날짜 약물 체크 페이지 정보 전송-> 약물 리스트, 월-금 먹은 약물 유무")
     @SneakyThrows
     @PostMapping("/scheduledata")
     public ResponseEntity<ApiResponse<ResponseDTO>> getMedicineSchedulesByDate(@RequestBody(required = false) ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
@@ -152,7 +154,7 @@ public class CheckController {
                 .notificationRead(notificationRead)
                 .build()));
     }
-
+    @Operation(summary="주 스크롤", description = "일주일 스크롤 시 일주 후 체크페이지 정보 리스트 전송")
     @SneakyThrows
     @PostMapping("/weekscroll")
     public ResponseEntity<ApiResponse<WeekDTO>> getWeekDateByDate(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
@@ -182,7 +184,7 @@ public class CheckController {
 
         return ResponseEntity.ok(ApiResponse.onSuccess(weekData));
     }
-
+    @Operation(summary="약물 클릭", description = "약물 클릭 시 약물 상세 정보 전송 >>>>아직 사용X<<<<")
     @PostMapping("/clickmedicine")
     public ResponseEntity<ApiResponse<MedicineDetailDTO>> getMedicineDetail(@RequestBody ClickMedicineDTO clickMedicineDTO){
         System.out.print(clickMedicineDTO);

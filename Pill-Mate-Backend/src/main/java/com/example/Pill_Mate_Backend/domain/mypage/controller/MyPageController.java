@@ -10,6 +10,7 @@ import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ public class MyPageController {
     @Autowired
     private FcmAlarmService fcmAlarmService;
 
+    @Operation(summary="마이페이지 정보", description = "마이페이지 정보 조회")
     @GetMapping("/mypagereturn")
     public ResponseEntity<ApiResponse<MyPageDTO>> getmyPageData(@RequestHeader(value = "Authorization", required = true) String token) {
         String email = "";
@@ -49,6 +51,7 @@ public class MyPageController {
         return ResponseEntity.ok(ApiResponse.onSuccess(myPageDTO));
     }
 
+    @Operation(summary="개인 루틴 조회", description = "개인 루틴 데이터를 조회/전송")
     @GetMapping("/routinedata")
     public ResponseEntity<ApiResponse<RoutineDTO>> getRoutineData(@RequestHeader(value = "Authorization", required = true) String token) {
         String email = "";
@@ -66,7 +69,7 @@ public class MyPageController {
 
         return ResponseEntity.ok(ApiResponse.onSuccess(routineDTO)) ;
     }
-
+    @Operation(summary="루틴 정보 수정", description = "개인 루틴 정보를 수정")
     @PatchMapping("/routineupdate")
     public ResponseEntity<ApiResponse<String>> routineUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody RoutineDTO routineDTO) {
         System.out.print(routineDTO);
@@ -96,6 +99,7 @@ public class MyPageController {
             return ResponseEntity.badRequest().body(ApiResponse.onFailure(e.getMessage()));
         }
     }
+    @Operation(summary="미케팅 알람 수정", description = "마케팅 알람 정보 수정")
     @PatchMapping("/alarmupdate/marketing")
     public ResponseEntity<ApiResponse<String>> alarmMarketingUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmMarketingDTO alarmMarketingDTO) {
         System.out.print(alarmMarketingDTO);
@@ -123,6 +127,7 @@ public class MyPageController {
             return ResponseEntity.badRequest().body(ApiResponse.onFailure(e.getMessage()));
         }
     }
+    @Operation(summary="info알람 데이터 수정", description = "information 알람 데이터를 수정")
     @PatchMapping("/alarmupdate/information")
     public ResponseEntity<ApiResponse<String>> alarmInfoUpdate(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody AlarmInfoDTO alarmInfoDTO) {
         System.out.print(alarmInfoDTO);
