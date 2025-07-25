@@ -89,6 +89,10 @@ public class ManagementController {
             }
 
             managementService.sheduleStop(email,scheduleId);
+
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
+
             return ResponseEntity.ok(ApiResponse.onSuccess(null));
         }
     }

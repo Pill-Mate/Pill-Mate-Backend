@@ -10,6 +10,7 @@ import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.global.common.ApiResponse;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,7 @@ public class FcmController {
     @Autowired
     private final UsersRepository usersRepository;
     // 1. client가 server로 알림 생성 요청
+    @Operation(summary="fcm 푸시 메세지 전송", description = "fcm 푸시 메세지 전송.. 기본 fcm 이해 잘 못해서 여기 위에 두개 엉망임..")
     @PostMapping("/pushMessage")
     public ResponseEntity<ApiResponse<String>> pushMessage(@RequestBody FcmRequestDTO requestDTO) throws IOException {
         System.out.println(requestDTO.getDeviceToken() + " "
@@ -56,7 +58,7 @@ public class FcmController {
                     .body(ApiResponse.onFailure("❌ FCM 알림 전송 실패: "+ e.getMessage() ));
         }
     }
-
+    @Operation(summary="전체 공지 정보 전송", description = "전체 공지 리스트 정보 전송 -> 날짜, 제목 등")
     @GetMapping("/notification")
     public ResponseEntity<ApiResponse<List<NotificationTitleDTO>>> sendAllNotification(@RequestHeader(value = "Authorization", required = true) String token){
         String email = "";
@@ -75,6 +77,7 @@ public class FcmController {
         return ResponseEntity.ok(ApiResponse.onSuccess(notificationService.getAllNotification(email)));
     }
 
+    @Operation(summary="공지 상세 내용", description = "특정 공지 정보 전송 -> 상세 내용, 제목, 날짜 등")
     @PostMapping("/notificationDetail")
     public ResponseEntity<ApiResponse<NotificationDTO>> sendNotificationDetail(@RequestBody NotificationIdDTO notificationId, @RequestHeader(value = "Authorization", required = true) String token){
         String email = "";
@@ -92,6 +95,7 @@ public class FcmController {
         System.out.println("공지 디테일 전송 완료");
         return ResponseEntity.ok(ApiResponse.onSuccess(notificationService.getNotificationDetail(notificationId.getNotificationId(),email)));
     }
+    @Operation(summary="fcmToken 등록", description = "사용자 디바이스의 fcmToken 등록")
     @PostMapping("/registerFcmToken")
     public ResponseEntity<ApiResponse<String>> regesterFcmToken(@RequestBody RegisterFcmTokenDTO registerFcmTokenDTO, @RequestHeader(value = "Authorization", required = true) String token){
         String email;
