@@ -50,23 +50,22 @@ public class RegisterService {
     private OpenapiHospitalRepository openapiHospitalRepository;
 
 
-    public void Register(RegisterDTO registerDTO,  Users users) {
+    public void Register(RegisterDTO registerDTO, Users users) {
         log.info("Received DTO: {}", registerDTO);
         Medicine medicine = null;
 
         //만약에 이미 기존에 등록된 약물이 있으면 그 약물을 집어넣음
-        if(medicineRepository.findMedicineByIdentifyNumber(registerDTO.identifyNumber()) != null){
-            medicine = medicineRepository.findMedicineByIdentifyNumber(registerDTO.identifyNumber());
-        } else {
-            //만약에 새로운 약물이면 새로 생성
-            medicine = CreateMedicine(registerDTO, users);
-        }
+
+        //만약에 새로운 약물이면 새로 생성
+        medicine = CreateMedicine(registerDTO, users);
+
         CreateHospital(registerDTO, users, medicine);
         CreatePharmacy(registerDTO, users, medicine);
         Schedule schedule = CreateSchedule(registerDTO, users, medicine);
         CreateMedicineSchedule(users, medicine, schedule);
     }
-    public Medicine CreateMedicine(RegisterDTO registerDTO,  Users users) {
+
+    public Medicine CreateMedicine(RegisterDTO registerDTO, Users users) {
         log.info("medicine1");
         Medicine medicine = Medicine.builder()
                 //medicine
@@ -90,6 +89,7 @@ public class RegisterService {
         //log.info("medicine2:{}",medicine);
         return medicineRepository.save(medicine);
     }
+
     public Schedule CreateSchedule(RegisterDTO registerDTO, Users users, Medicine medicine
     ) {
         Optional<Schedule> existingSchedule = scheduleRepository.findByUsersAndMedicineAndStatus(users, medicine);
@@ -122,6 +122,7 @@ public class RegisterService {
                 .build();
         return scheduleRepository.save(schedule);
     }
+
     public void CreateHospital(RegisterDTO registerDTO, Users users, Medicine medicine) {
         Hospital hospital = Hospital.builder()
                 .users(users)
@@ -132,6 +133,7 @@ public class RegisterService {
                 .build();
         hospitalRepository.save(hospital);
     }
+
     public void CreatePharmacy(RegisterDTO registerDTO, Users users, Medicine medicine) {
         Pharmacy pharmacy = Pharmacy.builder()
                 .users(users)
@@ -142,6 +144,7 @@ public class RegisterService {
                 .build();
         pharmacyRepository.save(pharmacy);
     }
+
     public void CreateMedicineSchedule(Users users, Medicine medicine, Schedule schedule) {
         log.info("CreateMedicineSchedule1");
         List<MedicineSchedule> schedules = new ArrayList<>();      // 스케줄 저장 리스트
@@ -150,7 +153,7 @@ public class RegisterService {
         for (int i = 0; i < schedule.getIntakePeriod(); i++) {
             LocalDate currentDate = schedule.getStartDate().plusDays(i);  // 날짜 계산
             DayOfWeek dayOfWeek = currentDate.getDayOfWeek(); //현재 날짜에 대한 요일
-            log.info("CreateMedicineSchedule for문 1 i값:{} , schedule.intakePeriod():{} ",i,schedule.getIntakePeriod());
+            log.info("CreateMedicineSchedule for문 1 i값:{} , schedule.intakePeriod():{} ", i, schedule.getIntakePeriod());
             if (schedule.getIntakeFrequencys().contains(dayOfWeek.name())) {
                 // 매일 Enum 개수만큼 MedicineSchedule 생성
                 for (String intakeCount1 : schedule.getIntakeCounts()) {
@@ -158,7 +161,7 @@ public class RegisterService {
                     log.info("CreateMedicineSchedule for문 2 value:{}", intakeCount.values());
                     MedicineSchedule medicineSchedule = null;
                     // 섭취 시간을 계산하여 설정
-                    if(intakeCount == IntakeCount.EMPTY || intakeCount == IntakeCount.SLEEP || intakeCount == IntakeCount.NEEDED) {
+                    if (intakeCount == IntakeCount.EMPTY || intakeCount == IntakeCount.SLEEP || intakeCount == IntakeCount.NEEDED) {
                         LocalTime intakeTime = calculateIntakeTime(users, intakeCount, null, schedule.getMealTime());
 
                         medicineSchedule = MedicineSchedule.builder()
@@ -175,8 +178,7 @@ public class RegisterService {
                                 .users(users)
                                 .schedule(schedule)
                                 .build();
-                    }
-                    else {
+                    } else {
                         LocalTime intakeTime = calculateIntakeTime(users, intakeCount, schedule.getMealUnit(), schedule.getMealTime());
 
                         medicineSchedule = MedicineSchedule.builder()
@@ -216,14 +218,12 @@ public class RegisterService {
             case LUNCH -> baseTime = users.getLunchTime();
             case DINNER -> baseTime = users.getDinnerTime();
             case EMPTY -> baseTime = users.getWakeupTime();
-            case SLEEP ->
-            {
+            case SLEEP -> {
                 //만약에 취침시간이 다음 날 오전 12시 이후, 즉 새벽일 경우에는
-                if(users.getBedTime().getHour() < 12) {
+                if (users.getBedTime().getHour() < 12) {
                     // 전날(당일 날) 오후 11시 50분으로 설정한다.
-                    baseTime = LocalTime.of(23,50,0);
-                }
-                else {
+                    baseTime = LocalTime.of(23, 50, 0);
+                } else {
                     baseTime = users.getBedTime();
                 }
             }
@@ -233,10 +233,10 @@ public class RegisterService {
         log.info("intakeFrequency");
 
         // MEALBEFORE / MEALAFTER에 따라 시간 조정
-        if (mealUnit == MealUnit.MEALBEFORE && (intakeCount != EMPTY || intakeCount != SLEEP ||intakeCount != NEEDED )) {
-            log.info("섭취 시간:{}",baseTime.minusMinutes(mealTime));
+        if (mealUnit == MealUnit.MEALBEFORE && (intakeCount != EMPTY || intakeCount != SLEEP || intakeCount != NEEDED)) {
+            log.info("섭취 시간:{}", baseTime.minusMinutes(mealTime));
             return baseTime.minusMinutes(mealTime);  // 식전이면 시간 빼기
-        } else if (mealUnit == MealUnit.MEALAFTER && (intakeCount != EMPTY || intakeCount != SLEEP ||intakeCount != NEEDED )) {
+        } else if (mealUnit == MealUnit.MEALAFTER && (intakeCount != EMPTY || intakeCount != SLEEP || intakeCount != NEEDED)) {
             return baseTime.plusMinutes(mealTime);   // 식후면 시간 더하기
         } else if (mealUnit == null) {
             return baseTime;
@@ -246,7 +246,7 @@ public class RegisterService {
     }
 
     public boolean getPillCounts(String email) {
-        Users user = userRepository.findByEmail(email).orElseThrow(()-> new UserHandler(ErrorStatus._NOT_FOUND_USER));
+        Users user = userRepository.findByEmail(email).orElseThrow(() -> new UserHandler(ErrorStatus._NOT_FOUND_USER));
         Long pillCounts = scheduleRepository.countByUsersIdAndStatus(user.getId(), ScheduleStatus.ACTIVATE);
         if (pillCounts >= 4) {
             return false;
@@ -260,10 +260,10 @@ public class RegisterService {
     }
 
     public List<HospitalResponseDTO> getHospitals(String name) {
-        return openapiHospitalRepository.findByDutyNameContainingAsDto(name, PageRequest.of(0,10));
+        return openapiHospitalRepository.findByDutyNameContainingAsDto(name, PageRequest.of(0, 10));
     }
 
     public List<PharmacyResponseDTO> getPharmacies(String name) {
-        return openapiPharmacyRepository.findByDutyNameContainingAsDto(name,PageRequest.of(0,10));
+        return openapiPharmacyRepository.findByDutyNameContainingAsDto(name, PageRequest.of(0, 10));
     }
 }

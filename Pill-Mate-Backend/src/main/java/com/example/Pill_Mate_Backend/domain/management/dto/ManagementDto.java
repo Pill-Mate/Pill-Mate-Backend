@@ -59,7 +59,7 @@ public class ManagementDto {
             return CurrentPillResponse.builder()
                     .startDate(schedule.getStartDate())
                     //시작일에서 복용일 더하기
-                    .endDate(schedule.getStartDate().plusDays(schedule.getIntakePeriod()))
+                    .endDate(schedule.getStartDate().plusDays(schedule.getIntakePeriod() + 1))
                     .className(schedule.getMedicine().getClassName())
                     .medicineName(schedule.getMedicine().getMedicineName())
                     .intakePeriod(schedule.getIntakePeriod())
