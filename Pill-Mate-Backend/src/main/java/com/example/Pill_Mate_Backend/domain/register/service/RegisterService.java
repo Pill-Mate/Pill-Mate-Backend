@@ -52,12 +52,7 @@ public class RegisterService {
 
     public void Register(RegisterDTO registerDTO, Users users) {
         log.info("Received DTO: {}", registerDTO);
-        Medicine medicine = null;
-
-        //만약에 이미 기존에 등록된 약물이 있으면 그 약물을 집어넣음
-
-        //만약에 새로운 약물이면 새로 생성
-        medicine = CreateMedicine(registerDTO, users);
+        Medicine medicine = CreateMedicine(registerDTO, users);
 
         CreateHospital(registerDTO, users, medicine);
         CreatePharmacy(registerDTO, users, medicine);
