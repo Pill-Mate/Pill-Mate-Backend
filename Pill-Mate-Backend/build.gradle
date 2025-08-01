@@ -60,6 +60,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.google.firebase:firebase-admin:9.4.2'
 	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.12.0'
+
+	//ios 로그인 250721
+	//implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.0'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
+//ios로그인 20250801
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.1"
+	}
 }
 
 test {//tasks.named('test')

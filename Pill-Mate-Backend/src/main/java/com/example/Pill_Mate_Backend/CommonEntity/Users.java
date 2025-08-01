@@ -21,6 +21,9 @@ public class Users extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = true, unique = true, length = 100)
+    private String appleId;
+
     @Column(nullable = false, length = 50)
     private String username;
 
@@ -57,6 +60,21 @@ public class Users extends BaseEntity {
         this.username = username;
         this.email = email;
         this.profileImage = profileImage;
+        this.appleId = null;
+        this.wakeupTime = null;
+        this.bedTime = null;
+        this.morningTime = null;
+        this.lunchTime = null;
+        this.dinnerTime = null;
+        this.alarmMarketing = false;
+        this.alarmInfo = false;
+    }
+
+    public Users(String username, String email, String appleId){
+        this.username = username;
+        this.email = email;
+        this.appleId = appleId;
+        this.profileImage = null;
         this.wakeupTime = null;
         this.bedTime = null;
         this.morningTime = null;

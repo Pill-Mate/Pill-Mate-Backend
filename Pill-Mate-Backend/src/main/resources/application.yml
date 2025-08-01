@@ -1,6 +1,4 @@
 spring:
-#  profiles:
-#    active: dev
   application:
     name: Pill-Mate-Backend
 
@@ -16,6 +14,14 @@ spring:
       dialect: org.hibernate.dialect.MariaDBDialect
     show-sql: true
 
+  cloud:
+    openfeign:
+      client:
+        config:
+          appleAuthClient:
+            connect-timeout: 3
+            read-timeout: 1
+
 jwt:
   secret-key: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:3600000} # 기본값 1시간
@@ -23,9 +29,15 @@ jwt:
 openApi:
   serviceKey: ${OPENAPI_SERVICE_KEY}
 
-fcm:
-  api:
-    url: https://fcm.googleapis.com/v1/projects/pillmate-c9a64/messages:send
+#--ios--
+apple:
+  auth:
+    token-url: https://appleid.apple.com/auth/token
+    public-key-url: https://appleid.apple.com/auth/keys
+  #redirect-uri: ${APPLE_REDIRECT_URL}
+  iss: https://appleid.apple.com
+  aud: ${APPLE_CLIENT_ID}
+  team-id: ${APPLE_TEAM_ID}
   key:
-    json: ${FCM_ACCOUNT_KEY}
-    scope: https://www.googleapis.com/auth/firebase.messageing
+    id: ${APPLE_KEY_ID}
+    path: resources/Pillmate_AuthKey.p8
