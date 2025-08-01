@@ -39,4 +39,4 @@ apple:
   team-id: ${APPLE_TEAM_ID}
   key:
     id: ${APPLE_KEY_ID}
-    path: resources/Pillmate_AuthKey.p8
+    path: ~/.ssh/Pill-Mate-Backend/Pill-Mate-Backend/src/main/resources/Pillmate_AuthKey.p8
