@@ -243,7 +243,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.onFailure(ex.getMessage()));
     }
 
-    @Operation(summary="애플 로그인", description = "애플,, 로그인..")
+    @Operation(summary="애플 회원가입/로그인", description = "애플,, 로그인..")
     @PostMapping("/appleSignup")
     public ResponseEntity<ApiResponse<SignUpDTO>> appleLogin(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
