@@ -14,7 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true)
 public class Users extends BaseEntity {
 
     @Id
@@ -109,7 +111,6 @@ public class Users extends BaseEntity {
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
     private List<FcmToken> fcmTokens;
 
-    @ToString.Exclude
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<RefreshToken> refreshTokens;
 
@@ -132,5 +133,9 @@ public class Users extends BaseEntity {
         this.email = email;
         this.alarmMarketing = alarmMarketing;
         this.alarmInfo = alarmInfo;
+    }
+    @Override
+    public String toString() {
+        return "Users{id=" + id + ", email=" + email + ", username=" + username + "}";
     }
 }
