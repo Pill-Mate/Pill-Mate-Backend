@@ -46,11 +46,6 @@ public class FcmService {
         fcmTokenRepository.deleteByFcmToken(fcmToken);
     }
 
-    @TransactionalEventListener
-    public void handleInvalidTokenEvent(InvalidFcmTokenEvent event) {
-        fcmTokenRepository.deleteByFcmToken(event.getFcmToken());
-    }
-
     // 메시지를 구성하고 토큰을 받아서 FCM으로 메시지를 처리한다.
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
         //fcmToken 없을 시 예외 처리
@@ -89,8 +84,7 @@ public class FcmService {
                     errorMessage.contains("invalid")) {
 
                 System.out.println("🚫 무효 FCM 토큰 감지: " + targetToken);
-                handleInvalidTokenEvent(new InvalidFcmTokenEvent(targetToken));
-                //deleteToken(targetToken); // 직접 삭제
+                deleteToken(targetToken); // 직접 삭제
                 System.out.println("🚫삭제 완료");
             }
         }
@@ -212,15 +206,5 @@ public class FcmService {
             e.printStackTrace();
         }
     }*/
-    public class InvalidFcmTokenEvent {
-        private final String fcmToken;
 
-        public InvalidFcmTokenEvent(String fcmToken) {
-            this.fcmToken = fcmToken;
-        }
-
-        public String getFcmToken() {
-            return fcmToken;
-        }
-    }
 }
