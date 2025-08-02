@@ -1,9 +1,12 @@
 package com.example.Pill_Mate_Backend.domain.alarm.service;
 
 
+import com.example.Pill_Mate_Backend.CommonEntity.Notification;
+import com.example.Pill_Mate_Backend.CommonEntity.NotificationRead;
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
 import com.example.Pill_Mate_Backend.domain.alarm.dto.AlarmScheduleDTO;
 import com.example.Pill_Mate_Backend.domain.alarm.repository.FcmTokenRepository;
+import com.example.Pill_Mate_Backend.domain.alarm.repository.NotificationRepository;
 import com.example.Pill_Mate_Backend.domain.alarm.repository.ScheduleRepository2;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDTO;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
@@ -49,6 +52,8 @@ public class FcmAlarmService {
     private final TaskScheduler taskScheduler;
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     // userId별 현재 등록된 ScheduledFuture 리스트 관리<약물 시간 알람>
     private final Map<Long, List<ScheduledFuture<?>>> userScheduledTasks = new ConcurrentHashMap<>();
@@ -103,7 +108,13 @@ public class FcmAlarmService {
         String title = "약 드실 시간이에요💊";
         String body = "잊지 말고 복약하세요!";
         System.out.println("💊 약 복용 시간!: " + userId);
-        fcmService.sendMessageTo(fcmService.getFcmTokenById(userId),title, body);
+        List<String> userFcmTokens = fcmTokenRepository.findActiveTokensByUserId(userId);
+        if (userFcmTokens != null && !userFcmTokens.isEmpty()) {
+            for (String token : userFcmTokens) {
+                fcmService.sendMessageTo(token, title, body);
+            }
+        }
+        //fcmService.sendMessageTo(fcmService.getFcmTokenById(userId),title, body);
     }
 
     // 이벤트 발생 시 특정 사용자 알람 재설정
@@ -259,7 +270,7 @@ public class FcmAlarmService {
 
         Date today = new Date(); // 현재 날짜 (시간 포함)
 
-        // isAlarm = true인 스케줄 조회
+        // isAlarm = true, status = ACTIVATE 인 스케줄 조회
         List<Object[]> schedules = scheduleRepository2.findByIsAlarmTrue();
 
         if (schedules.isEmpty()) {
@@ -291,11 +302,29 @@ public class FcmAlarmService {
                 String body = String.format("'%s'의 복용이 3일 후 종료됩니다.", (String) innerArray[3]);
                 System.out.println("알람 실행됨: "+body);
 
+                //notification에 3일전 알람 데이터 넣기
+                Notification notification = Notification.builder()
+                        .notifyDate(LocalDate.now())
+                        .notifyTime(LocalTime.parse("14:00:00"))
+                        .userIdNoti(userId)
+                        .title(title + " - " + body)
+                        .content("FcmAlarm,no Content")
+                        .build();
+                notificationRepository.save(notification);
+
                 // 사용자 FCM 토큰 가져오기
+                /*
                 String userFcmToken = fcmTokenRepository.findActiveTokenByUserId(userId);//schedule.getUsers().getFcmTokens()[0].getFcmToken();
                 if (userFcmToken != null) {
                     //fcmService.sendNotification(userFcmToken, title, body);
                     fcmService.sendMessageTo(userFcmToken, title, body);  //fcm알람 보내기,,,,,,
+                }*/
+                //한 계정당 여러 기기 가능하게 변경.....
+                List<String> userFcmTokens = fcmTokenRepository.findActiveTokensByUserId(userId);
+                if (userFcmTokens != null && !userFcmTokens.isEmpty()) {
+                    for (String token : userFcmTokens) {
+                        fcmService.sendMessageTo(token, title, body);
+                    }
                 }
             }
         }

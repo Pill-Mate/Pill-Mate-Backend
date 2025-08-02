@@ -36,15 +36,52 @@ public class NotificationService {
         List<Notification> notifications = notificationRepository.findAll();
         List<NotificationTitleDTO> notificationTitleDTOS = new ArrayList<> ();
 
+        Long userId = (Long) usersRepository.getIdByEmail(email)[0];
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 존재하지 않습니다."));
+
         for(Notification noti : notifications){
+            //noti의 userIdNoti가 0(공지)가 아닐때 true.
+            Long notiUserId = noti.getUserIdNoti();
+
+            // 본인 알림도 아니고 공지도 아니라면 스킵
+            if (notiUserId != 0 && !userId.equals(notiUserId)) {
+                continue;
+            }
+
+            boolean isFcm = notiUserId != 0;
+
             NotificationTitleDTO dto = new NotificationTitleDTO(
                     noti.getId(),
                     noti.getNotifyDate(),
                     noti.getNotifyTime(),
                     noti.getTitle(),
-                    notificationReadRepository.existsByNotificationIdAndUsersId(noti.getId(), (Long)usersRepository.getIdByEmail(email)[0])
+                    notificationReadRepository.existsByNotificationIdAndUsersId(noti.getId(), userId),
+                    isFcm
             );
             notificationTitleDTOS.add(dto);
+
+            if (userId.equals(notiUserId)) {
+                //fcm 알람은 미리 읽음 처리 해버리기.
+                // 기존 읽음 기록 있는지 확인
+                Optional<NotificationRead> existingRead = notificationReadRepository
+                        .findByNotificationIdAndUsersId(noti.getId(), userId);
+
+                if (existingRead.isPresent()) {
+                    // 이미 읽은 기록이 있으면 readAt만 업데이트
+                    NotificationRead read = existingRead.get();
+                    read.setReadAt(LocalDateTime.now());
+                    notificationReadRepository.save(read);
+                } else {
+                    // 없으면 새로 생성
+                    NotificationRead notificationRead = NotificationRead.builder()
+                            .users(user)
+                            .notification(noti)
+                            .readAt(LocalDateTime.now())
+                            .build();
+                    notificationReadRepository.save(notificationRead);
+                }
+            }
         }
         return notificationTitleDTOS;
     }
@@ -84,10 +121,11 @@ public class NotificationService {
     }
 
     public boolean getNotificationRead(String email){
-        Long countUnread = notificationRepository.countUnreadByUserId(email);
-        boolean result;
-        if  (countUnread>0) result = false; //안 읽은게 있음
-        else result = true; //다 읽음
-        return result;
+        Long userId = (Long) usersRepository.getIdByEmail(email)[0];
+
+        // 공지 또는 본인 알림 중에서 읽지 않은 알림 개수 조회
+        Long countUnread = notificationReadRepository.countUnreadByUserIdOrPublic(userId);
+
+        return countUnread == 0;
     }
 }

@@ -31,6 +31,9 @@ public class Notification  extends BaseEntity {
     @Column(nullable = false, length = 1000)
     private String content;
 
+    @Column(nullable = false)
+    private long userIdNoti;
+
     //on delete cascade를 위한 one to many
     @ToString.Exclude
     @OneToMany(mappedBy = "notification", cascade = CascadeType.REMOVE)
