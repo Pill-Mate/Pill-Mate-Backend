@@ -295,28 +295,27 @@ public class AuthController {
                     .login(true)
                     .refreshToken(refreshToken)
                     .jwtToken(jwtToken).build()));
+        }else{
+            //새로운 유저 가입
+            // User 객체 생성
+            Users users = new Users(appleSignUpDTO.getUserName(), appleSignUpDTO.getEmail(), accountId);
+            // 데이터베이스에 사용자 정보 저장
+            userRepository.save(users);
+
+            // JWT 토큰 생성
+            String jwtToken = jwtService.generateToken(appleSignUpDTO.getEmail());
+            String refreshToken = jwtService.generateRefreshToken(appleSignUpDTO.getEmail());
+
+            //refreshtoken DB에 저장
+            RefreshToken refreshToken1 = new RefreshToken(refreshToken, users);
+            refreshTokenRepository.save(refreshToken1);
+
+            System.out.println("회원가입 성공");
+
+            return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
+                    .login(false)
+                    .refreshToken(refreshToken)
+                    .jwtToken(jwtToken).build()));
         }
-
-        //새로운 유저 가입
-        // User 객체 생성
-        Users users = new Users(appleSignUpDTO.getUserName(), appleSignUpDTO.getEmail(), accountId);
-        // 데이터베이스에 사용자 정보 저장
-        userRepository.save(users);
-
-        // JWT 토큰 생성
-        String jwtToken = jwtService.generateToken(users.getEmail());
-        String refreshToken = jwtService.generateRefreshToken(users.getEmail());
-
-        //refreshtoken DB에 저장
-        RefreshToken refreshToken1 = new RefreshToken(refreshToken, users);
-        refreshTokenRepository.save(refreshToken1);
-
-        System.out.println("회원가입 성공");
-
-        return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
-                .login(false)
-                .refreshToken(refreshToken)
-                .jwtToken(jwtToken).build()));
     }
-
 }

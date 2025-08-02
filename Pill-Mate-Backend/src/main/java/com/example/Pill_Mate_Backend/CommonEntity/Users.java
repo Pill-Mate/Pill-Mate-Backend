@@ -1,7 +1,6 @@
 package com.example.Pill_Mate_Backend.CommonEntity;
 
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -111,7 +110,6 @@ public class Users extends BaseEntity {
     private List<FcmToken> fcmTokens;
 
     @ToString.Exclude
-    @JsonManagedReference
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<RefreshToken> refreshTokens;
 
