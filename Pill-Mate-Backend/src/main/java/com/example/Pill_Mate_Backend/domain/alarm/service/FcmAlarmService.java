@@ -241,28 +241,6 @@ public class FcmAlarmService {
             scheduleAlarms(Long.valueOf(entry.getKey()), entry.getValue());
         }
     }
-/*
-    @Scheduled(cron = "0 0 14 * * ?") // 매일 오전 9시에 실행
-    @Transactional
-    public void sendAnniversaryNotifications() {
-        LocalDate today = LocalDate.now();
-        List<Pet> pets = petRepository.findAll();
-
-        for (Pet pet : pets) {
-            if (today.equals(LocalDate.parse(pet.getAnniversary()))) {
-                Users user = pet.getUser();
-                String token = user.getDeviceToken();
-                String title = "Anniversary";
-                String body = "오늘은 " + pet.getPetName() + "의 기일 입니다.";
-
-                try {
-                    fcmService.sendMessageTo(token, title, body); // 이렇게
-                } catch (IOException e) {
-                    log.error("Failed to send FCM notification", e);
-                }
-            }
-        }
-    }*/
 
     @Scheduled(cron = "0 0 14 * * ?")//@Scheduled(cron = "0 0 14 * * ?") // 매일 오후 2시에 실행
     public void endDateSendAlarms() throws IOException {

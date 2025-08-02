@@ -6,9 +6,11 @@ import com.example.Pill_Mate_Backend.domain.alarm.dto.FcmMessage;
 import com.example.Pill_Mate_Backend.domain.alarm.repository.FcmTokenRepository;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.messaging.AndroidConfig;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -18,6 +20,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,6 +40,11 @@ public class FcmService {
     private FcmTokenRepository fcmTokenRepository;
     @Autowired
     private UsersRepository usersRepository;
+
+    @Transactional
+    public void deleteToken(String fcmToken) {
+        fcmTokenRepository.deleteByFcmToken(fcmToken);
+    }
 
     // 메시지를 구성하고 토큰을 받아서 FCM으로 메시지를 처리한다.
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
@@ -59,7 +67,29 @@ public class FcmService {
                 .build();
         Response response = client.newCall(request).execute(); // 요청 보냄
 
-        System.out.println(response.body().string());
+        //fcmToken 무효 토큰일 시 삭제
+        String responseBody = response.body().string();
+        System.out.println(responseBody);
+
+// 응답 본문에서 error 여부 확인
+        if (!response.isSuccessful() && responseBody.contains("error")) {
+            JsonNode root = objectMapper.readTree(responseBody);
+            String errorMessage = root.path("error").path("message").asText();
+
+            // 대표적인 무효 토큰 에러 코드들
+            if (errorMessage.contains("registration token is not a valid") ||
+                    errorMessage.contains("Requested entity was not found") || // NotRegistered
+                    errorMessage.contains("MismatchSenderId") ||
+                    errorMessage.contains("UNREGISTERED") ||
+                    errorMessage.contains("invalid")) {
+
+                System.out.println("🚫 무효 FCM 토큰 감지: " + targetToken);
+                deleteToken(targetToken); // 직접 삭제
+                System.out.println("🚫삭제 완료");
+            }
+        }
+
+        System.out.println(responseBody);
     }
 
     // FCM 전송 정보를 기반으로 메시지를 구성한다. (Object -> String)
@@ -176,4 +206,5 @@ public class FcmService {
             e.printStackTrace();
         }
     }*/
+
 }

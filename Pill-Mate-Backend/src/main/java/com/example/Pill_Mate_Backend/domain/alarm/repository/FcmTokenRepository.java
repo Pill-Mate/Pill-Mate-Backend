@@ -32,5 +32,11 @@ public interface FcmTokenRepository extends JpaRepository<FcmToken, Long> {
     List<String> findFcmTokenByEmail(@Param("email") String email);
 
     boolean existsByUsersAndFcmToken(Users users, String fcmToken);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional  // 여기 트랜잭션이 반드시 붙어야 함!
+    @Query("DELETE FROM FcmToken f WHERE f.fcmToken = :fcmToken")
+    void deleteByFcmToken(String fcmToken);
+
     boolean existsByUsersIdAndFcmToken(Long userId, String fcmToken);
 }
