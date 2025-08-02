@@ -258,7 +258,8 @@ public class AuthController {
         }
 
         String accountId = appleAuthService.getAppleAccountId(appleSignUpDTO.getIdentityToken());
-
+        System.out.println("애플 아이디"+accountId);
+        System.out.println("애플 아이디 길이"+accountId.length());
         // appleId로 유저가 이미 존재하는지 확인
         Optional<Users> existingUser = userRepository.findByAppleId(accountId);
         if (existingUser.isPresent()) {
