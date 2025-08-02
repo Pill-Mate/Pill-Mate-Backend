@@ -114,6 +114,7 @@ public class Users extends BaseEntity {
     private List<RefreshToken> refreshTokens;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<NotificationRead> notificationReads;
 
