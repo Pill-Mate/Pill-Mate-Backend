@@ -21,7 +21,7 @@ public class Users extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true, unique = true, length = 100)
+    @Column(nullable = true, unique = true, length = 255)
     private String appleId;
 
     @Column(nullable = false, length = 50)
