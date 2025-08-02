@@ -6,6 +6,7 @@ import com.example.Pill_Mate_Backend.domain.alarm.dto.FcmMessage;
 import com.example.Pill_Mate_Backend.domain.alarm.repository.FcmTokenRepository;
 import com.example.Pill_Mate_Backend.domain.mypage.repository.UsersRepository;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.messaging.AndroidConfig;
@@ -58,6 +59,28 @@ public class FcmService {
                 .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
                 .build();
         Response response = client.newCall(request).execute(); // 요청 보냄
+
+        //fcmToken 무효 토큰일 시 삭제
+        String responseBody = response.body().string();
+        System.out.println(responseBody);
+
+// 응답 본문에서 error 여부 확인
+        if (!response.isSuccessful() && responseBody.contains("error")) {
+            JsonNode root = objectMapper.readTree(responseBody);
+            String errorMessage = root.path("error").path("message").asText();
+
+            // 대표적인 무효 토큰 에러 코드들
+            if (errorMessage.contains("registration token is not a valid") ||
+                    errorMessage.contains("Requested entity was not found") || // NotRegistered
+                    errorMessage.contains("MismatchSenderId") ||
+                    errorMessage.contains("UNREGISTERED") ||
+                    errorMessage.contains("invalid")) {
+
+                System.out.println("🚫 무효 FCM 토큰 감지: " + targetToken);
+                fcmTokenRepository.deleteByFcmToken(targetToken); // 직접 삭제
+                System.out.println("🚫삭제 완료");
+            }
+        }
 
         System.out.println(response.body().string());
     }
