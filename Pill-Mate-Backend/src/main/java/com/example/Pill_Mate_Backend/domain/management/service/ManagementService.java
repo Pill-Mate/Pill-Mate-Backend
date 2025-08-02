@@ -22,9 +22,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -47,7 +45,7 @@ public class ManagementService {
         return schedules.stream().map(ManagementDto.StopPillResponse::from).collect(Collectors.toList());
     }
 
-    public void sheduleStop(String email, Long scheduleId) {
+    public void scheduleStop(String email, Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         schedule.setStatus(ScheduleStatus.INACTIVATE);
         schedule.setStoppedDate(LocalDateTime.now());
@@ -66,7 +64,7 @@ public class ManagementService {
                 .ingredient(medicine.getIngredient())
                 .ingredientAmount(medicine.getIngredientAmount())
                 .medicineImage(medicine.getMedicineImage())
-                .entpName(medicine.getClassName())
+                .entpName(medicine.getEntpName())
                 .className(medicine.getClassName())
                 .medicineId(medicine.getId())
                 .wakeupTime(users.getWakeupTime())
