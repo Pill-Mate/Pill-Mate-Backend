@@ -109,6 +109,7 @@ public class RegisterService {
                         .map(Enum::name)
                         .collect(Collectors.toSet()))
                 .isAlarm(registerDTO.isAlarm())
+                .ingredientUnit(registerDTO.ingredientUnit())
                 .status(ScheduleStatus.ACTIVATE)
                 .startDate(registerDTO.startDate()
                         .atZoneSameInstant(ZoneId.of("Asia/Seoul"))

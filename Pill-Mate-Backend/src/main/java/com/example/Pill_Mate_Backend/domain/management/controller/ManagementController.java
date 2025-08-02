@@ -88,7 +88,7 @@ public class ManagementController {
                 }
             }
 
-            managementService.sheduleStop(email,scheduleId);
+            managementService.scheduleStop(email,scheduleId);
             return ResponseEntity.ok(ApiResponse.onSuccess(null));
         }
     }
