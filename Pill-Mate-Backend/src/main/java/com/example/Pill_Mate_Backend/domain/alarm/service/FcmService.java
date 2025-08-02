@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.messaging.AndroidConfig;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -38,6 +39,11 @@ public class FcmService {
     private FcmTokenRepository fcmTokenRepository;
     @Autowired
     private UsersRepository usersRepository;
+
+    @Transactional
+    public void deleteToken(String fcmToken) {
+        fcmTokenRepository.deleteByFcmToken(fcmToken);
+    }
 
     // 메시지를 구성하고 토큰을 받아서 FCM으로 메시지를 처리한다.
     public void sendMessageTo(String targetToken, String title, String body) throws IOException {
@@ -77,7 +83,7 @@ public class FcmService {
                     errorMessage.contains("invalid")) {
 
                 System.out.println("🚫 무효 FCM 토큰 감지: " + targetToken);
-                fcmTokenRepository.deleteByFcmToken(targetToken); // 직접 삭제
+                deleteToken(targetToken); // 직접 삭제
                 System.out.println("🚫삭제 완료");
             }
         }
