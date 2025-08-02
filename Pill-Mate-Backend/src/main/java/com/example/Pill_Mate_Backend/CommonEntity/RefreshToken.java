@@ -9,6 +9,8 @@ import java.net.URI;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Builder
 @EqualsAndHashCode(callSuper = true, exclude = "users")
 @ToString(exclude = "users") // 순환 방지
