@@ -88,7 +88,13 @@ public class ManagementController {
                 }
             }
 
+
             managementService.scheduleStop(email,scheduleId);
+
+
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
+
             return ResponseEntity.ok(ApiResponse.onSuccess(null));
         }
     }

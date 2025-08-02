@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.domain.alarm.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,4 +18,6 @@ public class NotificationTitleDTO {
     private LocalTime notifyTime;
     private String title;
     private boolean notificationRead;
+    @JsonProperty("isFcm")
+    private boolean isFcm;
 }
