@@ -13,7 +13,6 @@ import java.net.URI;
 @Setter
 @Builder
 @EqualsAndHashCode(callSuper = true, exclude = "users")
-@ToString
 public class RefreshToken extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +20,7 @@ public class RefreshToken extends BaseEntity {
     @Column
     private String token;
     //fk
-    @ToString.Exclude
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
@@ -34,5 +33,10 @@ public class RefreshToken extends BaseEntity {
     public RefreshToken(String token, Users user){
         this.token = token;
         this.users = user;
+    }
+
+    @Override
+    public String toString() {
+        return "RefreshToken{id=" + id + ", token=" + token + "}";
     }
 }
