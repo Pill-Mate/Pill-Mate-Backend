@@ -11,7 +11,6 @@ import java.net.URI;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
 @EqualsAndHashCode(callSuper = true, exclude = "users")
 @ToString(exclude = "users") // 순환 방지
 public class RefreshToken extends BaseEntity {
