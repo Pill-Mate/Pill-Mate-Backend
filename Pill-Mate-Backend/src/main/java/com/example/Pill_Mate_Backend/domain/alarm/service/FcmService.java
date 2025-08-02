@@ -89,7 +89,7 @@ public class FcmService {
             }
         }
 
-        System.out.println(response.body().string());
+        System.out.println(responseBody);
     }
 
     // FCM 전송 정보를 기반으로 메시지를 구성한다. (Object -> String)
