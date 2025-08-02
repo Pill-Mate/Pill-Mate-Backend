@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.CommonEntity;
 
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,9 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
+@Data
 public class Users extends BaseEntity {
 
     @Id
@@ -111,6 +110,8 @@ public class Users extends BaseEntity {
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
     private List<FcmToken> fcmTokens;
 
+    @ToString.Exclude
+    @JsonManagedReference
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<RefreshToken> refreshTokens;
 
@@ -133,9 +134,5 @@ public class Users extends BaseEntity {
         this.email = email;
         this.alarmMarketing = alarmMarketing;
         this.alarmInfo = alarmInfo;
-    }
-    @Override
-    public String toString() {
-        return "Users{id=" + id + ", email=" + email + ", username=" + username + "}";
     }
 }

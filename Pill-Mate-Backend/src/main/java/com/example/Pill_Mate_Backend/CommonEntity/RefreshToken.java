@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.CommonEntity;
 
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,8 @@ public class RefreshToken extends BaseEntity {
     @Column
     private String token;
     //fk
-
+    @ToString.Exclude
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
@@ -33,10 +35,5 @@ public class RefreshToken extends BaseEntity {
     public RefreshToken(String token, Users user){
         this.token = token;
         this.users = user;
-    }
-
-    @Override
-    public String toString() {
-        return "RefreshToken{id=" + id + ", token=" + token + "}";
     }
 }
