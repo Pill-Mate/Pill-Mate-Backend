@@ -231,6 +231,7 @@ public class AuthController {
         kakaoService.deleteUser(email); //우리 db에서 회원정보 삭제
         return ResponseEntity.ok(ApiResponse.onSuccess("회원정보 삭제 완료"));
     }
+
     @Operation(summary="jwt토큰 검증", description = "jwt 토큰 만료 시 자동 로그인 위한 토큰 검증 - refresh 토큰 있을 시 jwt 발급 후 자동 로그인, 없을 시 재 로그인")
     @PostMapping("/reissue")
     public ResponseEntity<ApiResponse<JwtTokenDto>> reissue(@RequestBody JwtTokenDto tokenRequestDto) {
@@ -297,6 +298,12 @@ public class AuthController {
                     .jwtToken(jwtToken).build()));
         }else{
             //새로운 유저 가입
+
+            //요소없이 생성 금지
+            if(appleSignUpDTO.getEmail()==null || appleSignUpDTO.getUserName() == null || appleSignUpDTO.getIdentityToken() == null || appleSignUpDTO.getEmail()=="" || appleSignUpDTO.getUserName() == "" || appleSignUpDTO.getIdentityToken() == ""){
+                System.out.println("USERS 생성 위한 요소 불충분");
+                throw new GeneralException(ErrorStatus._USERS_ELEMENT_LACK);
+            }
             // User 객체 생성
             Users users = new Users(appleSignUpDTO.getUserName(), appleSignUpDTO.getEmail(), accountId);
             // 데이터베이스에 사용자 정보 저장
