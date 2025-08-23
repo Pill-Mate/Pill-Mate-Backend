@@ -27,7 +27,9 @@ public enum ErrorStatus implements BaseErrorCode {
     _EXPIRED_REFRESH_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "REFRESHEXPIRED401", "만료된 REFRESH JWT 토큰입니다."),
 
     //medicine 에러
-    _MEDICINE_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDICINE400", "약물이 존재하지 않습니다.");
+    _MEDICINE_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDICINE400", "약물이 존재하지 않습니다."),
+    //users요소 불충분 에러
+    _USERS_ELEMENT_LACK(HttpStatus.BAD_REQUEST, "USERSLACK400", "USERS 생성을 위한 요소가 불충분합니다.");
 
 
     private final HttpStatus httpStatus;

@@ -10,6 +10,7 @@ import com.example.Pill_Mate_Backend.domain.oauth2.dto.KakaoSignUpDTO;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.OnboardingDTO;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.UserInfoResponseDto;
 import com.example.Pill_Mate_Backend.domain.oauth2.repository.RefreshTokenRepository;
+import com.example.Pill_Mate_Backend.domain.oauth2.service.AppleAuthService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.KakaoService;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.OnboardingService;
@@ -28,7 +29,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
+import java.lang.reflect.Member;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +53,7 @@ public class AuthController {
     private final RefreshTokenRepository refreshTokenRepository;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     //로그 확인
+    private final AppleAuthService appleAuthService;
 
     // 프론트에서 인가코드를 받으면 이 엔드포인트가 호출됨
     @Operation(summary="카카오 회원가입/로그인", description = "카카오 로그인 및 회원가입 모두 처리")
@@ -174,6 +180,7 @@ public class AuthController {
                 .refreshToken(refreshToken)
                 .jwtToken(jwtToken).build()));
     }
+
     @Operation(summary="온보딩", description = "온보딩 정보 받아 삽입")
     @PostMapping("/onboarding")
     public ResponseEntity<ApiResponse<String>> onboarding(@RequestBody OnboardingDTO onboardingDTO, @RequestHeader(value = "Authorization", required = true) String token) {
@@ -224,6 +231,7 @@ public class AuthController {
         kakaoService.deleteUser(email); //우리 db에서 회원정보 삭제
         return ResponseEntity.ok(ApiResponse.onSuccess("회원정보 삭제 완료"));
     }
+
     @Operation(summary="jwt토큰 검증", description = "jwt 토큰 만료 시 자동 로그인 위한 토큰 검증 - refresh 토큰 있을 시 jwt 발급 후 자동 로그인, 없을 시 재 로그인")
     @PostMapping("/reissue")
     public ResponseEntity<ApiResponse<JwtTokenDto>> reissue(@RequestBody JwtTokenDto tokenRequestDto) {
@@ -236,4 +244,85 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.onFailure(ex.getMessage()));
     }
 
+    @Operation(summary="애플 회원가입/로그인", description = "애플,, 로그인..")
+    @PostMapping("/appleSignup")
+    public ResponseEntity<ApiResponse<SignUpDTO>> appleLogin(
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
+            @RequestBody AppleSignUpDTO appleSignUpDTO,
+            HttpSession session) throws IOException, AuthenticationException, NoSuchAlgorithmException, InvalidKeySpecException,
+    JsonProcessingException{
+
+        // JWT가 존재하는 경우에만 처리
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String jwtToken = authorizationHeader.substring(7);
+            // JWT를 사용한 추가 처리 가능
+        }
+
+        String accountId = appleAuthService.getAppleAccountId(appleSignUpDTO.getIdentityToken());
+
+        // appleId로 유저가 이미 존재하는지 확인
+        Optional<Users> existingUser = userRepository.findByAppleId(accountId);
+        if (existingUser.isPresent()) {
+            // 이미 존재하는 유저 -> 로그인 처리
+            Users users = existingUser.get();
+
+            //onboarding null 시
+            if(users.getMorningTime()==null){
+
+                String jwtToken = jwtService.generateToken(users.getEmail());
+                String refreshToken = jwtService.generateRefreshToken(users.getEmail());
+
+                //db refresh token 바꾸기...
+                kakaoService.updateRefreshToken(users.getEmail(),refreshToken);
+
+                System.out.println("로그인 성공, 온보딩 null");
+
+                return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
+                        .login(false)
+                        .refreshToken(refreshToken)
+                        .jwtToken(jwtToken).build()));
+            }
+
+            String jwtToken = jwtService.generateToken(users.getEmail());
+            String refreshToken = jwtService.generateRefreshToken(users.getEmail());
+            log.info("token: "+ jwtToken);
+
+            //db refresh token 바꾸기...
+            kakaoService.updateRefreshToken(users.getEmail(),refreshToken);
+
+            // 응답 데이터 준비
+            System.out.println("로그인 성공");
+            return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
+                    .login(true)
+                    .refreshToken(refreshToken)
+                    .jwtToken(jwtToken).build()));
+        }else{
+            //새로운 유저 가입
+
+            //요소없이 생성 금지
+            if(appleSignUpDTO.getEmail()==null || appleSignUpDTO.getUserName() == null || appleSignUpDTO.getIdentityToken() == null || appleSignUpDTO.getEmail()=="" || appleSignUpDTO.getUserName() == "" || appleSignUpDTO.getIdentityToken() == ""){
+                System.out.println("USERS 생성 위한 요소 불충분");
+                throw new GeneralException(ErrorStatus._USERS_ELEMENT_LACK);
+            }
+            // User 객체 생성
+            Users users = new Users(appleSignUpDTO.getUserName(), appleSignUpDTO.getEmail(), accountId);
+            // 데이터베이스에 사용자 정보 저장
+            userRepository.save(users);
+
+            // JWT 토큰 생성
+            String jwtToken = jwtService.generateToken(appleSignUpDTO.getEmail());
+            String refreshToken = jwtService.generateRefreshToken(appleSignUpDTO.getEmail());
+
+            //refreshtoken DB에 저장
+            RefreshToken refreshToken1 = new RefreshToken(refreshToken, users);
+            refreshTokenRepository.save(refreshToken1);
+
+            System.out.println("회원가입 성공");
+
+            return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
+                    .login(false)
+                    .refreshToken(refreshToken)
+                    .jwtToken(jwtToken).build()));
+        }
+    }
 }

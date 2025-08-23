@@ -2,6 +2,8 @@ package com.example.Pill_Mate_Backend.domain.oauth2.service;
 
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,13 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.nio.charset.StandardCharsets;
+import java.security.PublicKey;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import java.util.Base64;
-import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
@@ -135,6 +136,23 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public Map<String, String> parseHeaders(String token) throws JsonProcessingException {
+        String header = token.split("\\.")[0];
+        return new ObjectMapper().readValue(decodeHeader(header), Map.class);
+    }
+
+    public String decodeHeader(String token) {
+        return new String(Base64.getDecoder().decode(token), StandardCharsets.UTF_8);
+    }
+
+    public Claims getTokenClaims(String token, PublicKey publicKey) {
+        return Jwts.parserBuilder()
+                .setSigningKey(publicKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
 }
