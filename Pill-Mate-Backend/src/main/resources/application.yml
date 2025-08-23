@@ -1,0 +1,51 @@
+spring:
+
+  application:
+    name: Pill-Mate-Backend
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MariaDBDialect
+    show-sql: true
+
+  #apple login 추가 20260801
+  cloud:
+    openfeign:
+      client:
+        config:
+          appleAuthClient:
+            connect-timeout: 5000
+            read-timeout: 5000
+
+jwt:
+  secret-key: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:3600000} # 기본값 1시간
+
+openApi:
+  serviceKey: ${OPENAPI_SERVICE_KEY}
+
+fcm:
+  api:
+    url: https://fcm.googleapis.com/v1/projects/pillmate-c9a64/messages:send
+  key:
+    json: ${FCM_ACCOUNT_KEY}
+    scope: https://www.googleapis.com/auth/firebase.messageing
+
+#--ios--
+apple:
+  auth:
+    token-url: https://appleid.apple.com/auth/token
+    public-key-url: https://appleid.apple.com/auth/keys
+  iss: https://appleid.apple.com
+  aud: ${APPLE_CLIENT_ID}
+  team-id: ${APPLE_TEAM_ID}
+  key:
+    id: ${APPLE_KEY_ID}
+    path: ~/.ssh/Pill-Mate-Backend/Pill-Mate-Backend/src/main/resources/Pillmate_AuthKey.p8

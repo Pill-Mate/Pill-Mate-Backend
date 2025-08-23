@@ -1,17 +1,23 @@
 package com.example.Pill_Mate_Backend.domain.check.controller;
 
+import com.example.Pill_Mate_Backend.domain.alarm.service.FcmAlarmService;
+import com.example.Pill_Mate_Backend.domain.alarm.service.NotificationService;
 import com.example.Pill_Mate_Backend.domain.check.dto.*;
 import com.example.Pill_Mate_Backend.domain.check.service.ClickMedicineService;
 import com.example.Pill_Mate_Backend.domain.check.service.HomeService;
 import com.example.Pill_Mate_Backend.domain.check.service.MedicineCheckService;
 import com.example.Pill_Mate_Backend.domain.oauth2.controller.AuthController;
 import com.example.Pill_Mate_Backend.domain.oauth2.service.JwtService;
+import com.example.Pill_Mate_Backend.global.common.ApiResponse;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
+import com.google.protobuf.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
@@ -32,10 +38,14 @@ public class CheckController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     @Autowired
     private ClickMedicineService clickMedicineService;
-
+    @Autowired
+    private FcmAlarmService fcmAlarmService;
+    @Autowired
+    private NotificationService notificationService;
+    @Operation(summary="약물 복용 체크 정보 수정", description = "medicine_schedule 약물 복용 체크시 정보 수정, 그 후 모든 당일 약물 리스트도 전송")
     @SneakyThrows
     @PatchMapping("/medicinecheck")
-    public ResponseDTO updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<ResponseDTO>> updateMedicineCheck(@RequestBody List<MedicineCheckDTO> medicineCheckList, @RequestHeader(value = "Authorization", required = true) String token) {
         System.out.println(medicineCheckList);
         if (medicineCheckList == null || medicineCheckList.isEmpty()) {
             logger.info("Invalid or empty request body");
@@ -54,6 +64,7 @@ public class CheckController {
 
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
         System.out.println("오늘 EMAIL!! : " + email);
@@ -72,8 +83,17 @@ public class CheckController {
         WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
         System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
 
+        //알람 업데이트
+        if(medicineCheckService.findScheduleIsAfter(medicineScheduleId)==true){//medicineCheckList)==true){
+            //알람 업데이트
+            fcmAlarmService.resetAlarmTrigger(email);
+        }
+
+        //notificationread처리
+        boolean notificationRead = notificationService.getNotificationRead(email);
+
         // Return response entity
-        return ResponseDTO.builder()
+        return ResponseEntity.ok(ApiResponse.onSuccess(ResponseDTO.builder()
                 .medicineList(medicineList)
                 .sunday(weekCount.getSunday())
                 .monday(weekCount.getMonday())
@@ -84,12 +104,14 @@ public class CheckController {
                 .saturday(weekCount.getSaturday())
                 .countAll(weekCount.getCountAll())
                 .countLeft(weekCount.getCountLeft())
-                .build();
+                .notificationRead(notificationRead)
+                .build()));
     }
 
+    @Operation(summary="약물 체크 페이지 정보 전송", description = "특정 날짜 약물 체크 페이지 정보 전송-> 약물 리스트, 월-금 먹은 약물 유무")
     @SneakyThrows
     @PostMapping("/scheduledata")
-    public ResponseDTO getMedicineSchedulesByDate(@RequestBody(required = false) ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<ResponseDTO>> getMedicineSchedulesByDate(@RequestBody(required = false) ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
@@ -99,6 +121,7 @@ public class CheckController {
 
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
 
@@ -113,8 +136,11 @@ public class CheckController {
         WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
         System.out.print(homeService.getMedicineSchedulesByDate(email, mydate));
 
+        //notificationread처리
+        boolean notificationRead = notificationService.getNotificationRead(email);
+
         // Return response entity
-        return ResponseDTO.builder()
+        return ResponseEntity.ok(ApiResponse.onSuccess(ResponseDTO.builder()
                 .medicineList(medicineList)
                 .sunday(weekCount.getSunday())
                 .monday(weekCount.getMonday())
@@ -125,12 +151,13 @@ public class CheckController {
                 .saturday(weekCount.getSaturday())
                 .countAll(weekCount.getCountAll())
                 .countLeft(weekCount.getCountLeft())
-                .build();
+                .notificationRead(notificationRead)
+                .build()));
     }
-
+    @Operation(summary="주 스크롤", description = "일주일 스크롤 시 일주 후 체크페이지 정보 리스트 전송")
     @SneakyThrows
     @PostMapping("/weekscroll")
-    public WeekDTO getWeekDateByDate(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
+    public ResponseEntity<ApiResponse<WeekDTO>> getWeekDateByDate(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
@@ -140,6 +167,7 @@ public class CheckController {
 
             } else {
                 logger.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
             }
         }
 
@@ -154,12 +182,12 @@ public class CheckController {
         WeekDTO weekData = homeService.getWeekByDate(email, mydate);
         System.out.print(homeService.getWeekByDate(email, mydate));
 
-        return weekData;
+        return ResponseEntity.ok(ApiResponse.onSuccess(weekData));
     }
-
+    @Operation(summary="약물 클릭", description = "약물 클릭 시 약물 상세 정보 전송 >>>>아직 사용X<<<<")
     @PostMapping("/clickmedicine")
-    public MedicineDetailDTO getMedicineDetail(@RequestBody ClickMedicineDTO clickMedicineDTO){
+    public ResponseEntity<ApiResponse<MedicineDetailDTO>> getMedicineDetail(@RequestBody ClickMedicineDTO clickMedicineDTO){
         System.out.print(clickMedicineDTO);
-        return clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getMedicineScheduleId());
+        return  ResponseEntity.ok(ApiResponse.onSuccess(clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getMedicineScheduleId())));
     }
 }

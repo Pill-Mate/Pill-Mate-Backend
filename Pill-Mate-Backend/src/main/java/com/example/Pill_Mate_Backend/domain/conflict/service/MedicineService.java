@@ -1,0 +1,136 @@
+package com.example.Pill_Mate_Backend.domain.conflict.service;
+
+import com.example.Pill_Mate_Backend.CommonEntity.Medicine;
+import com.example.Pill_Mate_Backend.CommonEntity.openApi.DurEffDuplication;
+import com.example.Pill_Mate_Backend.domain.conflict.dto.*;
+import com.example.Pill_Mate_Backend.domain.conflict.repository.DurEffDuplicationRepository;
+import com.example.Pill_Mate_Backend.domain.conflict.repository.DurTabooRepository;
+import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+
+@RequiredArgsConstructor
+@Service
+public class MedicineService {
+    private final MedicineRepository medicineRepository;
+    private final TabooApiService tabooApiService;
+    private final EfcyApiService efcyApiService;
+    private final DurTabooRepository durTabooRepository;
+    private final DurEffDuplicationRepository durEffDuplicationRepository;
+
+    public MedicineConflict findAll(String itemSeq, String email) {
+       Medicine medicine =  medicineRepository.findByIdentifyNumberAndEmail(itemSeq,email)
+               .orElse(null);
+
+        if (medicine == null) {
+            return null; // or throw new MedicineHandler(...)
+        }
+
+       return MedicineConflict.builder()
+               .className(medicine.getClassName())
+               .effectName(medicine.getEfficacy())
+               .itemImage(medicine.getMedicineImage().toString())
+               .entpName(medicine.getEntpName())
+               .itemSeq(medicine.getIdentifyNumber())
+               .itemName(medicine.getMedicineName())
+               .build();
+
+
+
+    }
+    @Transactional
+    public AllConflictResponse checkAllConflicts(String itemSeq, String email) {
+        List<TabooDto> usjntList = new ArrayList<>();
+        List<EfcyDto> efcyList = new ArrayList<>();
+
+        //병용금기
+        List<TabooDto> mixtureList = durTabooRepository.findTabooByMixtureItemSeq(itemSeq);
+
+        //사용자가 가지고 있으면 리스트에 추가
+        for (TabooDto mixtureSeq : mixtureList) {
+            if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
+                mixtureSeq.setImage(medicineRepository.findMedicineImageByItemSeq(mixtureSeq.getMixtureItemSeq()));
+                usjntList.add(mixtureSeq);
+            }
+        }
+
+        DurEffDuplication entity = durEffDuplicationRepository.findByItemSeq(itemSeq);
+        String durSeq = "";
+        List<EfcyDto> itemSeqList;
+
+        if (entity != null) {
+            durSeq = entity.getDurSeq();
+            itemSeqList = durEffDuplicationRepository.findEfcyByDurSeq(durSeq);
+            for (EfcyDto dto : itemSeqList) {
+                if (medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).isPresent()) {
+                    Medicine medicine = medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).orElseThrow();
+
+                    EfcyDto efcy = EfcyDto.builder()
+                            .className(medicine.getClassName())
+                            //추후 effectname으로 수정
+                            .effectName(dto.getEffectName())
+                            .entpName(medicine.getEntpName())
+                            .itemName(medicine.getMedicineName())
+                            .itemSeq(dto.getItemSeq())
+                            .build();
+                    efcy.setImage(medicine.getMedicineImage().toString());
+                    efcyList.add(efcy);
+                }
+            }
+
+        }
+
+        MedicineConflict medicineConflict = findAll(itemSeq, email);
+
+        return AllConflictResponse.builder()
+                .usjntTabooList(usjntList)
+                .efcyDplctList(efcyList)
+                .conflictWithUserMeds(medicineConflict)
+                .build();
+    }
+
+
+    private List<MedicineConflict> findUserConflicts(String email,
+                                                     List<String> usjntList,
+                                                     List<String> efcyList) {
+
+        List<String> myItemSeqs = medicineRepository.findAllByEmail(email)
+                .stream()
+                .map(m -> m.getIdentifyNumber())
+                .toList();
+
+        Set<String> conflictSeqs = new HashSet<>();
+        usjntList.forEach(item -> {
+            if (myItemSeqs.contains(item)) {
+                conflictSeqs.add(item);
+            }
+        });
+
+        efcyList.forEach(item -> {
+            if (myItemSeqs.contains(item)) {
+                conflictSeqs.add(item);
+            }
+        });
+
+            return medicineRepository.findAllByIdentifyNumberInAndUserEmail(conflictSeqs,email)
+                .stream()
+                .map(med -> MedicineConflict.builder()
+                        .itemName(med.getMedicineName())
+                        .itemSeq(med.getIdentifyNumber())
+                        .effectName(med.getEfficacy())
+                        .className(med.getClassName())
+                        .entpName(med.getEntpName())
+                        .itemImage(med.getMedicineImage().toString())
+                        .build())
+                .toList();
+    }
+
+
+}

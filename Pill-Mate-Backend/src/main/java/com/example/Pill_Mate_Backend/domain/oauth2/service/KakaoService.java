@@ -1,17 +1,24 @@
 package com.example.Pill_Mate_Backend.domain.oauth2.service;
 
 
+import com.example.Pill_Mate_Backend.CommonEntity.RefreshToken;
 import com.example.Pill_Mate_Backend.CommonEntity.Users;
+import com.example.Pill_Mate_Backend.domain.oauth2.dto.JwtTokenDto;
 import com.example.Pill_Mate_Backend.domain.oauth2.dto.UserInfoResponseDto;
+import com.example.Pill_Mate_Backend.domain.oauth2.repository.RefreshTokenRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +31,8 @@ import java.util.Optional;
 @Service
 public class KakaoService {
     private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public UserInfoResponseDto getUserInfo(String kakaoAccessToken) {
         RestTemplate restTemplate = new RestTemplate();
@@ -123,5 +132,74 @@ public class KakaoService {
         }
     }
 
+    public void updateRefreshToken(String email, String refreshtoken){
+        RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
+        refreshToken.setToken(refreshtoken);
+        refreshTokenRepository.save(refreshToken);
+    }
 
+    @Transactional
+    public JwtTokenDto reissue(JwtTokenDto tokenRequestDto) {
+        // 1. Refresh Token 검증
+        if (!jwtService.validateToken(tokenRequestDto.getRefreshToken())) {
+            throw new GeneralException(ErrorStatus._EXPIRED_REFRESH_JWT_TOKEN);
+            //throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+        }
+
+        // 2. Access Token 에서 Member ID 가져오기
+        //Authentication authentication = jwtService.getAuthentication(tokenRequestDto.getAccessToken());
+        String email = jwtService.extractEmail(tokenRequestDto.getRefreshToken());
+
+        //refreshtoken없을때
+        if(refreshTokenRepository.findByEmail(email)==null){
+            System.out.println("db에 refresh token 없음");
+            throw new GeneralException(ErrorStatus._EXPIRED_REFRESH_JWT_TOKEN);
+        }
+
+        // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
+        //String refreshToken = tokenRequestDto.getRefreshToken();
+        //RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
+                //.orElseThrow(() -> new RuntimeException("로그아웃 된 사용자입니다."));
+        RefreshToken refreshToken = refreshTokenRepository.findByEmail(email);
+        //String refreshToken = refreshTokenRepository.findRefreshTokenByEmail(email);
+
+
+        System.out.println("DB리프레쉬토큰"+refreshToken.getToken());
+
+        // 4. Refresh Token 일치하는지 검사
+        if (!refreshToken.getToken().equals(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+        }
+
+        // 5. 새로운 토큰 생성
+        JwtTokenDto tokenDto = new JwtTokenDto();
+        String newAccessToken = "";
+        String newRefreshToken = "";
+        if (jwtService.refreshTokenPeriodCheck(refreshToken.getToken())) {
+            // 5-1. Refresh Token의 유효기간이 3일 미만일 경우 전체(Access / Refresh) 재발급
+            newAccessToken = jwtService.generateToken(email);
+            newRefreshToken = jwtService.generateRefreshToken(email);
+            this.updateRefreshToken(email,newRefreshToken);
+
+            System.out.println("accesstoken, refreshtoken 둘다 발급");
+
+            // 6. Refresh Token 저장소 정보 업데이트
+            refreshToken.updateValue(newRefreshToken);
+            refreshTokenRepository.save(refreshToken);
+        } else {
+            // 5-2. Refresh Token의 유효기간이 3일 이상일 경우 Access Token만 재발급
+            newAccessToken = jwtService.generateToken(email);
+            newRefreshToken = refreshToken.getToken();
+            System.out.println("accesstoken 하나만 발급..");
+        }
+        tokenDto.setAccessToken(newAccessToken);
+        tokenDto.setRefreshToken(newRefreshToken);
+        System.out.println("tokenDTO: "+tokenDto);
+        // 토큰 발급
+        return tokenDto;
+    }
+
+    //https://gong-story.tistory.com/44
+    // https://g-db.tistory.com/entry/Spring-Security-%EC%8A%A4%ED%94%84%EB%A7%81-%EB%B6%80%ED%8A%B8-Access-Token%EC%97%90%EC%84%9C-Refresh-Token%EC%B6%94%EA%B0%80%ED%95%98%EC%97%AC-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0
+    // 참고
 }

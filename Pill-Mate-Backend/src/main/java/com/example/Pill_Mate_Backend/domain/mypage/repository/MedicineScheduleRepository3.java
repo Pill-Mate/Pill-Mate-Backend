@@ -10,7 +10,16 @@ import java.util.List;
 
 @Repository
 public interface MedicineScheduleRepository3 extends JpaRepository<MedicineSchedule, Long> {
-    @Query(value = "select * from medicine_schedule s where user_id = :userId;"
-            , nativeQuery = true)
+    /*@Query(value = "SELECT * FROM medicine_schedule s " +
+            "WHERE user_id = :userId " +
+            "AND (s.intake_date > CURRENT_DATE " +
+            "     OR (s.intake_date = CURRENT_DATE AND s.intake_time > CURRENT_TIME))",
+            nativeQuery = true)
+    List<MedicineSchedule> findByUsers(@Param("userId") Long userId);*/
+
+    @Query("SELECT s FROM MedicineSchedule s " +
+            "WHERE s.users.id = :userId " +
+            "AND (s.intakeDate > CURRENT_DATE " +
+            "     OR (s.intakeDate = CURRENT_DATE AND s.intakeTime > CURRENT_TIME))")
     List<MedicineSchedule> findByUsers(@Param("userId") Long userId);
 }

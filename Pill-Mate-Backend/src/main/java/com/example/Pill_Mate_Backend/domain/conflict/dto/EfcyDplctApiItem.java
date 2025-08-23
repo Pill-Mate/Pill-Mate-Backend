@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EfcyDplctApiItem {
@@ -11,7 +12,7 @@ public class EfcyDplctApiItem {
     @JsonProperty("ITEM_NAME")
     private String itemName;
 
-    //약물 종류
+    //약물 식별 번호
     @JsonProperty("ITEM_SEQ")
     private String itemSeq;
 

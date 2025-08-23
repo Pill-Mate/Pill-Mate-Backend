@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.net.URI;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,9 @@ public class Users extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = true, unique = true, length = 255)
+    private String appleId;
+
     @Column(nullable = false, length = 50)
     private String username;
 
@@ -30,24 +34,24 @@ public class Users extends BaseEntity {
     private URI profileImage;       //userImage로 바꿔야? -----------------!-------------------
 
     @Column(nullable = true)
-    private Time wakeupTime;
+    private LocalTime wakeupTime;
 
     @Column(nullable = true)
-    private Time bedTime;
+    private LocalTime bedTime;
 
     @Column(nullable = true)
-    private Time morningTime;
+    private LocalTime morningTime;
 
     @Column(nullable = true)
-    private Time lunchTime;
+    private LocalTime lunchTime;
 
     @Column(nullable = true)
-    private Time dinnerTime;
+    private LocalTime dinnerTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean alarmMarketing;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean alarmInfo;
 
 
@@ -56,6 +60,21 @@ public class Users extends BaseEntity {
         this.username = username;
         this.email = email;
         this.profileImage = profileImage;
+        this.appleId = null;
+        this.wakeupTime = null;
+        this.bedTime = null;
+        this.morningTime = null;
+        this.lunchTime = null;
+        this.dinnerTime = null;
+        this.alarmMarketing = false;
+        this.alarmInfo = false;
+    }
+
+    public Users(String username, String email, String appleId){
+        this.username = username;
+        this.email = email;
+        this.appleId = appleId;
+        this.profileImage = URI.create("");
         this.wakeupTime = null;
         this.bedTime = null;
         this.morningTime = null;
@@ -86,9 +105,21 @@ public class Users extends BaseEntity {
     @ToString.Exclude
     @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
     private List<MedicineSchedule> medicineSchedules;
+    @ToString.Exclude
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE) // Cascade 설정은 부모 쪽에서
+    private List<FcmToken> fcmTokens;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+    private List<RefreshToken> refreshTokens;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+    private List<NotificationRead> notificationReads;
 
     //루틴 업데이트
-    public Users(String email, Time wakeupTime, Time bedTime, Time morningTime, Time lunchTime, Time dinnerTime) {
+    public Users(String email, LocalTime wakeupTime, LocalTime bedTime, LocalTime morningTime, LocalTime lunchTime, LocalTime dinnerTime) {
         this.email = email;
         this.wakeupTime = wakeupTime;
         this.bedTime = bedTime;

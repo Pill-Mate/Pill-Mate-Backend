@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 @Builder
 @Data
@@ -14,10 +15,10 @@ import java.sql.Time;
 public class OnboardingDTO {
     private Boolean alarmMarketing;
     private Boolean alarmInfo;
-    private Time wakeupTime;
-    private Time bedTime;
-    private Time morningTime;
-    private Time lunchTime;
-    private Time dinnerTime;
+    private LocalTime wakeupTime;
+    private LocalTime bedTime;
+    private LocalTime morningTime;
+    private LocalTime lunchTime;
+    private LocalTime dinnerTime;
 
 }

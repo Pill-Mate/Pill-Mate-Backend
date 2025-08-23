@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -34,11 +35,11 @@ public class RoutineService {
         System.out.println("Result[1] type: " + result[1].getClass().getName());
 
         RoutineDTO routineDTO = new RoutineDTO(
-                (Time) result[0],//wake
-                (Time) result[1],//bed
-                (Time) result[2],//morning
-                (Time) result[3],//lunch
-                (Time) result[4]//dinner
+                ((Time) result[0]).toLocalTime(), // wake
+                ((Time) result[1]).toLocalTime(), // bed
+                ((Time) result[2]).toLocalTime(), // morning
+                ((Time) result[3]).toLocalTime(), // lunch
+                ((Time) result[4]).toLocalTime()  // dinner
         );
 
         return routineDTO;
@@ -68,7 +69,7 @@ public class RoutineService {
             String mealUnit = String.valueOf(schedule.getMealUnit()); // mealbefore, mealafter
             int mealTime = schedule.getMealTime(); // 분 단위
 
-            Time updatedTime = null;
+            LocalTime updatedTime = null;
 
             switch (intakeCount) {
                 case "MORNING":
@@ -103,28 +104,25 @@ public class RoutineService {
         // JPA가 @Transactional로 인해 자동으로 변경 사항을 감지하고 업데이트합니다.
     }
     // 시간 계산 함수
-    private Time calculateTime(Time baseTime, String mealUnit, int mealTime) {
-        long baseMillis = baseTime.getTime();
-        long offsetMillis = mealTime * 60 * 1000L;
-
+    private LocalTime calculateTime(LocalTime baseTime, String mealUnit, int mealTime) {
         if ("MEALBEFORE".equals(mealUnit)) {
-            return new Time(baseMillis - offsetMillis);
+            return baseTime.minusMinutes(mealTime);
         } else if ("MEALAFTER".equals(mealUnit)) {
-            return new Time(baseMillis + offsetMillis);
+            return baseTime.plusMinutes(mealTime);
         }
-        throw new RuntimeException("Invalid meal unit: " + mealUnit);
+        throw new IllegalArgumentException("Invalid meal unit: " + mealUnit);
     }
 
-    // SLEEP 처리 함수
-    private Time calculateSleepTime(Time bedtime) {
-        long bedtimeMillis = bedtime.getTime();
-        Time elevenFifty = Time.valueOf("23:50:00");
 
-        if (bedtimeMillis < Time.valueOf("12:00:00").getTime()) {
-            return elevenFifty; // 저녁 11:50
+
+    private LocalTime calculateSleepTime(LocalTime bedtime) {
+        LocalTime elevenFifty = LocalTime.of(23, 50); // 23:50 (저녁 11시 50분)
+
+        if (bedtime.isBefore(LocalTime.NOON)) { // 오전 12시(정오)보다 이른 시간인지 체크
+            return elevenFifty;
         } else {
-            long offsetMillis = 30 * 60 * 1000L; // 30분
-            return new Time(bedtimeMillis - offsetMillis);
+            return bedtime.minusMinutes(30); // 취침 시간에서 30분을 뺌
         }
     }
+
 }

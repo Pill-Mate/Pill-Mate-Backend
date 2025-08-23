@@ -7,7 +7,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,13 +41,16 @@ public class Schedule extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10)")
-    private IngredientUnit medicineUnit;
+    private IngredientUnit ingredientUnit;
 
     @Column(nullable = false, length = 50)
     private Float medicineVolume;
 
     @Column(nullable = false)
     private Boolean isAlarm;
+
+    @Column
+    private LocalDateTime stoppedDate;
 
     @Enumerated(EnumType.STRING)
     //@Column(nullable = false)// 이거 하면 varchar이 아닌 enum으로 mysql에 저장 되는(타 db와의 연동 문제)
@@ -54,7 +60,7 @@ public class Schedule extends BaseEntity {
 
 
     @Column(nullable = false)
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(nullable = false, length = 50)
     private Integer intakePeriod;
@@ -85,4 +91,6 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    private List<MedicineSchedule> medicineSchedules;
 }
