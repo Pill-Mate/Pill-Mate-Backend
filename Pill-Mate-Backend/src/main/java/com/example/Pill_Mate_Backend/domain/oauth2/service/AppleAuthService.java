@@ -70,7 +70,7 @@ public class AppleAuthService {
             Users users = existingUser.get();
             //AppleAccount acc = appleAccountRepo.findByUserId(userId).orElseThrow();
             String refreshToken = tokenCipher.decrypt(users.getAppleRefreshToken());
-            if(refreshToken != null && !"".equals(refreshToken)){
+            if(refreshToken == null || "".equals(refreshToken)){
                 System.out.println("애플 리프레쉬 토큰이 없음. 애플 연동 해제 불가능");
                 throw new GeneralException(ErrorStatus._APPLE_REFRESH_TOKEN_NULL);
             }

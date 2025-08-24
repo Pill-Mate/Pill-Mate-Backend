@@ -229,7 +229,7 @@ public class AuthController {
         String email = jwtService.extractEmail(jwtToken.substring(7)); // Bearer 제거 후 파싱
 
         //apple Sign out
-        if(kakaoToken != null && !"".equals(kakaoToken)){
+        if(kakaoToken == null || "".equals(kakaoToken)){
             //애플이랑 연결해제(revoke)
             appleAuthService.revoke(email);
             System.out.println(email+": 애플이랑 연동 해제");
