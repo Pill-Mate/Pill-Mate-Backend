@@ -68,12 +68,13 @@ public class AppleAuthService {
         Optional<Users> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
             Users users = existingUser.get();
+            String enc = users.getAppleRefreshToken();
             //AppleAccount acc = appleAccountRepo.findByUserId(userId).orElseThrow();
-            String refreshToken = tokenCipher.decrypt(users.getAppleRefreshToken());
-            if(refreshToken == null || "".equals(refreshToken)){
+            if(enc == null || "".equals(enc)){
                 System.out.println("애플 리프레쉬 토큰이 없음. 애플 연동 해제 불가능");
                 throw new GeneralException(ErrorStatus._APPLE_REFRESH_TOKEN_NULL);
             }
+            String refreshToken = tokenCipher.decrypt(enc);
             String clientSecret = new AppleClientSecretProvider(appleProps).issueClientSecret(7);
             Map<String, Object> form = new HashMap<>();
             form.put("client_id", appleProps.clientId());
