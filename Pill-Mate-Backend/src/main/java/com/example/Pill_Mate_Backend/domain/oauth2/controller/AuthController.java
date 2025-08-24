@@ -222,11 +222,21 @@ public class AuthController {
     }
 
     // 카카오 회원탈퇴
-    @Operation(summary="카카오 회원탈퇴", description = "카카오 회원탈퇴..카카오와 연결 끊기")
+    @Operation(summary="카카오, 애플 회원탈퇴", description = "카카오 회원탈퇴:카카오와 연결 끊기 / 애플 회원탈퇴:kakaoaccesstoken null 시, 애플과 연결 해제")
     @PostMapping("/signout")
     public ResponseEntity<ApiResponse<String>> unlink(@RequestHeader("Authorization") String jwtToken, @RequestBody KakaoSignOutDTO kakaoSignUpDto) {
         String kakaoToken = kakaoSignUpDto.getKakaoAccessToken();
         String email = jwtService.extractEmail(jwtToken.substring(7)); // Bearer 제거 후 파싱
+
+        //apple Sign out
+        if(kakaoToken != null && !"".equals(kakaoToken)){
+            //애플이랑 연결해제(revoke)
+            appleAuthService.revoke(email);
+            System.out.println(email+": 애플이랑 연동 해제");
+            kakaoService.deleteUser(email); //우리 db에서 회원정보 삭제
+            return ResponseEntity.ok(ApiResponse.onSuccess("애플 회원정보 삭제 완료"));
+        }
+
         kakaoService.kakaoUnlink(kakaoToken); //카카오에서 연결 해제
         kakaoService.deleteUser(email); //우리 db에서 회원정보 삭제
         return ResponseEntity.ok(ApiResponse.onSuccess("회원정보 삭제 완료"));
@@ -304,8 +314,12 @@ public class AuthController {
                 System.out.println("USERS 생성 위한 요소 불충분");
                 throw new GeneralException(ErrorStatus._USERS_ELEMENT_LACK);
             }
-            // User 객체 생성
-            Users users = new Users(appleSignUpDTO.getUserName(), appleSignUpDTO.getEmail(), accountId);
+
+            //apple refreshtoken 받기.
+            String appleRefreshToken = appleAuthService.exchange(appleSignUpDTO.getAuthorizationCode());
+
+            // User 객체 생성(apple Id, apple refreshToken 저장)
+            Users users = new Users(appleSignUpDTO.getUserName(), appleSignUpDTO.getEmail(), accountId, appleRefreshToken);
             // 데이터베이스에 사용자 정보 저장
             userRepository.save(users);
 
