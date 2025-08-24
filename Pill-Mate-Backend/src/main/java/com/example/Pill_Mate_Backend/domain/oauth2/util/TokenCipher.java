@@ -33,6 +33,9 @@ public class TokenCipher {
     }
 
     public String decrypt(String b64) {
+        if (b64 == null || b64.isBlank()) {
+            throw new IllegalArgumentException("TokenCipher.decrypt: empty input");
+        }
         try {
             byte[] in = Base64.getDecoder().decode(b64);
             byte[] iv = new byte[12];
