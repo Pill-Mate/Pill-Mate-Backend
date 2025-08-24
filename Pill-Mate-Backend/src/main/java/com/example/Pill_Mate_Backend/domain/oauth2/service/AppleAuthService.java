@@ -11,6 +11,8 @@ import com.example.Pill_Mate_Backend.domain.oauth2.util.AppleProps;
 import com.example.Pill_Mate_Backend.domain.oauth2.util.ApplePublicKeyGenerator;
 import com.example.Pill_Mate_Backend.domain.oauth2.util.TokenCipher;
 import com.example.Pill_Mate_Backend.domain.register.repository.UserRepository;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.GeneralException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,21 +64,16 @@ public class AppleAuthService {
         return enc;
     }
 
-    public void revoke(String clientId, String clientSecret, String token, String hint) {
-        Map<String, Object> form = new HashMap<>();
-        form.put("client_id", clientId);
-        form.put("client_secret", clientSecret);
-        form.put("token", token);
-        form.put("token_type_hint", hint);
-        oauthClient.revoke(form);
-    }
-
     public void revoke(String email) {
         Optional<Users> existingUser = userRepository.findByEmail(email);
         if (existingUser.isPresent()) {
             Users users = existingUser.get();
             //AppleAccount acc = appleAccountRepo.findByUserId(userId).orElseThrow();
             String refreshToken = tokenCipher.decrypt(users.getAppleRefreshToken());
+            if(refreshToken != null && !"".equals(refreshToken)){
+                System.out.println("애플 리프레쉬 토큰이 없음. 애플 연동 해제 불가능");
+                throw new GeneralException(ErrorStatus._APPLE_REFRESH_TOKEN_NULL);
+            }
             String clientSecret = new AppleClientSecretProvider(appleProps).issueClientSecret(7);
             Map<String, Object> form = new HashMap<>();
             form.put("client_id", appleProps.clientId());

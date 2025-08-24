@@ -29,7 +29,8 @@ public enum ErrorStatus implements BaseErrorCode {
     //medicine 에러
     _MEDICINE_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDICINE400", "약물이 존재하지 않습니다."),
     //users요소 불충분 에러
-    _USERS_ELEMENT_LACK(HttpStatus.BAD_REQUEST, "USERSLACK400", "USERS 생성을 위한 요소가 불충분합니다.");
+    _USERS_ELEMENT_LACK(HttpStatus.BAD_REQUEST, "USERSLACK400", "USERS 생성을 위한 요소가 불충분합니다."),
+    _APPLE_REFRESH_TOKEN_NULL(HttpStatus.NOT_FOUND, "APPLEREFRESHTOKEN400", "애플 REFRESH_TOKEN이 존재하지 않습니다");
 
 
     private final HttpStatus httpStatus;
