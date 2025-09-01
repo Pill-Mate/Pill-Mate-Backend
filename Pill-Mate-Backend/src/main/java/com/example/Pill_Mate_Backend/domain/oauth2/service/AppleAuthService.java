@@ -37,6 +37,7 @@ public class AppleAuthService {
     private final AppleProps appleProps;
     private final TokenCipher tokenCipher;
     private final UserRepository userRepository;
+    private final AppleClientSecretProvider clientSecretProvider;
 
     public String getAppleAccountId(String identityToken)
             throws JsonProcessingException, AuthenticationException, NoSuchAlgorithmException,
@@ -52,6 +53,7 @@ public class AppleAuthService {
         return keysClient.getApplePublicKeys();
     }
 
+    /*
     public String exchange(String authorizationCode) {
         String clientSecret = new AppleClientSecretProvider(appleProps).issueClientSecret(180);
         Map<String, Object> form = new HashMap<>();
@@ -83,6 +85,37 @@ public class AppleAuthService {
             form.put("token_type_hint", "refresh_token");
             oauthClient.revoke(form);
             //appleAccountRepo.delete(acc);
+        }
+    }
+
+     */
+    public String exchange(String authorizationCode) {
+        String clientSecret = clientSecretProvider.issueClientSecret(180);
+        Map<String, Object> form = new HashMap<>();
+        form.put("grant_type", "authorization_code");
+        form.put("code", authorizationCode);
+        form.put("client_id", appleProps.clientId());
+        form.put("client_secret", clientSecret);
+        AppleTokenRes res = oauthClient.exchangeToken(form);
+        return tokenCipher.encrypt(res.refresh_token());
+    }
+
+    public void revoke(String email) {
+        Optional<Users> existingUser = userRepository.findByEmail(email);
+        if (existingUser.isPresent()) {
+            Users users = existingUser.get();
+            String enc = users.getAppleRefreshToken();
+            if (enc == null || enc.isBlank()) {
+                throw new GeneralException(ErrorStatus._APPLE_REFRESH_TOKEN_NULL);
+            }
+            String refreshToken = tokenCipher.decrypt(enc);
+            String clientSecret = clientSecretProvider.issueClientSecret(7);
+            Map<String, Object> form = new HashMap<>();
+            form.put("client_id", appleProps.clientId());
+            form.put("client_secret", clientSecret);
+            form.put("token", refreshToken);
+            form.put("token_type_hint", "refresh_token");
+            oauthClient.revoke(form);
         }
     }
 }
