@@ -53,42 +53,6 @@ public class AppleAuthService {
         return keysClient.getApplePublicKeys();
     }
 
-    /*
-    public String exchange(String authorizationCode) {
-        String clientSecret = new AppleClientSecretProvider(appleProps).issueClientSecret(180);
-        Map<String, Object> form = new HashMap<>();
-        form.put("grant_type", "authorization_code");
-        form.put("code", authorizationCode);
-        form.put("client_id", appleProps.clientId());
-        form.put("client_secret", clientSecret);
-        AppleTokenRes res = oauthClient.exchangeToken(form); //apple한테 refreshtoken 받아오기
-        String enc = tokenCipher.encrypt(res.refresh_token());//refresh token 암호화
-        return enc;
-    }
-
-    public void revoke(String email) {
-        Optional<Users> existingUser = userRepository.findByEmail(email);
-        if (existingUser.isPresent()) {
-            Users users = existingUser.get();
-            String enc = users.getAppleRefreshToken();
-            //AppleAccount acc = appleAccountRepo.findByUserId(userId).orElseThrow();
-            if(enc == null || "".equals(enc)){
-                System.out.println("애플 리프레쉬 토큰이 없음. 애플 연동 해제 불가능");
-                throw new GeneralException(ErrorStatus._APPLE_REFRESH_TOKEN_NULL);
-            }
-            String refreshToken = tokenCipher.decrypt(enc);
-            String clientSecret = new AppleClientSecretProvider(appleProps).issueClientSecret(7);
-            Map<String, Object> form = new HashMap<>();
-            form.put("client_id", appleProps.clientId());
-            form.put("client_secret", clientSecret);
-            form.put("token", refreshToken);
-            form.put("token_type_hint", "refresh_token");
-            oauthClient.revoke(form);
-            //appleAccountRepo.delete(acc);
-        }
-    }
-
-     */
     public String exchange(String authorizationCode) {
         String clientSecret = clientSecretProvider.issueClientSecret(180);
         Map<String, Object> form = new HashMap<>();
@@ -96,8 +60,8 @@ public class AppleAuthService {
         form.put("code", authorizationCode);
         form.put("client_id", appleProps.clientId());
         form.put("client_secret", clientSecret);
-        AppleTokenRes res = oauthClient.exchangeToken(form);
-        return tokenCipher.encrypt(res.refresh_token());
+        AppleTokenRes res = oauthClient.exchangeToken(form);//apple한테 refreshtoken 받아오기
+        return tokenCipher.encrypt(res.refresh_token());//refresh token 암호화
     }
 
     public void revoke(String email) {
@@ -106,6 +70,7 @@ public class AppleAuthService {
             Users users = existingUser.get();
             String enc = users.getAppleRefreshToken();
             if (enc == null || enc.isBlank()) {
+                System.out.println("애플 리프레쉬 토큰이 없음. 애플 연동 해제 불가능");
                 throw new GeneralException(ErrorStatus._APPLE_REFRESH_TOKEN_NULL);
             }
             String refreshToken = tokenCipher.decrypt(enc);
