@@ -1,6 +1,5 @@
 package com.example.Pill_Mate_Backend.domain.check.service;
 
-//import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeSpecific;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDTO;
 import com.example.Pill_Mate_Backend.domain.check.dto.WeekCountDTO;
 import com.example.Pill_Mate_Backend.domain.check.dto.WeekDTO;

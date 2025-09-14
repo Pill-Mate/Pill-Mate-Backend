@@ -12,6 +12,8 @@ import com.example.Pill_Mate_Backend.domain.register.repository.HospitalReposito
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.PharmacyRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.ScheduleRepository;
+import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
+import com.example.Pill_Mate_Backend.global.common.exception.handler.MedicineHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -127,8 +129,8 @@ public class TabooApiService {
     }
 
 
-        public PhoneAddresses getPhoneAddresses(String itemSeq) {
-            Long medicineId = medicineRepository.findMedicineIdByIdentifyNumber(itemSeq);
+        public PhoneAddresses getPhoneAddresses(String itemSeq,String email) {
+            Long medicineId = medicineRepository.findMedicineIdByIdentifyNumberAndEmail(itemSeq,email);
             Pharmacy pharmacy = pharmacyRepository.findByMedicineId(medicineId);
             Hospital hospital = hospitalRepository.findByMedicineId(medicineId);
             PhoneAddresses phoneAddresses = new PhoneAddresses(
@@ -216,8 +218,9 @@ public class TabooApiService {
 
 
 
-    public void delete(String itemSeq) {
-        Medicine medicine = medicineRepository.findMedicineByIdentifyNumber(itemSeq);
+    public void delete(String itemSeq, String email) {
+        Medicine medicine = medicineRepository.findByIdentifyNumberAndEmail(itemSeq,email)
+                .orElseThrow(() -> new MedicineHandler(ErrorStatus._MEDICINE_NOT_FOUND));
         medicineRepository.delete(medicine);
     }
     public void deletePharmacy(Long pharmacyId){

@@ -48,5 +48,15 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
     @Query("SELECT m.medicineImage FROM Medicine m WHERE m.identifyNumber = :itemSeq")
     String findMedicineImageByItemSeq(@Param("itemSeq") String itemSeq);
 
+    @Query("""
+    SELECT m
+    FROM Medicine m
+    JOIN m.users u
+    JOIN Schedule s ON s.medicine = m
+    WHERE m.identifyNumber = :identifyNumber
+      AND u.email = :email
+      AND s.status = 'ACTIVATE'
+""")
+    Long findMedicineIdByIdentifyNumberAndEmail(String itemSeq, String email);
 }
 

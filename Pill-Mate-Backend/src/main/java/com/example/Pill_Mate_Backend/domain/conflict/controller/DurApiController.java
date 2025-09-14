@@ -166,9 +166,23 @@ public class DurApiController {
 
     @Operation(summary = "약국 병원 이름 주소 전화번호 ", description = "약국 병원 이름 주소 전화번호 리턴")
     @GetMapping("get-phone-address")
-    public ResponseEntity<ApiResponse<PhoneAddresses>> getPhoneNumber(@RequestParam String itemSeq) throws IOException {
+    public ResponseEntity<ApiResponse<PhoneAddresses>> getPhoneNumber(@RequestHeader(value = "Authorization", required = true) String token,
+                                                                      @RequestParam String itemSeq) throws IOException {
 
-        PhoneAddresses phoneAddresses = tabooApiService.getPhoneAddresses(itemSeq);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+
+            } else {
+                log.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
+            }
+        }
+
+        PhoneAddresses phoneAddresses = tabooApiService.getPhoneAddresses(itemSeq,email);
         return ResponseEntity.ok(ApiResponse.onSuccess(phoneAddresses));
 
 
@@ -192,7 +206,7 @@ public class DurApiController {
         }
 
         //충돌 실제 약물 넣어놓을 시에 추가
-        tabooApiService.delete(itemSeq);
+        tabooApiService.delete(itemSeq,email);
             return ResponseEntity.ok(ApiResponse.onSuccess(null));
         }
 
