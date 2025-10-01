@@ -40,6 +40,7 @@ fcm:
 
 #--ios--
 apple:
+  base-url: https://appleid.apple.com
   auth:
     token-url: https://appleid.apple.com/auth/token
     public-key-url: https://appleid.apple.com/auth/keys
@@ -49,3 +50,6 @@ apple:
   key:
     id: ${APPLE_KEY_ID}
     path: ~/.ssh/Pill-Mate-Backend/Pill-Mate-Backend/src/main/resources/Pillmate_AuthKey.p8
+
+security:
+  token-secret: ${SECURITY_TOKEN_SECRET}
