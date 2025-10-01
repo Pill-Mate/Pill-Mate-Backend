@@ -1,6 +1,7 @@
 package com.example.Pill_Mate_Backend.domain.check.repository;
 
 import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
+import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDetailDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSchedule, Long> {
@@ -147,4 +149,21 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
     @Query(value = "select intake_date from medicine_schedule where id = :medicineScheduleId;"
             , nativeQuery = true)
     Object[] findDateByMedicineScheduleId(@Param("medicineScheduleId") long medicineScheduleId);
+
+    @Query(value = """
+        select a.item_image as medicineImage, 
+               a.class_name as className, 
+               a.item_name as medicineName, 
+               a.entp_name as entpName, 
+               b.type_name as caution, 
+               c.use_method_qesitm as userMethod, 
+               c.deposit_method as storage, 
+               c.efcy_qesitm as efficacy, 
+               c.atpn_qesitm as sideEffect
+        from drug_basic a
+        join dur_product_info b on a.item_seq = b.item_seq
+        join drug_detail c on a.item_seq = c.item_seq
+        where a.item_seq = :itemSeq
+        """, nativeQuery = true)
+    MedicineDetailDTO findMedicineDetailByItemSeq(@Param("itemSeq") long itemSeq);
 }

@@ -184,10 +184,10 @@ public class CheckController {
 
         return ResponseEntity.ok(ApiResponse.onSuccess(weekData));
     }
-    @Operation(summary="약물 클릭", description = "약물 클릭 시 약물 상세 정보 전송 >>>>아직 사용X<<<<")
-    @PostMapping("/clickmedicine")
+    @Operation(summary="상세 정보", description = "약물 상세 정보 전송")
+    @PostMapping("/medicinedetail")
     public ResponseEntity<ApiResponse<MedicineDetailDTO>> getMedicineDetail(@RequestBody ClickMedicineDTO clickMedicineDTO){
         System.out.print(clickMedicineDTO);
-        return  ResponseEntity.ok(ApiResponse.onSuccess(clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getMedicineScheduleId())));
+        return  ResponseEntity.ok(ApiResponse.onSuccess(clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getMedicineSeq())));
     }
 }

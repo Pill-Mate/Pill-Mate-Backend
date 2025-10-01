@@ -6,19 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.net.URI;
-
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class MedicineDetailDTO {
-    private String medicineName;
-    private URI medicineImage;
-    private String className;
-    private String ingredient;
-    private String efficacy;
-    private String caution;
-    private String sideEffect;
-    private String storage;
-    private String entpName;
+public interface MedicineDetailDTO {
+    String getMedicineName();    // item_name
+    String getMedicineImage();   // item_image
+    String getClassName();       // class_name
+    String getUserMethod();      // use_method_qesitm
+    String getEfficacy();        // efcy_qesitm
+    String getCaution();         // type_name
+    String getSideEffect();      // atpn_qesitm
+    String getStorage();         // deposit_method
+    String getEntpName();        // entp_name
 }

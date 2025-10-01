@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.hibernate.type.SqlTypes.JSON;
 
@@ -17,9 +18,10 @@ import static org.hibernate.type.SqlTypes.JSON;
 public class ClickMedicineService {
     @Autowired
     private MedicineScheduleRepository2 medicineScheduleRepository2;
-    public MedicineDetailDTO getMedicineDetailByScheduleId(Long medicineScheduleId){
-        Object[] result = medicineScheduleRepository2.findMedicineDetailByScheduleId(medicineScheduleId);
+    public MedicineDetailDTO getMedicineDetailByScheduleId(Long itemSeq){
+        MedicineDetailDTO medicineDetailDTO = medicineScheduleRepository2.findMedicineDetailByItemSeq(itemSeq);
 
+        /*
         for (Object obj : result) { //내용 확인용 출력 삭제해도 됨
             // 내부 배열 요소를 하나씩 출력
             Object[] innerArray = (Object[]) obj;
@@ -72,7 +74,7 @@ public class ClickMedicineService {
                 sideEffect,
                 storage,
                 entpName
-        );
+        );*/
         return medicineDetailDTO;
     }
 }
