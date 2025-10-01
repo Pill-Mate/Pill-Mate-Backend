@@ -13,4 +13,5 @@ public class AppleSignUpDTO {
     private String identityToken;
     private String email;
     private String userName;
+    private String authorizationCode;
 }
