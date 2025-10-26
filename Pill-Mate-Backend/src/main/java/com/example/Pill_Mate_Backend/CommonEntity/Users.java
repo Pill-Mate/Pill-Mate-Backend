@@ -24,6 +24,9 @@ public class Users extends BaseEntity {
     @Column(nullable = true, unique = true, length = 255)
     private String appleId;
 
+    @Column(nullable = true, unique = true, length = 512)
+    private String appleRefreshToken;
+
     @Column(nullable = false, length = 50)
     private String username;
 
@@ -70,10 +73,11 @@ public class Users extends BaseEntity {
         this.alarmInfo = false;
     }
 
-    public Users(String username, String email, String appleId){
+    public Users(String username, String email, String appleId, String appleRefreshToken){
         this.username = username;
         this.email = email;
         this.appleId = appleId;
+        this.appleRefreshToken = appleRefreshToken;
         this.profileImage = URI.create("");
         this.wakeupTime = null;
         this.bedTime = null;
