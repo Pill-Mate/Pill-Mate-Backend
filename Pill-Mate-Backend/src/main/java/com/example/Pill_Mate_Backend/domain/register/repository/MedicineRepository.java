@@ -57,6 +57,6 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
       AND u.email = :email
       AND s.status = 'ACTIVATE'
 """)
-    Long findMedicineIdByIdentifyNumberAndEmail(String itemSeq, String email);
+    Long findMedicineIdByIdentifyNumberAndEmail(@Param("identifyNumber")String itemSeq,@Param("email") String email);
 }
 

@@ -11,7 +11,6 @@ import com.example.Pill_Mate_Backend.domain.conflict.repository.DurTabooReposito
 import com.example.Pill_Mate_Backend.domain.register.repository.HospitalRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.MedicineRepository;
 import com.example.Pill_Mate_Backend.domain.register.repository.PharmacyRepository;
-import com.example.Pill_Mate_Backend.domain.register.repository.ScheduleRepository;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.handler.MedicineHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -227,5 +226,9 @@ public class TabooApiService {
         Optional<Pharmacy> optionalPharmacy = pharmacyRepository.findById(pharmacyId);
         Pharmacy pharmacy = optionalPharmacy.get();
         pharmacyRepository.delete(pharmacy);
+    }
+
+    public List<TabooDto> findTabooByMixtureItemSeq(String itemSeq) {
+        return durRepository.findTabooByMixtureItemSeq(itemSeq);
     }
 }
