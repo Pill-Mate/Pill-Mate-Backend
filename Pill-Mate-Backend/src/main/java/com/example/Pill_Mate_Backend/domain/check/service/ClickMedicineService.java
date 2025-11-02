@@ -3,6 +3,7 @@ package com.example.Pill_Mate_Backend.domain.check.service;
 import com.example.Pill_Mate_Backend.domain.check.dto.MedicineDetailDTO;
 import com.example.Pill_Mate_Backend.domain.check.repository.MedicineScheduleRepository2;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,13 @@ import static org.hibernate.type.SqlTypes.JSON;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class ClickMedicineService {
     @Autowired
     private MedicineScheduleRepository2 medicineScheduleRepository2;
     public MedicineDetailDTO getMedicineDetailByScheduleId(Long itemSeq){
         MedicineDetailDTO medicineDetailDTO = medicineScheduleRepository2.findMedicineDetailByItemSeq(itemSeq);
+        log.info("현재 프론트랑 테스트 중 MedicineDetailDTO: {}", medicineDetailDTO);
 
         /*
         for (Object obj : result) { //내용 확인용 출력 삭제해도 됨
