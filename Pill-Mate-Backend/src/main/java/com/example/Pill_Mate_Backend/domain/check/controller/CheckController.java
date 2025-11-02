@@ -188,6 +188,6 @@ public class CheckController {
     @PostMapping("/medicinedetail")
     public ResponseEntity<ApiResponse<MedicineDetailDTO>> getMedicineDetail(@RequestBody ClickMedicineDTO clickMedicineDTO){
         System.out.print(clickMedicineDTO);
-        return  ResponseEntity.ok(ApiResponse.onSuccess(clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getMedicineSeq())));
+        return  ResponseEntity.ok(ApiResponse.onSuccess(clickMedicineService.getMedicineDetailByScheduleId(clickMedicineDTO.getItemSeq())));
     }
 }

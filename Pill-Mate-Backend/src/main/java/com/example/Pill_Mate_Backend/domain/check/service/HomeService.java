@@ -56,6 +56,7 @@ public class HomeService {
                     (String) result[6],
                     (Boolean) result[7],
                     (String) result[8],
+                    (Long) result[9],
                     medicineImage.toString()
             );
             medicineDTOList.add(dto);

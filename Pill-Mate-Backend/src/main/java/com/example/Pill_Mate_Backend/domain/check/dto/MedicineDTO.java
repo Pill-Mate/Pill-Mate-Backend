@@ -29,5 +29,6 @@ public class MedicineDTO {//interface는 왜 안된걸까..? enum과 uri 때문�
 
     //medicine
     private String medicineName;
+    private Long itemSeq;
     private String medicineImage;
 }
