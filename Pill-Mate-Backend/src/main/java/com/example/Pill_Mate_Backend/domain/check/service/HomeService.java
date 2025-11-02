@@ -29,8 +29,11 @@ public class HomeService {
         List<MedicineDTO> medicineDTOList = new ArrayList<>();
 
         for (Object[] result : results) {
+            // itemSeq(Long) 변환
+            Long itemSeq = result[9] != null ? Long.parseLong(result[9].toString()) : null;
+
             //uri 변환
-            byte[] byteArray = (byte[]) result[9];
+            byte[] byteArray = (byte[]) result[10];
 
             URI medicineImage = null;
                 // 직렬화 해제 (Deserialization) - 직렬화된 URI 객체를 복원
@@ -56,7 +59,7 @@ public class HomeService {
                     (String) result[6],
                     (Boolean) result[7],
                     (String) result[8],
-                    Long.parseLong(result[9].toString()),
+                    itemSeq,
                     medicineImage.toString()
             );
             medicineDTOList.add(dto);
