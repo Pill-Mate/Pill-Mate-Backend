@@ -161,8 +161,8 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
                c.efcy_qesitm as efficacy, 
                c.atpn_qesitm as sideEffect
         from drug_basic a
-        join dur_product_info b on a.item_seq = b.item_seq
-        join drug_detail c on a.item_seq = c.item_seq
+        left join dur_product_info b on a.item_seq = b.item_seq
+        left join drug_detail c on a.item_seq = c.item_seq
         where a.item_seq = :itemSeq
         """, nativeQuery = true)
     MedicineDetailDTO findMedicineDetailByItemSeq(@Param("itemSeq") long itemSeq);

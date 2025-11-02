@@ -28,6 +28,7 @@ public class SearchService {
                 .depositMethod(dto.getDepositMethod())
                 .efcyQesitm(dto.getEfcyQesitm())
                 .atpnQesitm(dto.getAtpnQesitm())
+                .typeName(dto.getTypeName())
                 .useMethodQesitm(dto.getUseMethodQesitm())
                 .allConflictResponse(medicineService.checkAllConflicts(String.valueOf(itemSeq), email))
                 .build();

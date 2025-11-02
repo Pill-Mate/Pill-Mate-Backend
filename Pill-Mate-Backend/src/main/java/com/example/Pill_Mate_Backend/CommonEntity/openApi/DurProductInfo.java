@@ -19,7 +19,7 @@ public class DurProductInfo extends BaseEntity {
     @Id
     @Column(name = "item_seq")
     @Schema(description = "의약품 품목 일련번호", example = "198601234")
-    private String itemSeq;
+    private Long itemSeq;
 
     @Column(name = "item_name", length = 500)
     @Schema(description = "의약품명", example = "타이레놀정 500mg")

@@ -22,12 +22,14 @@ public interface DrugBasicRepository extends JpaRepository<DrugBasic, Long> {
             b.itemImage AS itemImage,
             b.entpName AS entpName,
             b.className AS className,
+            p.typeName AS typeName,
             d.useMethodQesitm AS useMethodQesitm,
             d.efcyQesitm AS efcyQesitm,
             d.atpnQesitm AS atpnQesitm,
             d.depositMethod AS depositMethod
         FROM DrugBasic b
         LEFT JOIN DrugDetail d ON b.itemSeq = d.itemSeq
+        LEFT JOIN DurProductInfo p ON b.itemSeq = p.itemSeq
         WHERE b.itemSeq = :itemSeq
     """)
     Optional<PillSimpleDto> findByItemSeq(@Param("itemSeq") Long itemSeq);

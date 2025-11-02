@@ -5,6 +5,7 @@ public interface PillSimpleDto {
     String getItemImage();
     String getEntpName();
     String getClassName();
+    String getTypeName();
     String getUseMethodQesitm();
     String getEfcyQesitm();
     String getAtpnQesitm();

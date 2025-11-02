@@ -28,6 +28,9 @@ public class SearchPillResponseDto {
     @Schema(description = "약물 충돌 정보")
     private AllConflictResponse allConflictResponse;
 
+    @Schema(description = "약물 주의", example = "임부금기, 특정연령대금지, 용량주의, 투여기간 주의..")
+    private String typeName;
+
     @Schema(description = "사용법(복용법)", example = "성인은 1회 1/2~1정(125∼250 mg), 1일 3회 복용합니다.")
     private String useMethodQesitm;
 
