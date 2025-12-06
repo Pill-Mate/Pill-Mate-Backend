@@ -49,7 +49,7 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
     String findMedicineImageByItemSeq(@Param("itemSeq") String itemSeq);
 
     @Query("""
-    SELECT m
+    SELECT m.id
     FROM Medicine m
     JOIN m.users u
     JOIN Schedule s ON s.medicine = m
