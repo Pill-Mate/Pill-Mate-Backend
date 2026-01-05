@@ -39,7 +39,7 @@ public class DurEffDuplication extends BaseEntity {
 
     @Column(name = "item_seq")
     @Schema(description = "품목 일련번호", example = "198601234")
-    private String itemSeq;
+    private Long itemSeq;
 
     @Column(name = "item_name")
     @Schema(description = "의약품 이름", example = "암로디핀정 5mg")

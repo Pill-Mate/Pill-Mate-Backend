@@ -38,7 +38,7 @@ public class EfcyApiService {
 
 
     //효능군 중복 버전2( DB에서 직접 호출 )
-    public List<EfcyDto> efcySearchWithUser(String itemSeq, String email) {
+    public List<EfcyDto> efcySearchWithUser(Long itemSeq, String email) {
         DurEffDuplication entity = durEffDuplicationRepository.findByItemSeq(itemSeq);
         String durSeq = "";
         List<EfcyDto> itemSeqList;
@@ -48,8 +48,8 @@ public class EfcyApiService {
             durSeq = entity.getDurSeq();
             itemSeqList = durEffDuplicationRepository.findEfcyByDurSeq(durSeq);
             for (EfcyDto dto : itemSeqList) {
-                if (medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).isPresent()) {
-                    Medicine medicine = medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).orElseThrow();
+                if (medicineRepository.findByItemSeqAndEmail(dto.getItemSeq(), email).isPresent()) {
+                    Medicine medicine = medicineRepository.findByItemSeqAndEmail(dto.getItemSeq(), email).orElseThrow();
                     dto.setImage(medicine.getMedicineImage().toString());
                     efcyDtoList.add(dto);
                 }
@@ -64,7 +64,7 @@ public class EfcyApiService {
     }
 
     //효능군 중복 itemSeq리스트 리턴
-    public List<String> efcySearch(String itemSeq) {
+    public List<String> efcySearch(Long itemSeq) {
         DurEffDuplication entity = durEffDuplicationRepository.findByItemSeq(itemSeq);
         String durSeq = "";
         List<String> itemSeqList = new ArrayList<>();
@@ -107,14 +107,14 @@ public class EfcyApiService {
 
         efcyDplctapiItems.getItems().forEach(item -> {
             // 만약 해당 약물이 테이블에 있으면 JSON에 추가
-            if (medicineRepository.findMedicineByIdentifyNumber(item.getItemSeq()) != null) {
+            if (medicineRepository.findMedicineByItemSeq(Long.valueOf(item.getItemSeq())) != null) {
                 Map<String, String> itemMap = new HashMap<>();
                 itemMap.put("ITEM_NAME", item.getItemName());
                 itemMap.put("ITEM_SEQ", item.getItemSeq());
                 itemMap.put("EFFECT_NAME", item.getEffectName());
                 itemMap.put("CLASS_NAME", item.getClassName());
                 itemMap.put("ENTP_NAME", item.getEntpName());
-                Medicine medicine = medicineRepository.findMedicineByIdentifyNumber(item.getItemSeq());
+                Medicine medicine = medicineRepository.findMedicineByItemSeq(Long.valueOf(item.getItemSeq()));
                 itemMap.put("ITEM_IMAGE", String.valueOf(medicine.getMedicineImage()));
 
                 processedItems.add(itemMap);

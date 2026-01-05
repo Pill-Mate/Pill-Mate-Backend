@@ -21,7 +21,7 @@ public interface DurEffDuplicationRepository extends JpaRepository<DurEffDuplica
             "FROM DurEffDuplication t WHERE t.durSeq = :durSeq")
     List<EfcyDto> findEfcyByDurSeq(@Param("durSeq") String durSeq);
 
-    DurEffDuplication findByItemSeq(String itemSeq);
+    DurEffDuplication findByItemSeq(Long itemSeq);
 
     @Query("SELECT e.itemSeq FROM DurEffDuplication e WHERE e.durSeq =:durSeq")
     List<String> findAllByDurSeq(@Param("durSeq") String durSeq);

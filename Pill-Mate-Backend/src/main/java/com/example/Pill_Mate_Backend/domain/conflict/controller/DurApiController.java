@@ -57,7 +57,7 @@ public class DurApiController {
     @Operation(summary = "전체 약물 충돌 검사", description = "itemSeq 기반으로 DUR 병용금기/효능군 중복, 서버 내 내 약물과의 충돌 여부를 모두 검사")
     @GetMapping("/check-conflict")
     public ResponseEntity<ApiResponse<AllConflictResponse>> checkConflictAll(
-            @RequestParam String itemSeq,
+            @RequestParam Long itemSeq,
             @RequestHeader(value = "Authorization", required = true) String token) {
 
         String email = "";
@@ -78,7 +78,7 @@ public class DurApiController {
     // 병용금기
     @Operation(summary = "병용금기", description = "헤더의 itemSeq약물 번호로 해당 약물의 병용금기 약물 리턴")
     @GetMapping("/usjnt-taboo")
-    public String UsjntTaboocallapi(@RequestParam String itemSeq) throws IOException {
+    public String UsjntTaboocallapi(@RequestParam Long itemSeq) throws IOException {
         StringBuilder sb = new StringBuilder();
         //병용금기 정보조회
         String urlbyeongyong = "http://apis.data.go.kr/1471000/DURPrdlstInfoService03/getUsjntTabooInfoList03?" +
@@ -167,7 +167,7 @@ public class DurApiController {
     @Operation(summary = "약국 병원 이름 주소 전화번호 ", description = "약국 병원 이름 주소 전화번호 리턴")
     @GetMapping("get-phone-address")
     public ResponseEntity<ApiResponse<PhoneAddresses>> getPhoneNumber(@RequestHeader(value = "Authorization", required = true) String token,
-                                                                      @RequestParam String itemSeq) throws IOException {
+                                                                      @RequestParam Long itemSeq) throws IOException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
@@ -190,7 +190,7 @@ public class DurApiController {
 
     @DeleteMapping("/conflict-remove")
     public ResponseEntity<ApiResponse<Void>> deleteConflict(@RequestHeader(value = "Authorization", required = true) String token,
-                                         @RequestParam String itemSeq) throws IOException {
+                                         @RequestParam Long itemSeq) throws IOException {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
@@ -215,7 +215,7 @@ public class DurApiController {
 // 병용금기02
 @Operation(summary = "병용금기02", description = "헤더의 itemSeq약물 번호로 해당 약물의 병용금기 약물 리턴")
 @GetMapping("/usjnt-taboo02")
-public ResponseEntity<ApiResponse<List<TabooDto>>> UsjntTaboocallapi02 (@RequestParam String itemSeq,
+public ResponseEntity<ApiResponse<List<TabooDto>>> UsjntTaboocallapi02 (@RequestParam Long itemSeq,
                                                         @RequestHeader(value = "Authorization", required = true) String token) throws IOException {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     String email = "";
@@ -236,7 +236,7 @@ public ResponseEntity<ApiResponse<List<TabooDto>>> UsjntTaboocallapi02 (@Request
 //효능군 중복 02
 @Operation(summary = "효능군 중복02", description = "헤더의 itemSeq약물 번호로 해당 약물의 효능군 중복 약물 리턴")
 @GetMapping("/efcy-dplct02")
-public ResponseEntity<ApiResponse<List<EfcyDto>>> EfcyDplctcallapi02 (@RequestParam String itemSeq,
+public ResponseEntity<ApiResponse<List<EfcyDto>>> EfcyDplctcallapi02 (@RequestParam Long itemSeq,
                                                       @RequestHeader(value = "Authorization", required = true) String token) throws IOException {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     String email = "";

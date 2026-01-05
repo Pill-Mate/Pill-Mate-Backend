@@ -17,7 +17,7 @@ public class EfcyDto {
 
     @JsonProperty("itemSeq")
     @Schema(description = "약물 식별 번호", example = "201101234")
-    private String itemSeq;
+    private Long itemSeq;
 
     @JsonProperty("className")
     @Schema(description = "효능군 이름", example = "해열·진통·소염제")
@@ -36,7 +36,7 @@ public class EfcyDto {
     private String image;
 
     @Builder
-    public EfcyDto(String itemName, String itemSeq, String className,
+    public EfcyDto(String itemName, Long itemSeq, String className,
                    String effectName, String entpName) {
         this.itemName = itemName;
         this.itemSeq = itemSeq;

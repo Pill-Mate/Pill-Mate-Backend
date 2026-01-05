@@ -29,7 +29,7 @@ public class DurTaboo extends BaseEntity {
 
     @Column(name = "item_seq")
     @Schema(description = "품목 일련번호", example = "198601234")
-    private String itemSeq;
+    private Long itemSeq;
 
     @Column(name = "item_name", length = 500)
     @Schema(description = "의약품명", example = "타이레놀정 500mg")
@@ -57,7 +57,7 @@ public class DurTaboo extends BaseEntity {
 
     @Column(name = "mixture_item_seq")
     @Schema(description = "병용약품 식별번호", example = "198601235")
-    private String mixtureItemSeq;
+    private Long mixtureItemSeq;
 
     @Column(name = "class_name")
     @Schema(description = "약물 분류명", example = "진통해열제")
