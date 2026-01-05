@@ -19,7 +19,7 @@ public class TabooDto {
 
     @JsonProperty("mixtureItemSeq")
     @Schema(description = "약물 식별 번호", example = "201101234")
-    private String mixtureItemSeq;
+    private Long mixtureItemSeq;
 
     @JsonProperty("prohbtContent")
     @Schema(description = "병용 금기 사유", example = "와파린과 병용 시 출혈 위험 증가")
@@ -37,7 +37,7 @@ public class TabooDto {
     @Schema(description = "약물 이미지 URL", example = "https://example.com/aspirin.png")
     private String image;
 
-public TabooDto(String mixItemName, String mixtureItemSeq, String prohbtContent, String className, String entpName) {
+public TabooDto(String mixItemName, Long mixtureItemSeq, String prohbtContent, String className, String entpName) {
         this.mixItemName = mixItemName;
         this.mixtureItemSeq = mixtureItemSeq;
         this.prohbtContent = prohbtContent;

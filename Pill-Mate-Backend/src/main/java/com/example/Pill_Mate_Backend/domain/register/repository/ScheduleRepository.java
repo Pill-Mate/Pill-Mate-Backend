@@ -16,8 +16,8 @@ import java.util.Optional;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findByUsersIdAndStatus(Long userId, ScheduleStatus status);
     Long countByUsersIdAndStatus(Long userId, ScheduleStatus status);
-    @Query("SELECT s FROM Schedule s JOIN s.medicine m WHERE m.identifyNumber = :identifyNumber")
-    Schedule findByIdentifyNumber(@Param("identifyNumber") String identifyNumber);
+    @Query("SELECT s FROM Schedule s JOIN s.medicine m WHERE m.itemSeq = :itemSeq")
+    Schedule findByItemSeq(@Param("itemSeq") String itemSeq);
 
 
     Optional<Schedule> findByUsersAndMedicine(Users users, Medicine medicine);

@@ -25,8 +25,8 @@ public class MedicineService {
     private final DurTabooRepository durTabooRepository;
     private final DurEffDuplicationRepository durEffDuplicationRepository;
 
-    public MedicineConflict findAll(String itemSeq, String email) {
-       Medicine medicine =  medicineRepository.findByIdentifyNumberAndEmail(itemSeq,email)
+    public MedicineConflict findAll(Long itemSeq, String email) {
+       Medicine medicine =  medicineRepository.findByItemSeqAndEmail(itemSeq,email)
                .orElse(null);
 
         if (medicine == null) {
@@ -38,7 +38,7 @@ public class MedicineService {
                .effectName(medicine.getEfficacy())
                .itemImage(medicine.getMedicineImage().toString())
                .entpName(medicine.getEntpName())
-               .itemSeq(medicine.getIdentifyNumber())
+               .itemSeq(medicine.getItemSeq())
                .itemName(medicine.getMedicineName())
                .build();
 
@@ -46,7 +46,7 @@ public class MedicineService {
 
     }
     @Transactional
-    public AllConflictResponse checkAllConflicts(String itemSeq, String email) {
+    public AllConflictResponse checkAllConflicts(Long itemSeq, String email) {
         List<TabooDto> usjntList = new ArrayList<>();
         List<EfcyDto> efcyList = new ArrayList<>();
 
@@ -55,7 +55,7 @@ public class MedicineService {
 
         //사용자가 가지고 있으면 리스트에 추가
         for (TabooDto mixtureSeq : mixtureList) {
-            if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
+            if(medicineRepository.findByItemSeqAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
                 mixtureSeq.setImage(medicineRepository.findMedicineImageByItemSeq(mixtureSeq.getMixtureItemSeq()));
                 usjntList.add(mixtureSeq);
             }
@@ -69,8 +69,8 @@ public class MedicineService {
             durSeq = entity.getDurSeq();
             itemSeqList = durEffDuplicationRepository.findEfcyByDurSeq(durSeq);
             for (EfcyDto dto : itemSeqList) {
-                if (medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).isPresent()) {
-                    Medicine medicine = medicineRepository.findByIdentifyNumberAndEmail(dto.getItemSeq(), email).orElseThrow();
+                if (medicineRepository.findByItemSeqAndEmail(dto.getItemSeq(), email).isPresent()) {
+                    Medicine medicine = medicineRepository.findByItemSeqAndEmail(dto.getItemSeq(), email).orElseThrow();
 
                     EfcyDto efcy = EfcyDto.builder()
                             .className(medicine.getClassName())
@@ -98,15 +98,15 @@ public class MedicineService {
 
 
     private List<MedicineConflict> findUserConflicts(String email,
-                                                     List<String> usjntList,
-                                                     List<String> efcyList) {
+                                                     List<Long> usjntList,
+                                                     List<Long> efcyList) {
 
-        List<String> myItemSeqs = medicineRepository.findAllByEmail(email)
+        List<Long> myItemSeqs = medicineRepository.findAllByEmail(email)
                 .stream()
-                .map(m -> m.getIdentifyNumber())
+                .map(m -> m.getItemSeq())
                 .toList();
 
-        Set<String> conflictSeqs = new HashSet<>();
+        Set<Long> conflictSeqs = new HashSet<>();
         usjntList.forEach(item -> {
             if (myItemSeqs.contains(item)) {
                 conflictSeqs.add(item);
@@ -119,11 +119,11 @@ public class MedicineService {
             }
         });
 
-            return medicineRepository.findAllByIdentifyNumberInAndUserEmail(conflictSeqs,email)
+            return medicineRepository.findAllByItemSeqInAndUserEmail(conflictSeqs,email)
                 .stream()
                 .map(med -> MedicineConflict.builder()
                         .itemName(med.getMedicineName())
-                        .itemSeq(med.getIdentifyNumber())
+                        .itemSeq(med.getItemSeq())
                         .effectName(med.getEfficacy())
                         .className(med.getClassName())
                         .entpName(med.getEntpName())

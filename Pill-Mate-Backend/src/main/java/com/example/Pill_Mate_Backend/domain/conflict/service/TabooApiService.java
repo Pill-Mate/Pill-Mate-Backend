@@ -43,7 +43,7 @@ public class TabooApiService {
     private final DurTabooRepository durRepository;
 
     //병용금기 버전2( DB에서 직접 호출 )
-    public List<TabooDto> tabooSearchWithUser(String itemSeq, String email){
+    public List<TabooDto> tabooSearchWithUser(Long itemSeq, String email){
         List<TabooDto> mixtureList = durRepository.findTabooByMixtureItemSeq(itemSeq);
 
 
@@ -53,7 +53,7 @@ public class TabooApiService {
 
         //사용자가 가지고 있으면 리스트에 추가
         for (TabooDto mixtureSeq : mixtureList) {
-            if(medicineRepository.findByIdentifyNumberAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
+            if(medicineRepository.findByItemSeqAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
 
                 mixtureSeq.setImage(medicineRepository.findMedicineImageByItemSeq(mixtureSeq.getMixtureItemSeq()));
                 userHasList.add(mixtureSeq);
@@ -62,11 +62,11 @@ public class TabooApiService {
         return userHasList;
     }
 
-    public List<String> tabooSearch(String itemSeq) {
+    public List<Long> tabooSearch(Long itemSeq) {
         //병용 금기 약물 있는지 검색
         List<TabooDto> mixtureSeqList = durRepository.findTabooByMixtureItemSeq(itemSeq);
 
-        List<String> itemSeqList = new ArrayList<>();
+        List<Long> itemSeqList = new ArrayList<>();
 
         //사용자가 가지고 있으면 리스트에 추가
         for (TabooDto mixtureSeq : mixtureSeqList) {
@@ -102,8 +102,8 @@ public class TabooApiService {
         List<Map<String, String>> processedItems = new ArrayList<>();
 
         usjntTabooApiItems.getItems().forEach(item -> {
-            if(medicineRepository.findMedicineByIdentifyNumber(item.getMixtureItemSeq()) != null){
-            System.out.println(medicineRepository.findMedicineByIdentifyNumber(item.getMixtureItemSeq()));
+            if(medicineRepository.findMedicineByItemSeq(Long.valueOf(item.getMixtureItemSeq())) != null){
+            System.out.println(medicineRepository.findMedicineByItemSeq(Long.valueOf(item.getMixtureItemSeq())));
             //만약에 medicine에 해당 약물이 있으면 출력
             Map<String, String> itemMap = new HashMap<>();
             // 약물 데이터 처리
@@ -112,7 +112,7 @@ public class TabooApiService {
             itemMap.put("PROHBT_CONTENT", item.getProhbtContent());
             itemMap.put("ENTP_NAME", item.getEntpName());
             itemMap.put("CLASS_NAME", item.getClassName());
-            Medicine medicine = medicineRepository.findMedicineByIdentifyNumber(item.getMixtureItemSeq());
+            Medicine medicine = medicineRepository.findMedicineByItemSeq(Long.valueOf(item.getMixtureItemSeq()));
             itemMap.put("ITEM_IMAGE", String.valueOf(medicine.getMedicineImage()));
             processedItems.add(itemMap);
         }
@@ -128,8 +128,8 @@ public class TabooApiService {
     }
 
 
-        public PhoneAddresses getPhoneAddresses(String itemSeq,String email) {
-            Long medicineId = medicineRepository.findMedicineIdByIdentifyNumberAndEmail(itemSeq,email);
+        public PhoneAddresses getPhoneAddresses(Long itemSeq,String email) {
+            Long medicineId = medicineRepository.findMedicineIdByItemSeqAndEmail(itemSeq,email);
             Pharmacy pharmacy = pharmacyRepository.findByMedicineId(medicineId);
             Hospital hospital = hospitalRepository.findByMedicineId(medicineId);
             PhoneAddresses phoneAddresses = new PhoneAddresses(
@@ -217,8 +217,8 @@ public class TabooApiService {
 
 
 
-    public void delete(String itemSeq, String email) {
-        Medicine medicine = medicineRepository.findByIdentifyNumberAndEmail(itemSeq,email)
+    public void delete(Long itemSeq, String email) {
+        Medicine medicine = medicineRepository.findByItemSeqAndEmail(itemSeq,email)
                 .orElseThrow(() -> new MedicineHandler(ErrorStatus._MEDICINE_NOT_FOUND));
         medicineRepository.delete(medicine);
     }
@@ -228,7 +228,7 @@ public class TabooApiService {
         pharmacyRepository.delete(pharmacy);
     }
 
-    public List<TabooDto> findTabooByMixtureItemSeq(String itemSeq) {
+    public List<TabooDto> findTabooByMixtureItemSeq(Long itemSeq) {
         return durRepository.findTabooByMixtureItemSeq(itemSeq);
     }
 }

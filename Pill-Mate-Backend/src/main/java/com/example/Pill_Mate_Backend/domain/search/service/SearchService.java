@@ -30,7 +30,7 @@ public class SearchService {
                 .atpnQesitm(dto.getAtpnQesitm())
                 .typeName(dto.getTypeName())
                 .useMethodQesitm(dto.getUseMethodQesitm())
-                .allConflictResponse(medicineService.checkAllConflicts(String.valueOf(itemSeq), email))
+                .allConflictResponse(medicineService.checkAllConflicts(itemSeq, email))
                 .build();
     }
 
