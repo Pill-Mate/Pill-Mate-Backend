@@ -23,7 +23,7 @@ public class ConflictController {
 
     @Operation(summary = "중복 약물 검사", description = "등록하려는 약물을 이미 복용중인지  조회합니다.")
     @GetMapping("/check-duplicate-drug")
-    public MedicineConflict getConflict(@RequestParam String itemSeq,
+    public MedicineConflict getConflict(@RequestParam Long itemSeq,
                                         @RequestHeader(value = "Authorization", required = true)  String token) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";

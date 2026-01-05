@@ -65,28 +65,44 @@ public class RegisterController {
             Optional<Users> optionalUser = userRepository.findByEmail(email);
             Users user = optionalUser.get(); // Optional에서 값을 추출
 
-//            Users users = Users.builder()
-//                    .id(null)
-//                    .profileImage(URI.create("https://example.com/profile.jpg"))  // 임시 프로필 이미지
-//                    .username("testUser")  // 사용자 이름
-//                    .email("testuser@example.com")  // 이메일
-//                    .wakeupTime(Time.valueOf(LocalTime.of(7, 0)))  // 기상 시간 07:00
-//                    .bedTime(Time.valueOf(LocalTime.of(23, 0)))  // 취침 시간 23:00
-//                    .morningTime(Time.valueOf(LocalTime.of(8, 0)))  // 아침 08:00
-//                    .lunchTime(Time.valueOf(LocalTime.of(12, 0)))  // 점심 12:00
-//                    .dinnerTime(Time.valueOf(LocalTime.of(18, 0)))  // 저녁 18:00
-//                    .alarmMarketing(true)  // 마케팅 알림 허용
-//                    .alarmInfo(true)  // 정보 알림 허용
-//                    .build(); //(임시) 로그인 연결 시 삭제
 
-            //userRepository.save(user);
-                //log.info(user.toString());
-                registerService.Register(registerDTO, user);
+            registerService.Register(registerDTO, user);
 
             //알람 업데이트
             fcmAlarmService.resetAlarmTrigger(email);
 
             return ResponseEntity.ok(ApiResponse.onSuccess(null));
+
+    }
+
+    @Operation(summary = "등록되지 않은 약물 직접 등록", description = "사용자가 직접 입력한 약물을 저장하는 api")
+    @PostMapping("/register-custom")
+    public ResponseEntity<ApiResponse<Void>> medicineCustomRegister(@RequestHeader(value = "Authorization", required = true) String token,
+                                                              @RequestBody RegisterDTO registerDTO
+    ) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String email = "";
+        if (token != null && token.startsWith("Bearer ")) {
+            String jwtToken = token.substring(7);
+            if (jwtService.validateToken(jwtToken)) {
+                email = jwtService.extractEmail(jwtToken);
+
+            } else {
+                log.info("Invalid JWT");
+                throw new GeneralException(ErrorStatus._EXPIRED_JWT_TOKEN);
+            }
+        }
+
+
+        Optional<Users> optionalUser = userRepository.findByEmail(email);
+        Users user = optionalUser.get(); // Optional에서 값을 추출
+
+        registerService.RegisterCustom(registerDTO, user);
+
+        //알람 업데이트
+        fcmAlarmService.resetAlarmTrigger(email);
+
+        return ResponseEntity.ok(ApiResponse.onSuccess(null));
 
     }
 

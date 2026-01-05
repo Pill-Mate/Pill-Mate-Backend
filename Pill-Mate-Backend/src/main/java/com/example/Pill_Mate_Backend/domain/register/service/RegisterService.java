@@ -4,10 +4,8 @@ import com.example.Pill_Mate_Backend.CommonEntity.*;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.IntakeCount;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.MealUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
-import com.example.Pill_Mate_Backend.domain.register.dto.HospitalResponseDTO;
-import com.example.Pill_Mate_Backend.domain.register.dto.PharmacyResponseDTO;
-import com.example.Pill_Mate_Backend.domain.register.dto.PillResponseDto;
-import com.example.Pill_Mate_Backend.domain.register.dto.RegisterDTO;
+import com.example.Pill_Mate_Backend.CommonEntity.enums.SourceType;
+import com.example.Pill_Mate_Backend.domain.register.dto.*;
 import com.example.Pill_Mate_Backend.domain.register.repository.*;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
 import com.example.Pill_Mate_Backend.global.common.exception.handler.UserHandler;
@@ -60,12 +58,22 @@ public class RegisterService {
         CreateMedicineSchedule(users, medicine, schedule);
     }
 
+    public void RegisterCustom(RegisterDTO registerDTO, Users users) {
+        Medicine medicine = CreateCustomMedicine(registerDTO, users);
+        CreateHospital(registerDTO, users, medicine);
+        CreatePharmacy(registerDTO, users, medicine);
+        Schedule schedule = CreateSchedule(registerDTO, users, medicine);
+        CreateMedicineSchedule(users, medicine, schedule);
+
+    }
+
     public Medicine CreateMedicine(RegisterDTO registerDTO, Users users) {
         log.info("medicine1");
         Medicine medicine = Medicine.builder()
+                .sourceType(SourceType.API)
                 //medicine
                 //약물 낱알 식별 번호
-                .identifyNumber(registerDTO.identifyNumber())
+                .itemSeq(registerDTO.itemSeq())
                 //약물이름
                 .medicineName(registerDTO.medicineName())
                 .ingredient(registerDTO.ingredient())
@@ -82,6 +90,31 @@ public class RegisterService {
                 .users(users)
                 .build();
         //log.info("medicine2:{}",medicine);
+        return medicineRepository.save(medicine);
+    }
+
+    public Medicine CreateCustomMedicine(RegisterDTO registerDTO, Users users) {
+        log.info("medicine1");
+        Medicine medicine = Medicine.builder()
+                .sourceType(SourceType.CUSTOM)
+                //medicine
+                //약물 낱알 식별 번호
+                .itemSeq(null)
+                //약물이름
+                .medicineName(registerDTO.medicineName())
+                .ingredient(null)
+                .medicineImage(null)
+                .entpName(null)
+                .className(null)
+                .efficacy(null)
+                .sideEffect(null)
+                .caution(null)
+                .storage(null)
+                .cautionTypes(null)
+                .ingredientUnit(null)
+                .ingredientAmount(null)
+                .users(users)
+                .build();
         return medicineRepository.save(medicine);
     }
 

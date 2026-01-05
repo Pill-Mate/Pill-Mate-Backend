@@ -1,5 +1,6 @@
 package com.example.Pill_Mate_Backend.CommonEntity;
 
+import com.example.Pill_Mate_Backend.CommonEntity.enums.SourceType;
 import com.example.Pill_Mate_Backend.global.common.BaseEntity;
 import com.example.Pill_Mate_Backend.CommonEntity.enums.IngredientUnit;
 import com.example.Pill_Mate_Backend.CommonEntity.sets.StringSetConverter;
@@ -22,22 +23,32 @@ public class Medicine extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
-    private String identifyNumber;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private SourceType sourceType;
+
+    // NEW: 공공 API 약물(DrugBasic/DrugDetail)의 itemSeq 연결용
+    // - sourceType=API 일 때만 값 존재
+    // - CUSTOM이면 null
+    @Column(name = "item_seq", nullable = true)
+    private Long itemSeq;
+
+//    @Column(nullable = true, length = 50)
+//    private String identifyNumber;
 
     @Column(nullable = false, length = 255)
     private String medicineName;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = true, length = 100)
     private String ingredient;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = true, length = 255)
     private URI medicineImage;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String entpName;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = true, length = 50)
     private String className;
 
     //nullable 임시 수정
@@ -75,7 +86,7 @@ public class Medicine extends BaseEntity {
     //user_id
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private Users users;
 
     @ToString.Exclude

@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 public record ManagementDetailDto(
         @Schema(description = "식별 번호", requiredMode = Schema.RequiredMode.REQUIRED, example = "200901187")
-        String identifyNumber,
+        Long itemSeq,
 
         @Schema(description = "약물 이름", requiredMode = Schema.RequiredMode.REQUIRED, example = "이지에스정(방기황기탕건조엑스)")
         String medicineName,

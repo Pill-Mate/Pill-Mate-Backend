@@ -59,7 +59,7 @@ public class ManagementService {
         List<LocalTime> intakeTimes = medicineScheduleRepository.findDistinctIntakeTimes(users.getId(), medicine.getId());
         //Set<LocalTime> intakeTimes = new LinkedHashSet<>(intakeTimesList);
         return ManagementDetailDto.builder()
-                .identifyNumber(medicine.getIdentifyNumber())
+                .itemSeq(medicine.getItemSeq())
                 .medicineName(medicine.getMedicineName())
                 .ingredient(medicine.getIngredient())
                 .ingredientAmount(medicine.getIngredientAmount())
@@ -107,7 +107,7 @@ public class ManagementService {
                 .orElseThrow(() -> new RuntimeException("Medicine not found"));
 
 
-        medicine.setIdentifyNumber(dto.identifyNumber());
+        medicine.setItemSeq(dto.itemSeq());
         medicine.setMedicineName(dto.medicineName());
         medicine.setIngredient(dto.ingredient());
         medicine.setIngredientAmount(dto.ingredientAmount());

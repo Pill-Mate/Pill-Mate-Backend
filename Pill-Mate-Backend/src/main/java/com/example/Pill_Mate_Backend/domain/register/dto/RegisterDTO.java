@@ -27,12 +27,22 @@ public record RegisterDTO (
         @Schema(description = "병원 주소", example = "서울특별시 강남구 병원로 2길")
         String hospitalAddress,
 
-        @Schema(description = "약물 식별 번호", example = "A123456")
-        String identifyNumber,
+        @Schema(description = "검색한 약물인지 직접입력한 약물인지 - ex) API, CUSTOM", example = "CUSTOM")
+        SourceType sourceType,
 
+//        //nullable
+//        @Schema(description = "약물 식별 번호", example = "A123456")
+//        String identifyNumber,
+
+        @Schema(description = "약물 식별 번호", example = "A123456")
+        Long itemSeq,
+
+
+        //nullable
         @Schema(description = "약물 이름", example = "Painkiller")
         String medicineName,
 
+        //nullable
         @Schema(description = "약물 성분", example = "Ibuprofen")
         String ingredient,
 
@@ -42,27 +52,35 @@ public record RegisterDTO (
         @Schema(description = "1회 성분량", example = "200.0")
         float ingredientAmount,
 
+        //nullable
         @Schema(description = "약물 이미지", example = "https://example.com/medicine.jpg")
         URI medicineImage,
 
+        //nullable
         @Schema(description = "회사이름", example = "Pillmate Inc.")
         String entpName,
 
+        //nullable
         @Schema(description = "분류명", example = "Analgesic")
         String classname,
 
+        //nullable
         @Schema(description = "효능", example = "Reduces pain and fever")
         String efficacy,
 
+        //nullable
         @Schema(description = "부작용", example = "Nausea")
         String sideEffect,
 
+        //nullable
         @Schema(description = "주의사항", example = "Do not take on an empty stomach")
         String caution,
 
+        //nullable
         @Schema(description = "보관 방법", example = "Store in a cool, dry place")
         String storage,
 
+        //nullable
         @Schema(description = "약물 id", example = "null") // 예시 값이 없으므로 null 그대로 명시
         Long medicineId,
 

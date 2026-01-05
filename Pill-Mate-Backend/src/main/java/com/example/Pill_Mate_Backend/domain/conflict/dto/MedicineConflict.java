@@ -17,7 +17,7 @@ public class MedicineConflict {
     private String itemName;
 
     @JsonProperty("item_seq")
-    private String itemSeq;
+    private Long itemSeq;
 
     @JsonProperty("effect_name")
     private String effectName;
