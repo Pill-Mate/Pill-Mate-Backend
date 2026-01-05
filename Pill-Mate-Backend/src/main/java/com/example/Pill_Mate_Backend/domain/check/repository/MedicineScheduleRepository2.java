@@ -24,7 +24,7 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
                 ms.meal_unit AS mealunit,
                 ms.eat_check AS eatcheck,
                 m.medicine_name AS medicinename,
-                m.identify_number As itemseq,
+                m.item_seq As itemseq,
                 m.medicine_image AS medicineimage
             FROM medicine_schedule ms
             JOIN medicine m ON ms.medicine_id = m.id
