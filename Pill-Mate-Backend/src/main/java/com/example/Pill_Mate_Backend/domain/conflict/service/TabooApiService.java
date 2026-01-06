@@ -136,13 +136,14 @@ public class TabooApiService {
                     pharmacy.getPharmacyName(),
                     pharmacy.getPharmacyAddress(),
                     pharmacy.getPharmacyPhone(),
-                    hospital.getHospitalName(),
-                    hospital.getHospitalAddress(),
-                    hospital.getHospitalPhone()
+                    hospital != null ? hospital.getHospitalName() : "",
+                    hospital != null ? hospital.getHospitalAddress() : "",
+                    hospital != null ? hospital.getHospitalPhone() : ""
             );
             return phoneAddresses;
 
         }
+
     public List<UsjntTabooApiItem> getUsjntItemsFromDur(String itemSeq) {
         try {
             String url = "http://apis.data.go.kr/1471000/DURPrdlstInfoService03/getUsjntTabooInfoList03?" +

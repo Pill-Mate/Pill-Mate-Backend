@@ -51,8 +51,10 @@ public class RegisterService {
     public void Register(RegisterDTO registerDTO, Users users) {
         log.info("Received DTO: {}", registerDTO);
         Medicine medicine = CreateMedicine(registerDTO, users);
+        if (registerDTO.hospitalName() != null && !registerDTO.hospitalName().isBlank()) {
+            CreateHospital(registerDTO, users, medicine);
+        }
 
-        CreateHospital(registerDTO, users, medicine);
         CreatePharmacy(registerDTO, users, medicine);
         Schedule schedule = CreateSchedule(registerDTO, users, medicine);
         CreateMedicineSchedule(users, medicine, schedule);
@@ -60,7 +62,9 @@ public class RegisterService {
 
     public void RegisterCustom(RegisterDTO registerDTO, Users users) {
         Medicine medicine = CreateCustomMedicine(registerDTO, users);
-        CreateHospital(registerDTO, users, medicine);
+        if (registerDTO.hospitalName() != null && !registerDTO.hospitalName().isBlank()) {
+            CreateHospital(registerDTO, users, medicine);
+        }
         CreatePharmacy(registerDTO, users, medicine);
         Schedule schedule = CreateSchedule(registerDTO, users, medicine);
         CreateMedicineSchedule(users, medicine, schedule);
