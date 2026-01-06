@@ -37,18 +37,19 @@ public class HomeService {
 
             URI medicineImage = null;
                 // 직렬화 해제 (Deserialization) - 직렬화된 URI 객체를 복원
-            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
-                 ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
-                Object deserializedObject = objectInputStream.readObject();
-                if (deserializedObject instanceof URI) {
-                    medicineImage = (URI) deserializedObject;
-                } else {
-                    throw new IllegalArgumentException("Deserialized object is not a URI");
+            if (result[10] != null) {
+                try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
+                     ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
+                    Object deserializedObject = objectInputStream.readObject();
+                    if (deserializedObject instanceof URI) {
+                        medicineImage = (URI) deserializedObject;
+                    } else {
+                        throw new IllegalArgumentException("Deserialized object is not a URI");
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to deserialize medicine_image", e);
                 }
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to deserialize medicine_image", e);
             }
-
             MedicineDTO dto = new MedicineDTO(
                     (Long) result[0],
                     (String) result[1],
@@ -60,7 +61,7 @@ public class HomeService {
                     (Boolean) result[7],
                     (String) result[8],
                     itemSeq,
-                    medicineImage.toString()
+                    medicineImage != null ? medicineImage.toString() : null
             );
             medicineDTOList.add(dto);
         }

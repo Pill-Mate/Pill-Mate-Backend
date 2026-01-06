@@ -50,16 +50,16 @@ public class MedicineService {
         List<TabooDto> usjntList = new ArrayList<>();
         List<EfcyDto> efcyList = new ArrayList<>();
 
-        //병용금기
         List<TabooDto> mixtureList = durTabooRepository.findTabooByMixtureItemSeq(itemSeq);
 
-        //사용자가 가지고 있으면 리스트에 추가
         for (TabooDto mixtureSeq : mixtureList) {
-            if(medicineRepository.findByItemSeqAndEmail(mixtureSeq.getMixtureItemSeq(),email).isPresent()) {
-                mixtureSeq.setImage(medicineRepository.findMedicineImageByItemSeq(mixtureSeq.getMixtureItemSeq()));
+            if (medicineRepository.findByItemSeqAndEmail(mixtureSeq.getMixtureItemSeq(), email).isPresent()) {
+                String image = medicineRepository.findMedicineImageByItemSeq(mixtureSeq.getMixtureItemSeq());
+                mixtureSeq.setImage(image); // null-safe
                 usjntList.add(mixtureSeq);
             }
         }
+
 
         DurEffDuplication entity = durEffDuplicationRepository.findByItemSeq(itemSeq);
         String durSeq = "";
@@ -72,6 +72,9 @@ public class MedicineService {
                 if (medicineRepository.findByItemSeqAndEmail(dto.getItemSeq(), email).isPresent()) {
                     Medicine medicine = medicineRepository.findByItemSeqAndEmail(dto.getItemSeq(), email).orElseThrow();
 
+                    String image = medicine.getMedicineImage() != null
+                            ? medicine.getMedicineImage().toString()
+                            : null;
                     EfcyDto efcy = EfcyDto.builder()
                             .className(medicine.getClassName())
                             //추후 effectname으로 수정
@@ -80,7 +83,7 @@ public class MedicineService {
                             .itemName(medicine.getMedicineName())
                             .itemSeq(dto.getItemSeq())
                             .build();
-                    efcy.setImage(medicine.getMedicineImage().toString());
+                    efcy.setImage(image);
                     efcyList.add(efcy);
                 }
             }
