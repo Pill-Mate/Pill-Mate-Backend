@@ -30,10 +30,6 @@ public record RegisterDTO (
         @Schema(description = "검색한 약물인지 직접입력한 약물인지 - ex) API, CUSTOM", example = "CUSTOM")
         SourceType sourceType,
 
-//        //nullable
-//        @Schema(description = "약물 식별 번호", example = "A123456")
-//        String identifyNumber,
-
         @Schema(description = "약물 식별 번호", example = "A123456")
         Long itemSeq,
 
@@ -79,10 +75,6 @@ public record RegisterDTO (
         //nullable
         @Schema(description = "보관 방법", example = "Store in a cool, dry place")
         String storage,
-
-        //nullable
-        @Schema(description = "약물 id", example = "null") // 예시 값이 없으므로 null 그대로 명시
-        Long medicineId,
 
         @Schema(description = "아침/점심/저녁/공복/취침전", example = "[\"MORNING\", \"DINNER\"]")
         Set<IntakeCount> intakeCounts,
