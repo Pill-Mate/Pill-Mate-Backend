@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,11 +33,38 @@ public class KakaoService {
     private final JwtService jwtService;
     private final RefreshTokenRepository refreshTokenRepository;
 
+//    public UserInfoResponseDto getUserInfo(String kakaoAccessToken) {
+//        RestTemplate restTemplate = new RestTemplate();
+//        String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
+//
+//        // 카카오 API에 요청할 Authorization 헤더 설정
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Authorization", "Bearer " + kakaoAccessToken);
+//
+//        HttpEntity<String> request = new HttpEntity<>(headers);
+//
+//        ResponseEntity<Map> response = restTemplate.exchange(
+//                userInfoUrl, HttpMethod.GET, request, Map.class
+//        );
+//        URI profileImage = URI.create("");
+//
+//        if (response.getStatusCode() == HttpStatus.OK) {
+//            Map<String, Object> userInfo = response.getBody();
+//            String email = (String) ((Map) userInfo.get("kakao_account")).get("email");
+//            String nickname = (String) ((Map) userInfo.get("properties")).get("nickname");
+//            if((((Map<?, ?>) userInfo.get("properties")).get("profile_image") != null)) {
+//                profileImage = URI.create(((Map<String, Object>) userInfo.get("properties")).get("profile_image").toString());
+//            }
+//            return new UserInfoResponseDto(nickname, profileImage, email);
+//        } else {
+//            throw new RuntimeException("Failed to get user info from Kakao");
+//        }
+//    }
+
     public UserInfoResponseDto getUserInfo(String kakaoAccessToken) {
         RestTemplate restTemplate = new RestTemplate();
         String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
 
-        // 카카오 API에 요청할 Authorization 헤더 설정
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + kakaoAccessToken);
 
@@ -47,20 +73,40 @@ public class KakaoService {
         ResponseEntity<Map> response = restTemplate.exchange(
                 userInfoUrl, HttpMethod.GET, request, Map.class
         );
-        URI profileImage = URI.create("");
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Map<String, Object> userInfo = response.getBody();
-            String email = (String) ((Map) userInfo.get("kakao_account")).get("email");
-            String nickname = (String) ((Map) userInfo.get("properties")).get("nickname");
-            if((((Map<?, ?>) userInfo.get("properties")).get("profile_image") != null)) {
-                profileImage = URI.create(((Map<String, Object>) userInfo.get("properties")).get("profile_image").toString());
-            }
-            return new UserInfoResponseDto(nickname, profileImage, email);
-        } else {
+        if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
             throw new RuntimeException("Failed to get user info from Kakao");
         }
+
+        Map<String, Object> userInfo = response.getBody();
+
+        // kakao_account.email
+        String email = null;
+        Object kakaoAccountObj = userInfo.get("kakao_account");
+        if (kakaoAccountObj instanceof Map<?, ?> kakaoAccount) {
+            Object emailObj = kakaoAccount.get("email");
+            if (emailObj != null) email = emailObj.toString();
+        }
+
+        // properties.nickname / properties.profile_image
+        String nickname = null;
+        String profileImageUrl = null;
+
+        Object propsObj = userInfo.get("properties");
+        if (propsObj instanceof Map<?, ?> props) {
+            Object nickObj = props.get("nickname");
+            if (nickObj != null) nickname = nickObj.toString();
+
+            Object imgObj = props.get("profile_image");
+            if (imgObj != null) {
+                String s = imgObj.toString().trim();
+                profileImageUrl = s.isEmpty() ? null : s;
+            }
+        }
+
+        return new UserInfoResponseDto(nickname, profileImageUrl, email);
     }
+
 
     public void kakaoDisconnect(String accessToken) throws JsonProcessingException {
         // HTTP Header 생성

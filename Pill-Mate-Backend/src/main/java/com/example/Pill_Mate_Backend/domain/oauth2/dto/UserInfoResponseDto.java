@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.net.URI;
 
 @Data
 @Builder
@@ -19,7 +18,7 @@ public class UserInfoResponseDto {
     private String name;
 
     @Schema(description = "프로필 이미지 URL", example = "https://example.com/profile.jpg", requiredMode = Schema.RequiredMode.REQUIRED)
-    private URI profileImage;
+    private String profileImage;
 
     @Schema(description = "사용자 이메일", example = "honggildong@example.com", requiredMode = Schema.RequiredMode.REQUIRED)
     private String email;

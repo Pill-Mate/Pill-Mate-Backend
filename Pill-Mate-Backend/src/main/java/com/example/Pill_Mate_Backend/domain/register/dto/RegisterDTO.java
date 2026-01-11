@@ -4,7 +4,6 @@ import com.example.Pill_Mate_Backend.CommonEntity.enums.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.Set;
 @Builder
@@ -50,7 +49,7 @@ public record RegisterDTO (
 
         //nullable
         @Schema(description = "약물 이미지", example = "https://example.com/medicine.jpg")
-        URI medicineImage,
+        String medicineImage,
 
         //nullable
         @Schema(description = "회사이름", example = "Pillmate Inc.")

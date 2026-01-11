@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
-import java.net.URI;
-import java.sql.Time;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -34,7 +32,7 @@ public class Users extends BaseEntity {
     private String email;
 
     @Column(nullable = true, length = 255)
-    private URI profileImage;       //userImage로 바꿔야? -----------------!-------------------
+    private String profileImage;       //userImage로 바꿔야? -----------------!-------------------
 
     @Column(nullable = true)
     private LocalTime wakeupTime;
@@ -59,7 +57,7 @@ public class Users extends BaseEntity {
 
 
     //카카오 로그인 엔티티 생성할때 디폴트 값 넣어서 생성.
-    public Users(String username, String email, URI profileImage){
+    public Users(String username, String email, String profileImage){
         this.username = username;
         this.email = email;
         this.profileImage = profileImage;
@@ -78,7 +76,7 @@ public class Users extends BaseEntity {
         this.email = email;
         this.appleId = appleId;
         this.appleRefreshToken = appleRefreshToken;
-        this.profileImage = URI.create("");
+        this.profileImage = "";
         this.wakeupTime = null;
         this.bedTime = null;
         this.morningTime = null;

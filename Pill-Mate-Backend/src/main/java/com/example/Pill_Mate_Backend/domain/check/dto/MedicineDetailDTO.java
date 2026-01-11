@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.net.URI;
 public interface MedicineDetailDTO {
     String getMedicineName();    // item_name
     String getMedicineImage();   // item_image

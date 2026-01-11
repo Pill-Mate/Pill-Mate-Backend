@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
-import java.net.URI;
 import java.sql.Time;
 import java.util.*;
 
@@ -33,26 +32,16 @@ public class HomeService {
 
             Long itemSeq = result[9] != null ? Long.parseLong(result[9].toString()) : null;
 
-            URI medicineImage = null;
+            String medicineImageUrl = null;
+            Object rawImage = result[10];
 
-            if (result[10] instanceof byte[]) {
-                byte[] byteArray = (byte[]) result[10];
-
-                if (byteArray.length > 0) {
-                    try (
-                            ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
-                            ObjectInputStream ois = new ObjectInputStream(bais)
-                    ) {
-                        Object obj = ois.readObject();
-                        if (obj instanceof URI) {
-                            medicineImage = (URI) obj;
-                        }
-                    } catch (EOFException e) {
-                        // 0바이트/깨진 데이터 → 이미지 없음 처리
-                        medicineImage = null;
-                    } catch (Exception e) {
-                        throw new RuntimeException("Failed to deserialize medicine_image", e);
-                    }
+            if (rawImage != null) {
+                if (rawImage instanceof String s) {
+                    medicineImageUrl = s.isBlank() ? null : s;
+                } else {
+                    // 혹시 드라이버/쿼리 설정에 따라 다른 타입으로 오면 문자열로 변환
+                    String s = rawImage.toString();
+                    medicineImageUrl = (s == null || s.isBlank()) ? null : s;
                 }
             }
 
@@ -67,7 +56,7 @@ public class HomeService {
                     (Boolean) result[7],
                     (String) result[8],
                     itemSeq,
-                    medicineImage != null ? medicineImage.toString() : null
+                    medicineImageUrl
             );
 
             medicineDTOList.add(dto);
@@ -75,6 +64,7 @@ public class HomeService {
 
         return medicineDTOList;
     }
+
 
 
     public WeekCountDTO getWeekCountByDate(String email, Date date){

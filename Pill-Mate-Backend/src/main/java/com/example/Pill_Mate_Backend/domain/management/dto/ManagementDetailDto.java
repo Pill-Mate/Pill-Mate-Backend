@@ -4,7 +4,6 @@ import com.example.Pill_Mate_Backend.CommonEntity.enums.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-import java.net.URI;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -24,7 +23,7 @@ public record ManagementDetailDto(
         float ingredientAmount,
 
         @Schema(description = "약물 이미지 URL", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/154333330132500115")
-        URI medicineImage,
+        String medicineImage,
 
         @Schema(description = "제약 회사명", requiredMode = Schema.RequiredMode.REQUIRED, example = "해열.진통.소염제")
         String entpName,

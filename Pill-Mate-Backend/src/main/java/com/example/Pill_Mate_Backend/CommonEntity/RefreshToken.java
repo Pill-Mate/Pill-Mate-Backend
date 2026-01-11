@@ -4,7 +4,6 @@ import com.example.Pill_Mate_Backend.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.net.URI;
 
 @Entity
 @AllArgsConstructor

@@ -7,7 +7,6 @@ import com.example.Pill_Mate_Backend.CommonEntity.sets.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +42,7 @@ public class Medicine extends BaseEntity {
     private String ingredient;
 
     @Column(nullable = true, length = 255)
-    private URI medicineImage;
+    private String medicineImage;
 
     @Column(nullable = true, length = 50)
     private String entpName;

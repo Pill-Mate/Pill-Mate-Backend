@@ -4,7 +4,6 @@ import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -66,9 +65,8 @@ public class ManagementDto {
 
         @Schema(description = "약물 사진 URI",
                 requiredMode = Schema.RequiredMode.REQUIRED,
-                type = "string", format = "uri",
                 example = "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/154333330132500115")
-        private URI image;
+        private String image;
 
         @Schema(description = "스케줄 ID",
                 requiredMode = Schema.RequiredMode.REQUIRED,
@@ -129,9 +127,8 @@ public class ManagementDto {
 
         @Schema(description = "약물 사진 URI",
                 requiredMode = Schema.RequiredMode.REQUIRED,
-                type = "string", format = "uri",
                 example = "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/154333330132500115")
-        private URI image;
+        private String image;
 
         @Schema(description = "스케줄 ID",
                 requiredMode = Schema.RequiredMode.REQUIRED,
