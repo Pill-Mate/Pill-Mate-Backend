@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
+import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.net.URI;
 import java.sql.Time;
@@ -29,27 +30,32 @@ public class HomeService {
         List<MedicineDTO> medicineDTOList = new ArrayList<>();
 
         for (Object[] result : results) {
-            // itemSeq(Long) 변환
+
             Long itemSeq = result[9] != null ? Long.parseLong(result[9].toString()) : null;
 
-            //uri 변환
-            byte[] byteArray = (byte[]) result[10];
-
             URI medicineImage = null;
-                // 직렬화 해제 (Deserialization) - 직렬화된 URI 객체를 복원
-            if (result[10] != null) {
-                try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
-                     ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)) {
-                    Object deserializedObject = objectInputStream.readObject();
-                    if (deserializedObject instanceof URI) {
-                        medicineImage = (URI) deserializedObject;
-                    } else {
-                        throw new IllegalArgumentException("Deserialized object is not a URI");
+
+            if (result[10] instanceof byte[]) {
+                byte[] byteArray = (byte[]) result[10];
+
+                if (byteArray.length > 0) {
+                    try (
+                            ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+                            ObjectInputStream ois = new ObjectInputStream(bais)
+                    ) {
+                        Object obj = ois.readObject();
+                        if (obj instanceof URI) {
+                            medicineImage = (URI) obj;
+                        }
+                    } catch (EOFException e) {
+                        // 0바이트/깨진 데이터 → 이미지 없음 처리
+                        medicineImage = null;
+                    } catch (Exception e) {
+                        throw new RuntimeException("Failed to deserialize medicine_image", e);
                     }
-                } catch (Exception e) {
-                    throw new RuntimeException("Failed to deserialize medicine_image", e);
                 }
             }
+
             MedicineDTO dto = new MedicineDTO(
                     (Long) result[0],
                     (String) result[1],
@@ -63,11 +69,13 @@ public class HomeService {
                     itemSeq,
                     medicineImage != null ? medicineImage.toString() : null
             );
+
             medicineDTOList.add(dto);
         }
 
         return medicineDTOList;
     }
+
 
     public WeekCountDTO getWeekCountByDate(String email, Date date){
         Object[] countAllResult = medicineScheduleRepository2.findAllCountByDate(email, date);
