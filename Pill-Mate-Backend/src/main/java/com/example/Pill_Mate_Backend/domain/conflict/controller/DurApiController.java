@@ -95,7 +95,6 @@ public class DurApiController {
                 //추후 프론트에서 받아올 시 itemSeq requestparam
                 "&itemSeq="+itemSeq ;
         URL url = new URL(urlbyeongyong);
-        log.info(url.toString());
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
@@ -138,7 +137,6 @@ public class DurApiController {
                 //추후 프론트에서 받아올 시 itemSeq requestparam
                 "&itemSeq="+itemSeq ;
         URL url = new URL(urlEfcy);
-        log.info(url.toString());
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
@@ -148,7 +146,6 @@ public class DurApiController {
 
         while ((returnLine = br.readLine()) != null) {
             sb.append(returnLine+"\n\r");
-            log.info(sb.toString());
         }
         urlConnection.disconnect();
         String json = sb.toString(); // Replace with actual JSON

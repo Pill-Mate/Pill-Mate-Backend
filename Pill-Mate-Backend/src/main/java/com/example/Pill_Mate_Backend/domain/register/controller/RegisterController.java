@@ -37,7 +37,6 @@ public class RegisterController {
 
     @PostMapping("/test")
     public ResponseEntity<ApiResponse<String>> test(@RequestBody RegisterDTO registerDTO) {
-            log.info(registerDTO.toString());
             return ResponseEntity.ok(ApiResponse.onSuccess("약물등록 성공"));
 
     }

@@ -36,7 +36,7 @@ public class MedicineService {
        return MedicineConflict.builder()
                .className(medicine.getClassName())
                .effectName(medicine.getEfficacy())
-               .itemImage(medicine.getMedicineImage().toString())
+               .itemImage(medicine.getMedicineImage())
                .entpName(medicine.getEntpName())
                .itemSeq(medicine.getItemSeq())
                .itemName(medicine.getMedicineName())
@@ -130,7 +130,7 @@ public class MedicineService {
                         .effectName(med.getEfficacy())
                         .className(med.getClassName())
                         .entpName(med.getEntpName())
-                        .itemImage(med.getMedicineImage().toString())
+                        .itemImage(med.getMedicineImage())
                         .build())
                 .toList();
     }

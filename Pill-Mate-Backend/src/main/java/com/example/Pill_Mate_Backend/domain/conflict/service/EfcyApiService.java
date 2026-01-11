@@ -50,7 +50,7 @@ public class EfcyApiService {
             for (EfcyDto dto : itemSeqList) {
                 if (medicineRepository.findByItemSeqAndEmail(dto.getItemSeq(), email).isPresent()) {
                     Medicine medicine = medicineRepository.findByItemSeqAndEmail(dto.getItemSeq(), email).orElseThrow();
-                    dto.setImage(medicine.getMedicineImage().toString());
+                    dto.setImage(medicine.getMedicineImage());
                     efcyDtoList.add(dto);
                 }
             }

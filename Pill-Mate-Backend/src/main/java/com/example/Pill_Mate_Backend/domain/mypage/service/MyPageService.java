@@ -19,7 +19,7 @@ public class MyPageService {
         MyPageDTO myPageDTO = new MyPageDTO(
                 users.getUsername(),
                 email,
-                users.getProfileImage().toString(),
+                users.getProfileImage(),
                 users.getAlarmMarketing(),
                 users.getAlarmInfo()
         );
