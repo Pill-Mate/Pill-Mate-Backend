@@ -110,7 +110,9 @@ public class ManagementService {
         medicine.setItemSeq(dto.itemSeq());
         medicine.setMedicineName(dto.medicineName());
         medicine.setIngredient(dto.ingredient());
-        medicine.setIngredientAmount(dto.ingredientAmount());
+        if (dto.ingredientAmount() != null) {
+            medicine.setIngredientAmount(dto.ingredientAmount());
+        }
         medicine.setMedicineImage(dto.medicineImage());
         medicine.setEntpName(dto.entpName());
         medicine.setClassName(dto.className());

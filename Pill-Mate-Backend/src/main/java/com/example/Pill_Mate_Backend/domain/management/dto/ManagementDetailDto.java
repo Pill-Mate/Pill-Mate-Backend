@@ -20,7 +20,7 @@ public record ManagementDetailDto(
         String ingredient,
 
         @Schema(description = "성분량", requiredMode = Schema.RequiredMode.REQUIRED, example = "500")
-        float ingredientAmount,
+        Float ingredientAmount,
 
         @Schema(description = "약물 이미지 URL", requiredMode = Schema.RequiredMode.REQUIRED, example = "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/154333330132500115")
         String medicineImage,
