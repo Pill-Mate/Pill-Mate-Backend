@@ -308,6 +308,10 @@ public class AuthController {
                     .jwtToken(jwtToken).build()));
         }else{
             //새로운 유저 가입
+            System.out.println("email=[" + appleSignUpDTO.getEmail() + "]");
+            System.out.println("userName=[" + appleSignUpDTO.getUserName() + "]");
+            System.out.println("identityToken=[" + appleSignUpDTO.getIdentityToken() + "]");
+
 
             //요소없이 생성 금지
             if (
