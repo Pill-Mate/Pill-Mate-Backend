@@ -310,7 +310,11 @@ public class AuthController {
             //새로운 유저 가입
 
             //요소없이 생성 금지
-            if(appleSignUpDTO.getEmail()==null || appleSignUpDTO.getUserName() == null || appleSignUpDTO.getIdentityToken() == null || appleSignUpDTO.getEmail()=="" || appleSignUpDTO.getUserName() == "" || appleSignUpDTO.getIdentityToken() == ""){
+            if (
+                    appleSignUpDTO.getEmail() == null || appleSignUpDTO.getEmail().isBlank() ||
+                            appleSignUpDTO.getUserName() == null || appleSignUpDTO.getUserName().isBlank() ||
+                            appleSignUpDTO.getIdentityToken() == null || appleSignUpDTO.getIdentityToken().isBlank()
+            ) {
                 System.out.println("USERS 생성 위한 요소 불충분");
                 throw new GeneralException(ErrorStatus._USERS_ELEMENT_LACK);
             }
