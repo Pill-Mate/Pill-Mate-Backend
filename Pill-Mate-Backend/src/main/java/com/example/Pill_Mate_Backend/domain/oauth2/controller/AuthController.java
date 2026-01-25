@@ -259,10 +259,9 @@ public class AuthController {
     public ResponseEntity<ApiResponse<SignUpDTO>> appleLogin(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @RequestBody AppleSignUpDTO appleSignUpDTO,
-            HttpSession session) throws IOException, AuthenticationException, NoSuchAlgorithmException, InvalidKeySpecException,
-    JsonProcessingException{
+            HttpSession session
+    ) throws IOException, AuthenticationException, NoSuchAlgorithmException, InvalidKeySpecException, JsonProcessingException {
 
-        // JWT가 존재하는 경우에만 처리
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String jwtToken = authorizationHeader.substring(7);
             // JWT를 사용한 추가 처리 가능
@@ -270,81 +269,104 @@ public class AuthController {
 
         String accountId = appleAuthService.getAppleAccountId(appleSignUpDTO.getIdentityToken());
 
-        // appleId로 유저가 이미 존재하는지 확인
         Optional<Users> existingUser = userRepository.findByAppleId(accountId);
         if (existingUser.isPresent()) {
-            // 이미 존재하는 유저 -> 로그인 처리
             Users users = existingUser.get();
 
-            //onboarding null 시
-            if(users.getMorningTime()==null){
+            // 손상 유저(appleRefreshToken null/blank)면 이번 로그인에서 복구 시도
+            if (users.getAppleRefreshToken() == null || users.getAppleRefreshToken().isBlank()) {
+                String code = appleSignUpDTO.getAuthorizationCode();
 
+                if (code != null && !code.isBlank()) {
+                    String newEncRt = appleAuthService.exchange(code); // refresh_token 없으면 null 가능
+
+                    if (newEncRt != null && !newEncRt.isBlank()) {
+                        users.setAppleRefreshToken(newEncRt);
+                        userRepository.save(users);
+                        System.out.println("애플 refreshToken 복구 성공");
+                    } else {
+                        System.out.println("exchange 응답에 refresh_token이 없음(복구 실패)");
+                    }
+                } else {
+                    System.out.println("authorizationCode가 없어서 복구 시도 불가");
+                }
+            }
+
+            // 기존 로그인 응답 로직 그대로
+            if (users.getMorningTime() == null) {
                 String jwtToken = jwtService.generateToken(users.getEmail());
                 String refreshToken = jwtService.generateRefreshToken(users.getEmail());
 
-                //db refresh token 바꾸기...
-                kakaoService.updateRefreshToken(users.getEmail(),refreshToken);
+                kakaoService.updateRefreshToken(users.getEmail(), refreshToken);
 
                 System.out.println("로그인 성공, 온보딩 null");
-
                 return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
                         .login(false)
                         .refreshToken(refreshToken)
-                        .jwtToken(jwtToken).build()));
+                        .jwtToken(jwtToken)
+                        .build()));
             }
 
             String jwtToken = jwtService.generateToken(users.getEmail());
             String refreshToken = jwtService.generateRefreshToken(users.getEmail());
-            log.info("token: "+ jwtToken);
 
-            //db refresh token 바꾸기...
-            kakaoService.updateRefreshToken(users.getEmail(),refreshToken);
+            kakaoService.updateRefreshToken(users.getEmail(), refreshToken);
 
-            // 응답 데이터 준비
             System.out.println("로그인 성공");
             return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
                     .login(true)
                     .refreshToken(refreshToken)
-                    .jwtToken(jwtToken).build()));
-        }else{
-            //새로운 유저 가입
-            System.out.println("email=[" + appleSignUpDTO.getEmail() + "]");
-            System.out.println("userName=[" + appleSignUpDTO.getUserName() + "]");
-            System.out.println("identityToken=[" + appleSignUpDTO.getIdentityToken() + "]");
-
-
-            //요소없이 생성 금지
-            if (
-                    appleSignUpDTO.getEmail() == null || appleSignUpDTO.getEmail().isBlank() ||
-                            appleSignUpDTO.getUserName() == null || appleSignUpDTO.getUserName().isBlank() ||
-                            appleSignUpDTO.getIdentityToken() == null || appleSignUpDTO.getIdentityToken().isBlank()
-            ) {
-                System.out.println("USERS 생성 위한 요소 불충분");
-                throw new GeneralException(ErrorStatus._USERS_ELEMENT_LACK);
-            }
-
-            //apple refreshtoken 받기.
-            String appleRefreshToken = appleAuthService.exchange(appleSignUpDTO.getAuthorizationCode());
-
-            // User 객체 생성(apple Id, apple refreshToken 저장)
-            Users users = new Users(appleSignUpDTO.getUserName(), appleSignUpDTO.getEmail(), accountId, appleRefreshToken);
-            // 데이터베이스에 사용자 정보 저장
-            userRepository.save(users);
-
-            // JWT 토큰 생성
-            String jwtToken = jwtService.generateToken(appleSignUpDTO.getEmail());
-            String refreshToken = jwtService.generateRefreshToken(appleSignUpDTO.getEmail());
-
-            //refreshtoken DB에 저장
-            RefreshToken refreshToken1 = new RefreshToken(refreshToken, users);
-            refreshTokenRepository.save(refreshToken1);
-
-            System.out.println("회원가입 성공");
-
-            return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
-                    .login(false)
-                    .refreshToken(refreshToken)
-                    .jwtToken(jwtToken).build()));
+                    .jwtToken(jwtToken)
+                    .build()));
         }
+
+        // ======================
+        // 신규 유저 가입
+        // ======================
+
+        System.out.println("email=[" + appleSignUpDTO.getEmail() + "]");
+        System.out.println("userName=[" + appleSignUpDTO.getUserName() + "]");
+        System.out.println("identityToken=[" + appleSignUpDTO.getIdentityToken() + "]");
+        System.out.println("authorizationCode=[" + appleSignUpDTO.getAuthorizationCode() + "]");
+
+        // 신규가입 시 필요한 요소 체크 (authorizationCode도 사실상 필수)
+        if (appleSignUpDTO.getIdentityToken() == null || appleSignUpDTO.getIdentityToken().isBlank()
+                || appleSignUpDTO.getAuthorizationCode() == null || appleSignUpDTO.getAuthorizationCode().isBlank()
+                || appleSignUpDTO.getEmail() == null || appleSignUpDTO.getEmail().isBlank()
+                || appleSignUpDTO.getUserName() == null || appleSignUpDTO.getUserName().isBlank()) {
+            System.out.println("USERS 생성 위한 요소 불충분");
+            throw new GeneralException(ErrorStatus._USERS_ELEMENT_LACK);
+        }
+
+        // apple refresh token 받기
+        String appleRefreshToken = appleAuthService.exchange(appleSignUpDTO.getAuthorizationCode());
+
+        // 신규가입인데 refresh_token이 없으면 저장하면 안 됨
+        if (appleRefreshToken == null || appleRefreshToken.isBlank()) {
+            System.out.println("신규 가입인데 애플 refresh_token이 없음");
+            throw new GeneralException(ErrorStatus._APPLE_REFRESH_TOKEN_NULL);
+        }
+
+        Users users = new Users(
+                appleSignUpDTO.getUserName(),
+                appleSignUpDTO.getEmail(),
+                accountId,
+                appleRefreshToken
+        );
+        userRepository.save(users);
+
+        String jwtToken = jwtService.generateToken(appleSignUpDTO.getEmail());
+        String refreshToken = jwtService.generateRefreshToken(appleSignUpDTO.getEmail());
+
+        RefreshToken refreshToken1 = new RefreshToken(refreshToken, users);
+        refreshTokenRepository.save(refreshToken1);
+
+        System.out.println("회원가입 성공");
+
+        return ResponseEntity.ok(ApiResponse.onSuccess(SignUpDTO.builder()
+                .login(false)
+                .refreshToken(refreshToken)
+                .jwtToken(jwtToken)
+                .build()));
     }
 }
