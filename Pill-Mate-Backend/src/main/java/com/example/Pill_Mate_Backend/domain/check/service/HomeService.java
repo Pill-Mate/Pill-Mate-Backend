@@ -13,6 +13,9 @@ import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.sql.Time;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class HomeService {
 
 
     @SneakyThrows
-    public List<MedicineDTO> getMedicineSchedulesByDate(String email, Date date) {
+    public List<MedicineDTO> getMedicineSchedulesByDate(String email, LocalDate date) {
         List<Object[]> results = medicineScheduleRepository2.findByIntakeDate(email, date);
         List<MedicineDTO> medicineDTOList = new ArrayList<>();
 
@@ -67,7 +70,7 @@ public class HomeService {
 
 
 
-    public WeekCountDTO getWeekCountByDate(String email, Date date){
+    public WeekCountDTO getWeekCountByDate(String email, LocalDate date){
         Object[] countAllResult = medicineScheduleRepository2.findAllCountByDate(email, date);
         Object[] countLeftResult = medicineScheduleRepository2.findLeftCountByDate(email, date);
 
@@ -76,10 +79,10 @@ public class HomeService {
         System.out.println("countleft:"+countLeftResult[0]);
 
         //date 범위 알아내기(일주일 범위 알아내기)
-        Map<String, Date> weekRange = getWeekRange(date);
-        Date startDate = weekRange.get("startOfWeek");
-        Date endDate = weekRange.get("endOfWeek");
-        System.out.println("Date: " + weekRange.get("startOfWeek") + " - " + weekRange.get("endOfWeek"));
+        Map<String, LocalDate> weekRange = getWeekRange(date);
+        LocalDate startDate = weekRange.get("startOfWeek");
+        LocalDate endDate = weekRange.get("endOfWeek");
+        System.out.println("Date: " + startDate + " - " + endDate);
 
         Boolean sunday = false;
         Boolean monday = false;
@@ -90,20 +93,16 @@ public class HomeService {
         Boolean saturday = false;
 
         List<Object[]> weekResult = medicineScheduleRepository2.findExitWeekByDate(email, startDate, endDate);
-        Calendar calendar = Calendar.getInstance();
         for (Object[] result : weekResult){
-            calendar.setTime((Date) result[0]);
+            DayOfWeek currentDayOfWeek = toLocalDate(result[0]).getDayOfWeek();
 
-            // 현재 날짜의 요일을 가져옴 (1: Sunday, 2: Monday, ..., 7: Saturday)
-            int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
-            if(currentDayOfWeek ==1 ) {sunday = true;}
-            else if(currentDayOfWeek == 2 ) {monday = true;}
-            else if(currentDayOfWeek == 3 ) {tuesday = true;}
-            else if(currentDayOfWeek == 4 ) {wednesday = true;}
-            else if(currentDayOfWeek == 5 ) {thursday = true;}
-            else if(currentDayOfWeek == 6 ) {friday = true;}
-            else if(currentDayOfWeek == 7 ) {saturday = true;}
+            if(currentDayOfWeek == DayOfWeek.SUNDAY ) {sunday = true;}
+            else if(currentDayOfWeek == DayOfWeek.MONDAY ) {monday = true;}
+            else if(currentDayOfWeek == DayOfWeek.TUESDAY ) {tuesday = true;}
+            else if(currentDayOfWeek == DayOfWeek.WEDNESDAY ) {wednesday = true;}
+            else if(currentDayOfWeek == DayOfWeek.THURSDAY ) {thursday = true;}
+            else if(currentDayOfWeek == DayOfWeek.FRIDAY ) {friday = true;}
+            else if(currentDayOfWeek == DayOfWeek.SATURDAY ) {saturday = true;}
         }
 
         System.out.println("week:"+sunday+monday+tuesday+wednesday+thursday+friday+saturday);
@@ -116,13 +115,13 @@ public class HomeService {
         return weekCountDTO;
     }
 
-    public WeekDTO getWeekByDate(String email, Date date){
+    public WeekDTO getWeekByDate(String email, LocalDate date){
 
         //date 범위 알아내기(일주일 범위 알아내기)
-        Map<String, Date> weekRange = getWeekRange(date);
-        Date startDate = weekRange.get("startOfWeek");
-        Date endDate = weekRange.get("endOfWeek");
-        System.out.println("Date: " + weekRange.get("startOfWeek") + " - " + weekRange.get("endOfWeek"));
+        Map<String, LocalDate> weekRange = getWeekRange(date);
+        LocalDate startDate = weekRange.get("startOfWeek");
+        LocalDate endDate = weekRange.get("endOfWeek");
+        System.out.println("Date: " + startDate + " - " + endDate);
 
         Boolean sunday = false;
         Boolean monday = false;
@@ -133,20 +132,16 @@ public class HomeService {
         Boolean saturday = false;
 
         List<Object[]> weekResult = medicineScheduleRepository2.findExitWeekByDate(email, startDate, endDate);
-        Calendar calendar = Calendar.getInstance();
         for (Object[] result : weekResult){
-            calendar.setTime((Date) result[0]);
+            DayOfWeek currentDayOfWeek = toLocalDate(result[0]).getDayOfWeek();
 
-            // 현재 날짜의 요일을 가져옴 (1: Sunday, 2: Monday, ..., 7: Saturday)
-            int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
-            if(currentDayOfWeek ==1 ) {sunday = true;}
-            else if(currentDayOfWeek == 2 ) {monday = true;}
-            else if(currentDayOfWeek == 3 ) {tuesday = true;}
-            else if(currentDayOfWeek == 4 ) {wednesday = true;}
-            else if(currentDayOfWeek == 5 ) {thursday = true;}
-            else if(currentDayOfWeek == 6 ) {friday = true;}
-            else if(currentDayOfWeek == 7 ) {saturday = true;}
+            if(currentDayOfWeek == DayOfWeek.SUNDAY ) {sunday = true;}
+            else if(currentDayOfWeek == DayOfWeek.MONDAY ) {monday = true;}
+            else if(currentDayOfWeek == DayOfWeek.TUESDAY ) {tuesday = true;}
+            else if(currentDayOfWeek == DayOfWeek.WEDNESDAY ) {wednesday = true;}
+            else if(currentDayOfWeek == DayOfWeek.THURSDAY ) {thursday = true;}
+            else if(currentDayOfWeek == DayOfWeek.FRIDAY ) {friday = true;}
+            else if(currentDayOfWeek == DayOfWeek.SATURDAY ) {saturday = true;}
         }
 
         System.out.println("week:"+sunday+monday+tuesday+wednesday+thursday+friday+saturday);
@@ -157,23 +152,15 @@ public class HomeService {
         return weekDTO;
     }
 
-    public static Map<String, Date> getWeekRange(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-
-        // 현재 날짜의 요일을 가져옴 (1: Sunday, 2: Monday, ..., 7: Saturday)
-        int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
+    public static Map<String, LocalDate> getWeekRange(LocalDate date) {
         // 해당 주의 시작 날짜 (일요일)
-        calendar.add(Calendar.DAY_OF_MONTH, - (currentDayOfWeek - Calendar.SUNDAY));
-        Date startOfWeek = calendar.getTime();
+        LocalDate startOfWeek = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
         // 해당 주의 종료 날짜 (토요일)
-        calendar.add(Calendar.DAY_OF_MONTH, 6);
-        Date endOfWeek = calendar.getTime();
+        LocalDate endOfWeek = startOfWeek.plusDays(6);
 
         // 결과를 Map으로 반환
-        Map<String, Date> weekRange = new HashMap<>();
+        Map<String, LocalDate> weekRange = new HashMap<>();
         weekRange.put("startOfWeek", startOfWeek);
         weekRange.put("endOfWeek", endOfWeek);
 
@@ -181,8 +168,22 @@ public class HomeService {
     }
 
     //
-    public Date getDateByScheduleId(Long MedicineScheduleId){
+    public LocalDate getDateByScheduleId(Long MedicineScheduleId){
         Object[] obj = medicineScheduleRepository2.findDateByMedicineScheduleId(MedicineScheduleId);
-        return (Date) obj[0];
+        if (obj == null || obj.length == 0 || obj[0] == null) {
+            return null;
+        }
+        return toLocalDate(obj[0]);
+    }
+
+    // 네이티브 쿼리의 DATE 컬럼은 드라이버 설정에 따라 java.sql.Date 또는 LocalDate로 올 수 있음
+    private static LocalDate toLocalDate(Object rawDate) {
+        if (rawDate instanceof java.sql.Date sqlDate) {
+            return sqlDate.toLocalDate();
+        }
+        if (rawDate instanceof LocalDate localDate) {
+            return localDate;
+        }
+        return LocalDate.parse(rawDate.toString());
     }
 }

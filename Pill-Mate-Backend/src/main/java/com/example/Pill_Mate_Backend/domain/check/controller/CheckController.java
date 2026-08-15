@@ -20,8 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -55,7 +54,6 @@ public class CheckController {
         System.out.println("오늘 db업데이트 완료!! : ");
 
         //schedule data 보내주기..
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
             String jwtToken = token.substring(7);
@@ -70,14 +68,11 @@ public class CheckController {
         System.out.println("오늘 EMAIL!! : " + email);
         long medicineScheduleId = medicineCheckList.get(0).getMedicineScheduleId();
 
-        Date mydate = homeService.getDateByScheduleId(medicineScheduleId);
-        mydate = format.parse(String.valueOf(mydate));
-        System.out.println("오늘 DATE!! : " + mydate);
+        LocalDate mydate = homeService.getDateByScheduleId(medicineScheduleId);
         if (mydate == null) {
-            mydate = new Date(); // 현재 날짜로 설정
-            String date = format.format(mydate);
-            mydate = format.parse(date);
+            mydate = LocalDate.now(); // 현재 날짜로 설정
         }
+        System.out.println("오늘 DATE!! : " + mydate);
 
         List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate(email, mydate);
         WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
@@ -112,7 +107,6 @@ public class CheckController {
     @SneakyThrows
     @PostMapping("/scheduledata")
     public ResponseEntity<ApiResponse<ResponseDTO>> getMedicineSchedulesByDate(@RequestBody(required = false) ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
             String jwtToken = token.substring(7);
@@ -125,12 +119,11 @@ public class CheckController {
             }
         }
 
-        Date mydate = new Date();
+        LocalDate mydate;
         if(changeDateDTO == null || changeDateDTO.getDate()==null || changeDateDTO.getDate().isEmpty()){
-            String date =  format.format(mydate);
-            mydate = format.parse(date); //date 안 넘겨줄 시 오늘로 date 설정
+            mydate = LocalDate.now(); //date 안 넘겨줄 시 오늘로 date 설정
         }else{
-            mydate = format.parse(changeDateDTO.getDate());
+            mydate = LocalDate.parse(changeDateDTO.getDate());
         }
         List<MedicineDTO> medicineList = homeService.getMedicineSchedulesByDate(email, mydate);
         WeekCountDTO weekCount = homeService.getWeekCountByDate(email, mydate);
@@ -158,7 +151,6 @@ public class CheckController {
     @SneakyThrows
     @PostMapping("/weekscroll")
     public ResponseEntity<ApiResponse<WeekDTO>> getWeekDateByDate(@RequestBody ChangeDateDTO changeDateDTO, @RequestHeader(value = "Authorization", required = true) String token) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String email = "";
         if (token != null && token.startsWith("Bearer ")) {
             String jwtToken = token.substring(7);
@@ -171,12 +163,11 @@ public class CheckController {
             }
         }
 
-        Date mydate = new Date();
+        LocalDate mydate;
         if(changeDateDTO == null || changeDateDTO.getDate()==null || changeDateDTO.getDate().isEmpty()){
-            String date =  format.format(mydate);
-            mydate = format.parse(date);
+            mydate = LocalDate.now();
         }else{
-            mydate = format.parse(changeDateDTO.getDate());
+            mydate = LocalDate.parse(changeDateDTO.getDate());
         }
 
         WeekDTO weekData = homeService.getWeekByDate(email, mydate);

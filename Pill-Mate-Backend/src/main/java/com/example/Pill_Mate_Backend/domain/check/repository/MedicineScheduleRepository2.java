@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +46,7 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
             ORDER BY ms.intake_time
             """
             , nativeQuery = true)
-    List<Object[]> findByIntakeDate(@Param("email") String email, @Param("date") Date date);
+    List<Object[]> findByIntakeDate(@Param("email") String email, @Param("date") LocalDate date);
 
     //schedule inactivate 시 stopped_date 이전 만 보이게.. 하지만 check 된건 보여야 한다..로 바꿈(위에 내용)
     /*"SELECT ms.id as medicinescheduleid, ms.intake_count as intakecount, ms.intake_time as intaketime, ms.eat_count as eatcount, " +
@@ -110,7 +110,7 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
                       )
                     """
             , nativeQuery = true)
-    Object[] findAllCountByDate(@Param("email") String email, @Param("date") Date date);
+    Object[] findAllCountByDate(@Param("email") String email, @Param("date") LocalDate date);
     /*"Select count(*) From medicine_schedule ms " +
             "Join users u on u.id = ms.user_id " +
             "where ms.intake_date = :date and u.email = :email and eat_check = 0"*/
@@ -133,7 +133,7 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
                       )
                     """
             , nativeQuery = true)
-    Object[] findLeftCountByDate(@Param("email") String email, @Param("date") Date date);
+    Object[] findLeftCountByDate(@Param("email") String email, @Param("date") LocalDate date);
 
     //week 받아오기
     @Query(value = "Select date(ms.intake_date) as target " +
@@ -144,7 +144,7 @@ public interface MedicineScheduleRepository2 extends JpaRepository<MedicineSched
             "having sum(ms.eat_check) > 0 " +
             "order by target"
             , nativeQuery = true)
-    List<Object[]> findExitWeekByDate(@Param("email") String email, @Param("startdate") Date startDate, @Param("enddate") Date endDate);
+    List<Object[]> findExitWeekByDate(@Param("email") String email, @Param("startdate") LocalDate startDate, @Param("enddate") LocalDate endDate);
 
     //medicine_schedule id로 date 받아오기
     @Query(value = "select intake_date from medicine_schedule where id = :medicineScheduleId;"
