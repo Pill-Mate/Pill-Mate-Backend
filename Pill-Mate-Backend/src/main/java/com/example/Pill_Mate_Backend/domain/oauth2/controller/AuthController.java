@@ -369,4 +369,45 @@ public class AuthController {
                 .jwtToken(jwtToken)
                 .build()));
     }
+
+    @Operation(summary = "로그인 및 온보딩 상태 확인", description = "JWT 토큰을 통해 사용자의 로그인 상태와 온보딩 완료 여부를 확인합니다.")
+    @GetMapping("/status")
+    public ResponseEntity<ApiResponse<AuthStatusDTO>> checkAuthStatus(
+            @RequestHeader(value = "Authorization", required = false) String token) {
+
+        // 1. 토큰이 없거나 형식이 맞지 않는 경우
+        if (token == null || !token.startsWith("Bearer ")) {
+            return ResponseEntity.ok(ApiResponse.onSuccess(
+                    AuthStatusDTO.builder().isLoggedIn(false).isOnboarded(false).build()
+            ));
+        }
+
+        String jwtToken = token.substring(7);
+
+        // 2. 토큰이 유효하지 않은 경우
+        if (!jwtService.validateToken(jwtToken)) {
+            return ResponseEntity.ok(ApiResponse.onSuccess(
+                    AuthStatusDTO.builder().isLoggedIn(false).isOnboarded(false).build()
+            ));
+        }
+
+        // 3. 토큰에서 이메일 추출 후 유저 조회
+        String email = jwtService.extractEmail(jwtToken);
+        Optional<Users> existingUser = userRepository.findByEmail(email);
+
+        if (existingUser.isEmpty()) {
+            return ResponseEntity.ok(ApiResponse.onSuccess(
+                    AuthStatusDTO.builder().isLoggedIn(false).isOnboarded(false).build()
+            ));
+        }
+
+        Users user = existingUser.get();
+
+        // 4. 온보딩 완료 여부 확인 (morningTime 기준)
+        boolean isOnboarded = user.getMorningTime() != null;
+
+        return ResponseEntity.ok(ApiResponse.onSuccess(
+                AuthStatusDTO.builder().isLoggedIn(true).isOnboarded(isOnboarded).build()
+        ));
+    }
 }
