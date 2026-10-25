@@ -2,7 +2,6 @@ package com.example.Pill_Mate_Backend.domain.statistics.service;
 
 import com.example.Pill_Mate_Backend.CommonEntity.MedicineSchedule;
 import com.example.Pill_Mate_Backend.CommonEntity.Schedule;
-import com.example.Pill_Mate_Backend.CommonEntity.enums.ScheduleStatus;
 import com.example.Pill_Mate_Backend.domain.statistics.dto.StatisticsDto;
 import com.example.Pill_Mate_Backend.domain.statistics.repository.StatisticsRepository;
 import com.example.Pill_Mate_Backend.global.common.code.status.ErrorStatus;
@@ -32,11 +31,15 @@ public class StatisticsService {
     private final StatisticsRepository statisticsRepository;
 
     public List<StatisticsDto.MedicineOption> getMedicineOptions(String email) {
-        return statisticsRepository.findSchedulesByEmail(email).stream()
-                // 복용중 약물 먼저
-                .sorted(Comparator.comparing((Schedule s) -> s.getStatus() != ScheduleStatus.ACTIVATE)
-                        .thenComparing(Schedule::getId))
-                .map(StatisticsDto.MedicineOption::from)
+        Map<Long, Long> intakeDaysByMedicine = new HashMap<>();
+        for (Object[] row : statisticsRepository.countIntakeDaysByMedicine(email)) {
+            intakeDaysByMedicine.put((Long) row[0], ((Number) row[1]).longValue());
+        }
+
+        return statisticsRepository.findActiveSchedulesByEmail(email).stream()
+                .sorted(Comparator.comparing(Schedule::getId))
+                .map(s -> StatisticsDto.MedicineOption.of(s,
+                        intakeDaysByMedicine.getOrDefault(s.getMedicine().getId(), 0L)))
                 .collect(Collectors.toList());
     }
 
@@ -50,20 +53,14 @@ public class StatisticsService {
         Map<LocalDate, List<MedicineSchedule>> byDate = intakes.stream()
                 .collect(Collectors.groupingBy(MedicineSchedule::getIntakeDate, TreeMap::new, Collectors.toList()));
 
-        LocalDate today = LocalDate.now(ZONE_SEOUL);
         List<StatisticsDto.CalendarDay> days = new ArrayList<>();
         byDate.forEach((date, list) -> days.add(StatisticsDto.CalendarDay.builder()
                 .date(date)
-                .status(toDayStatus(date, list, today))
+                .status(toDayStatus(list))
                 .build()));
-
-        int intakeDayCount = (int) days.stream()
-                .filter(d -> d.status() == StatisticsDto.DayStatus.TAKEN)
-                .count();
 
         return StatisticsDto.CalendarResponse.builder()
                 .medicineName(schedule.getMedicine().getMedicineName())
-                .intakeDayCount(intakeDayCount)
                 .days(days)
                 .build();
     }
@@ -101,14 +98,9 @@ public class StatisticsService {
         return YearMonth.now(ZONE_SEOUL);
     }
 
-    private StatisticsDto.DayStatus toDayStatus(LocalDate date, List<MedicineSchedule> list, LocalDate today) {
-        long checked = list.stream().filter(ms -> Boolean.TRUE.equals(ms.getEatCheck())).count();
-        if (checked == list.size()) {
-            return StatisticsDto.DayStatus.TAKEN;
-        }
-        if (checked > 0) {
-            return StatisticsDto.DayStatus.PARTIAL;
-        }
-        return date.isBefore(today) ? StatisticsDto.DayStatus.MISSED : StatisticsDto.DayStatus.SCHEDULED;
+    // 하루 중 한 번이라도 체크했으면 복용한 날
+    private StatisticsDto.DayStatus toDayStatus(List<MedicineSchedule> list) {
+        boolean anyChecked = list.stream().anyMatch(ms -> Boolean.TRUE.equals(ms.getEatCheck()));
+        return anyChecked ? StatisticsDto.DayStatus.TAKEN : StatisticsDto.DayStatus.NOT_TAKEN;
     }
 }
