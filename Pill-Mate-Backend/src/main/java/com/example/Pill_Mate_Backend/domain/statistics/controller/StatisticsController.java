@@ -27,7 +27,7 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
     private final JwtService jwtService;
 
-    @Operation(summary = "통계 약물 드롭다운 리스트", description = "복용중/복용중지 약물을 모두 조회합니다. 복용중 약물이 먼저 정렬됩니다.")
+    @Operation(summary = "통계 약물 드롭다운 리스트", description = "복용중 약물과 약물별 누적 복용일수(한 번이라도 체크한 날 수)를 조회합니다.")
     @GetMapping("/medicines")
     public ResponseEntity<ApiResponse<List<StatisticsDto.MedicineOption>>> medicineOptions(
             @RequestHeader(value = "Authorization", required = true) String token) {
@@ -35,7 +35,7 @@ public class StatisticsController {
         return ResponseEntity.ok(ApiResponse.onSuccess(statisticsService.getMedicineOptions(email)));
     }
 
-    @Operation(summary = "개별 약물 복용 달력", description = "해당 월의 날짜별 복용 상태와 복용 완료 일수를 조회합니다.")
+    @Operation(summary = "개별 약물 복용 달력", description = "해당 월의 날짜별 복용 상태(TAKEN: 한 번이라도 체크, NOT_TAKEN: 체크 없음)를 조회합니다.")
     @GetMapping("/medicines/{medicineId}/calendar")
     public ResponseEntity<ApiResponse<StatisticsDto.CalendarResponse>> calendar(
             @RequestHeader(value = "Authorization", required = true) String token,

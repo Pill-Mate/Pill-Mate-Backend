@@ -14,9 +14,15 @@ import java.util.Optional;
 @Repository
 public interface StatisticsRepository extends JpaRepository<MedicineSchedule, Long> {
 
-    // 드롭다운용: 사용자의 전체 약물 스케줄(복용중 + 복용중지)
-    @Query("SELECT s FROM Schedule s JOIN FETCH s.medicine m WHERE s.users.email = :email")
-    List<Schedule> findSchedulesByEmail(@Param("email") String email);
+    // 드롭다운용: 사용자의 복용중 약물 스케줄
+    @Query("SELECT s FROM Schedule s JOIN FETCH s.medicine m WHERE s.users.email = :email AND s.status = 'ACTIVATE'")
+    List<Schedule> findActiveSchedulesByEmail(@Param("email") String email);
+
+    // [약물 ID, 누적 복용일수] - 한 번이라도 체크한 날짜 수
+    @Query("SELECT ms.medicine.id, COUNT(DISTINCT ms.intakeDate) FROM MedicineSchedule ms " +
+            "WHERE ms.users.email = :email AND ms.eatCheck = true " +
+            "GROUP BY ms.medicine.id")
+    List<Object[]> countIntakeDaysByMedicine(@Param("email") String email);
 
     // 본인 약물인지 확인용
     @Query("SELECT s FROM Schedule s JOIN FETCH s.medicine m WHERE m.id = :medicineId AND s.users.email = :email")
